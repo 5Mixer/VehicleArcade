@@ -1,20 +1,15 @@
 #include "Input.h"
 
-namespace Engine
-{
-    namespace Input
-    {
-        void onKeyDown(Kore::KeyCode code)
-        {
+namespace Engine {
+    namespace Input {
+        void onKeyDown(Kore::KeyCode code) {
             keysDown[code] = true;
         }
-        void onKeyUp(Kore::KeyCode code)
-        {
+        void onKeyUp(Kore::KeyCode code) {
             keysDown[code] = false;
         }
 
-        void init()
-        {
+        void init() {
             auto keyboard = Kore::Keyboard::the();
             keyboard->KeyDown = onKeyDown;
             keyboard->KeyUp = onKeyUp;
