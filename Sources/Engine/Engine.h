@@ -10,11 +10,22 @@
 #include <memory>
 
 namespace Engine {
-    inline std::shared_ptr<Scene> scene;
-    inline void init() {
-        Input::init();
-    }
-    void update();
+    class Engine {
+    private:
+        void start();
+        Kore::Graphics2::Graphics2 g;
+
+    public:
+        Engine();
+        std::shared_ptr<Scene> scene;
+
+        void init() {
+            Input::init();
+            start();
+        }
+
+        void update();
+    };
 } // namespace Engine
 
 #endif

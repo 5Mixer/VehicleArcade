@@ -9,7 +9,7 @@
 class Play : public Engine::Scene {
 public:
     Play();
-    void render(std::shared_ptr<Kore::Graphics2::Graphics2> g);
+    void render(Kore::Graphics2::Graphics2 &g);
     void update();
     std::string toString();
 };

@@ -7,12 +7,21 @@
 #include "Engine/Input.h"
 #include "Play.h"
 
+std::unique_ptr<Engine::Engine> engine;
+
 int kickstart(int argc, char **argv) {
     Kore::System::init("Vehicle Arcade", 1024, 768);
-    Kore::System::setCallback(Engine::update);
 
-    Engine::scene = std::make_shared<Play>();
-    Engine::init();
+    engine = std::make_unique<Engine::Engine>();
+    engine->scene = std::make_shared<Play>();
+    engine->init();
+
+    Kore::System::setCallback([] {
+        engine->update();
+    });
+    Kore::System::setShutdownCallback([] {
+        delete engine.get();
+    });
 
     Kore::System::start();
 
