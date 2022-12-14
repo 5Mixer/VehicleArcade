@@ -3,27 +3,16 @@
 #include <limits>
 #include <memory>
 
-#include "Engine/Engine.h"
+#include "Engine/Core.h"
 #include "Engine/Input.h"
-#include "Play.h"
+#include "Game/Play.h"
 
-std::unique_ptr<Engine::Engine> engine;
+#include <Kore/Graphics2/Graphics.h>
 
 int kickstart(int argc, char **argv) {
-    Kore::System::init("Vehicle Arcade", 1024, 768);
-
-    engine = std::make_unique<Engine::Engine>();
-    engine->scene = std::make_shared<Play>();
-    engine->init();
-
-    Kore::System::setCallback([] {
-        engine->update();
-    });
-    Kore::System::setShutdownCallback([] {
-        delete engine.get();
-    });
-
-    Kore::System::start();
+    Engine::Core &engine = Engine::Core::getInstance();
+    engine.setScene(std::make_shared<Game::Play>());
+    engine.start();
 
     return 0;
 }
