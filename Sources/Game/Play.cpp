@@ -5,7 +5,7 @@ Game::Play::Play() {
 }
 
 void Game::Play::render(std::shared_ptr<Engine::Graphics> graphics) {
-    graphics->drawSprite(50, 50);
+    graphics->drawSprite(0, 50, 50);
 }
 
 void Game::Play::update() {
