@@ -4,6 +4,7 @@
 #include "../Engine/Graphics.h"
 #include "../Engine/Scene.h"
 #include "Entity.h"
+#include "Tilemap.h"
 #include "Vehicle.h"
 #include <memory>
 #include <string>
@@ -14,6 +15,7 @@ namespace Game {
     private:
         std::vector<Game::Entity> entities;
         std::shared_ptr<Game::Vehicle> controlledCar;
+        std::unique_ptr<Game::Tilemap> tilemap;
 
     public:
         Play();
