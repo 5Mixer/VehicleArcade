@@ -18,7 +18,7 @@ namespace Engine {
         Graphics();
         void begin();
         void end();
-        void drawSprite(int sprite, int x, int y);
+        void drawSprite(int sprite, Kore::vec2 pos);
     };
 } // namespace Engine
 

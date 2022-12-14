@@ -15,8 +15,7 @@ namespace Engine {
     void Engine::Graphics::end() {
         graphics->end();
     }
-    void Engine::Graphics::drawSprite(int sprite, int x, int y) {
-        graphics->fillRect(x, y, 10, 10);
-        graphics->drawImage(texture.get(), x, y);
+    void Engine::Graphics::drawSprite(int sprite, Kore::vec2 pos) {
+        graphics->drawImage(texture.get(), pos.x(), pos.y());
     }
 } // namespace Engine

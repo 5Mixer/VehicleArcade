@@ -7,6 +7,7 @@
 #include <Kore/System.h>
 #include <iostream>
 #include <memory>
+#include <random>
 
 namespace Engine {
     class Core {
@@ -24,6 +25,9 @@ namespace Engine {
         Core(Core const &) = delete;
         void operator=(Core const &) = delete;
         Core();
+
+        std::minstd_rand random;
+        float rand() { return random() / static_cast<float>(random.max()); }
 
         void init();
         void start();

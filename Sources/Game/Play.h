@@ -13,6 +13,7 @@ namespace Game {
     class Play : public Engine::Scene {
     private:
         std::vector<Game::Entity> entities;
+        std::shared_ptr<Game::Vehicle> controlledCar;
 
     public:
         Play();
