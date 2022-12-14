@@ -15,7 +15,10 @@ namespace Engine {
     void Engine::Graphics::end() {
         graphics->end();
     }
-    void Engine::Graphics::drawSprite(int sprite, Kore::vec2 pos) {
-        graphics->drawImage(texture.get(), pos.x(), pos.y());
+    void Engine::Graphics::drawSprite(int sprite, Kore::vec2 pos, float angle) {
+        auto prior = graphics->transformation;
+        graphics->pushRotation(angle, pos.x() + 32, pos.y() + 32);
+        graphics->drawScaledSubImage(texture.get(), 0, 0, 16, 16, pos.x(), pos.y(), 16 * 4, 16 * 4);
+        graphics->transformation = prior;
     }
 } // namespace Engine

@@ -5,16 +5,18 @@
 #include "../Engine/Graphics.h"
 #include "Entity.h"
 #include <Kore/Math/Vector.h>
+#include <cmath>
 
 namespace Game {
     class Vehicle : public Game::Entity {
     private:
-        double acceleration;
-        double angle;
+        float forwardsVelocity;
+        float angle;
+        float turnRateVelocityFactor(float speed, float maximumSpeed);
 
     public:
-        void accelerate(double accelerationDelta);
-        void turn(double angleDelta);
+        void accelerate(float acceleration);
+        void turn(float angleDelta);
         void update();
         void render(Engine::Graphics *g);
     };
