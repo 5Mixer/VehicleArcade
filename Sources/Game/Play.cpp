@@ -5,14 +5,14 @@ Game::Play::Play() {
     tilemap = std::make_unique<Game::Tilemap>();
 }
 
-void Game::Play::render(std::shared_ptr<Engine::Graphics> graphics) {
-    tilemap->render(graphics.get());
+void Game::Play::render(Engine::Graphics &graphics) {
+    tilemap->render(graphics);
     for (auto &entity : entities) {
         entity.pos.add(Kore::vec2(0, 1));
         entity.update();
-        graphics->drawSprite(0, entity.pos);
+        graphics.drawSprite(0, entity.pos);
     }
-    controlledCar->render(graphics.get());
+    controlledCar->render(graphics);
 }
 
 void Game::Play::update() {

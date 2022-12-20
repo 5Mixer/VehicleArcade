@@ -9,10 +9,10 @@ Game::Tilemap::Tilemap() {
     }
 }
 
-void Game::Tilemap::render(Engine::Graphics *g) {
+void Game::Tilemap::render(Engine::Graphics &g) {
     for (int tx = 0; tx < tilesWide; tx++) {
         for (int ty = 0; ty < tilesHigh; ty++) {
-            g->drawSprite(tiles.at(ty * tilesWide + tx), Kore::vec2{tx * 64, ty * 64});
+            g.drawSprite(tiles.at(ty * tilesWide + tx), Kore::vec2{tx * 64, ty * 64});
         }
     }
 }

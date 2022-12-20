@@ -19,7 +19,7 @@ namespace Game {
 
     public:
         Play();
-        void render(std::shared_ptr<Engine::Graphics> g);
+        void render(Engine::Graphics &g);
         void update();
         std::string toString();
     };

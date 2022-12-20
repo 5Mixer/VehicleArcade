@@ -9,7 +9,7 @@ namespace Engine {
     class Scene {
 
     public:
-        virtual void render(std::shared_ptr<Engine::Graphics> g) = 0;
+        virtual void render(Engine::Graphics &g) = 0;
         virtual void update() = 0;
         virtual std::string toString() = 0;
     };

@@ -17,7 +17,7 @@ namespace Game {
         Tilemap();
         int get(int x, int y);
         void set(int x, int y, int tile);
-        void render(Engine::Graphics *g);
+        void render(Engine::Graphics &g);
     };
 } // namespace Game
 

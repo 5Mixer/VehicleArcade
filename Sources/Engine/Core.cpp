@@ -31,7 +31,7 @@ namespace Engine {
         Kore::Graphics4::clear(Kore::Graphics4::ClearColorFlag);
 
         graphics->begin();
-        scene->render(graphics);
+        scene->render(*graphics.get());
         graphics->end();
 
         Kore::Graphics4::end();

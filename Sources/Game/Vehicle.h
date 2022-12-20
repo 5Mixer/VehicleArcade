@@ -18,7 +18,7 @@ namespace Game {
         void accelerate(float acceleration);
         void turn(float angleDelta);
         void update();
-        void render(Engine::Graphics *g);
+        void render(Engine::Graphics &g);
     };
 } // namespace Game
 
