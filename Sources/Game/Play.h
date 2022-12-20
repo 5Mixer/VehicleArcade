@@ -4,6 +4,7 @@
 #include "../Engine/Graphics.h"
 #include "../Engine/Scene.h"
 #include "Entity.h"
+#include "Kore/Math/Matrix.h"
 #include "Tilemap.h"
 #include "Vehicle.h"
 #include <memory>

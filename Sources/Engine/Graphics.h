@@ -3,6 +3,8 @@
 
 #include <Kore/Graphics2/Graphics.h>
 #include <Kore/Graphics4/Graphics.h>
+#include <Kore/Math/Matrix.h>
+#include <Kore/Math/Vector.h>
 #include <Kore/System.h>
 #include <memory>
 #include <string>
@@ -19,7 +21,8 @@ namespace Engine {
         void begin();
         void end();
         void drawSprite(int sprite, Kore::vec2 pos, float angle = 0);
-    };
+        void transform(Kore::mat3 transformation);
+        Kore::mat3 rotate(float angle, float centerx, float centery);
+    }; // namespace Engine
 } // namespace Engine
-
 #endif

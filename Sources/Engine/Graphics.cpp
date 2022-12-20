@@ -17,8 +17,15 @@ namespace Engine {
     }
     void Engine::Graphics::drawSprite(int sprite, Kore::vec2 pos, float angle) {
         auto prior = graphics->transformation;
-        graphics->pushRotation(angle, pos.x() + 32, pos.y() + 32);
+        auto rotation = rotate(angle, pos.x() + 32, pos.y() + 32);
+        transform(rotation);
         graphics->drawScaledSubImage(texture.get(), sprite * 16, 0, 16, 16, pos.x(), pos.y(), 16 * 4, 16 * 4);
         graphics->transformation = prior;
+    }
+    void Engine::Graphics::transform(Kore::mat3 transformation) {
+        graphics->transformation *= transformation;
+    }
+    Kore::mat3 Engine::Graphics::rotate(float angle, float centerx, float centery) {
+        return (Kore::mat3::Translation(centerx, centery) * Kore::mat3::RotationZ(angle)) * Kore::mat3::Translation(-centerx, -centery);
     }
 } // namespace Engine
