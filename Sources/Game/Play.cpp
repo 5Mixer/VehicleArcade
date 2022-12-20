@@ -12,10 +12,9 @@ void Game::Play::render(Engine::Graphics &graphics) {
 
     tilemap->render(graphics);
     graphics.drawTexture();
-    for (auto &entity : entities) {
-        entity.pos.add(Kore::vec2(0, 1));
-        entity.update();
-        graphics.drawSprite(0, entity.pos);
+    for (auto &bullet : bullets) {
+        bullet.update();
+        bullet.render(graphics);
     }
     controlledCar->render(graphics);
 
@@ -35,6 +34,13 @@ void Game::Play::update() {
     }
 
     controlledCar->update();
+
+    if (Engine::Input::mouseDown) {
+        auto bullet = new Game::Bullet();
+        bullet->pos = controlledCar->pos;
+        bullet->angle = atan2(Engine::Input::mousePosition.y() - Kore::System::windowHeight() / 2, Engine::Input::mousePosition.x() - Kore::System::windowWidth() / 2);
+        bullets.push_back(*bullet);
+    }
 }
 
 std::string Game::Play::toString() {

@@ -3,6 +3,7 @@
 
 #include "../Engine/Graphics.h"
 #include "../Engine/Scene.h"
+#include "Bullet.h"
 #include "Entity.h"
 #include "Kore/Math/Matrix.h"
 #include "Tilemap.h"
@@ -15,6 +16,7 @@ namespace Game {
     class Play : public Engine::Scene {
     private:
         std::vector<Game::Entity> entities;
+        std::vector<Game::Bullet> bullets;
         std::shared_ptr<Game::Vehicle> controlledCar;
         std::unique_ptr<Game::Tilemap> tilemap;
 
