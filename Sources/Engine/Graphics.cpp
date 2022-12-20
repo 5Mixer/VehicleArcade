@@ -3,7 +3,8 @@
 namespace Engine {
     Engine::Graphics::Graphics()
         : graphics(std::unique_ptr<Kore::Graphics2::Graphics2>(new Kore::Graphics2::Graphics2(Kore::System::windowWidth(), Kore::System::windowHeight()))),
-          texture(std::unique_ptr<Kore::Graphics4::Texture>(new Kore::Graphics4::Texture("../Assets/textures.png"))) {
+          texture(std::unique_ptr<Kore::Graphics4::Texture>(new Kore::Graphics4::Texture("../Assets/textures.png"))),
+          grassTexture(std::unique_ptr<Kore::Graphics4::Texture>(new Kore::Graphics4::Texture("../Assets/grass.png"))) {
     }
 
     void Engine::Graphics::start() {
@@ -14,6 +15,9 @@ namespace Engine {
     }
     void Engine::Graphics::end() {
         graphics->end();
+    }
+    void Engine::Graphics::drawTexture() {
+        graphics->drawScaledSubImage(grassTexture.get(), 0, 0, 1000, 600, 0, 0, 4 * 1000, 4 * 600);
     }
     void Engine::Graphics::drawSprite(int sprite, Kore::vec2 pos, float angle) {
         auto prior = graphics->transformation;

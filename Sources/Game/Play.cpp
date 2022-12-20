@@ -11,6 +11,7 @@ void Game::Play::render(Engine::Graphics &graphics) {
     graphics.transform(camera);
 
     tilemap->render(graphics);
+    graphics.drawTexture();
     for (auto &entity : entities) {
         entity.pos.add(Kore::vec2(0, 1));
         entity.update();
