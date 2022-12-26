@@ -19,7 +19,6 @@
 namespace Game {
     class Play : public Engine::Scene {
     private:
-        Kore::FileReader reader;
         std::vector<Game::Entity> entities;
         std::vector<Game::Bullet> bullets;
         std::vector<Game::Wall> walls;

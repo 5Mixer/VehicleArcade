@@ -3,8 +3,7 @@
 Game::Play::Play()
     : editingScene(false),
       tilemap(std::make_unique<Game::Tilemap>()),
-      controlledCar(std::make_shared<Game::Vehicle>()),
-      reader() {
+      controlledCar(std::make_shared<Game::Vehicle>()) {
 
     auto reader = Kore::FileReader();
 
@@ -45,6 +44,11 @@ void Game::Play::render(Engine::Graphics &graphics) {
 }
 
 void Game::Play::update() {
+
+    auto camera = Kore::mat3::Translation(int(Kore::System::windowWidth() / 2 - controlledCar->pos.x()), int(Kore::System::windowHeight() / 2 - controlledCar->pos.y()));
+
+    editingScene = Engine::Input::keysDown.at(Kore::KeyTab);
+
     for (auto entity : entities) {
         entity.update();
     }
