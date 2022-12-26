@@ -19,6 +19,7 @@ namespace Game {
         std::vector<Game::Bullet> bullets;
         std::shared_ptr<Game::Vehicle> controlledCar;
         std::unique_ptr<Game::Tilemap> tilemap;
+        bool editingScene;
 
     public:
         Play();

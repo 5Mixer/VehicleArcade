@@ -1,11 +1,11 @@
 #include "Vehicle.h"
 
 void Game::Vehicle::update() {
-    float accelerationSpeed = .5;
+    float accelerationSpeed = .3;
     float breakSpeed = .5;
     float turnSpeed = .07;
-    float frictionFactor = .9;
-    float maximumSpeed = 25;
+    float frictionFactor = .99;
+    float maximumSpeed = 10;
 
     if (Engine::Input::keysDown[Kore::KeyCode::KeyW]) {
         accelerate(accelerationSpeed);
@@ -23,8 +23,8 @@ void Game::Vehicle::update() {
         turn(turnSpeed * turnRate);
     }
 
-    if (std::abs(forwardsVelocity) > 5) {
-        forwardsVelocity = 5 * (forwardsVelocity > 0 ? 1 : -1);
+    if (std::abs(forwardsVelocity) > maximumSpeed) {
+        forwardsVelocity = maximumSpeed * (forwardsVelocity > 0 ? 1 : -1);
     }
 
     pos += Kore::vec2{std::cos(angle) * forwardsVelocity, std::sin(angle) * forwardsVelocity};
