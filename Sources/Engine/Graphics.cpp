@@ -17,6 +17,7 @@ namespace Engine {
         graphics->end();
     }
     void Engine::Graphics::drawTexture() {
+        graphics->clear(0x585685);
         graphics->drawScaledSubImage(grassTexture.get(), 0, 0, 1000, 600, 0, 0, 4 * 1000, 4 * 600);
     }
     void Engine::Graphics::drawSprite(int sprite, Kore::vec2 pos, float angle) {
