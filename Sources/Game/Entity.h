@@ -2,7 +2,6 @@
 #define GAME_ENTITY
 
 #include <Kore/Math/Vector.h>
-#include <stdio.h>
 
 namespace Game {
     class Entity {

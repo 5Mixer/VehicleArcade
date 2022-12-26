@@ -1,7 +1,7 @@
 #include "Play.h"
 
 Game::Play::Play()
-    : editingScene(true),
+    : editingScene(false),
       tilemap(std::make_unique<Game::Tilemap>()),
       controlledCar(std::make_shared<Game::Vehicle>()),
       reader() {
@@ -31,11 +31,11 @@ void Game::Play::render(Engine::Graphics &graphics) {
         bullet.update();
         bullet.render(graphics);
     }
-    {
-        for (int layer = 0; layer < 3; layer++) {
-            for (auto &wall : walls) {
-                graphics.drawSprite(5 + layer, wall.position);
-            }
+
+    // Draw walls
+    for (int layer = 0; layer < 3; layer++) {
+        for (auto &wall : walls) {
+            graphics.drawSprite(5 + layer, wall.position);
         }
     }
 
@@ -48,6 +48,17 @@ void Game::Play::update() {
     for (auto entity : entities) {
         entity.update();
     }
+
+    bullets.erase(std::remove_if(bullets.begin(), bullets.end(), [&](Game::Bullet bullet) -> bool {
+                      // TODO: Avoid n^2
+                      for (auto &wall : walls) {
+                          if ((bullet.pos - wall.position).squareLength() < (10 * 10 * 4 * 4)) {
+                              return true;
+                          }
+                      }
+                      return false;
+                  }),
+                  bullets.end());
 
     auto carTx = (controlledCar->pos.x() + 32) / 64;
     auto carTy = (controlledCar->pos.y() + 32) / 64;

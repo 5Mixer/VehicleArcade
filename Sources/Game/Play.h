@@ -11,6 +11,7 @@
 #include "Tilemap.h"
 #include "Vehicle.h"
 #include "Wall.h"
+#include <algorithm>
 #include <memory>
 #include <string>
 #include <vector>
