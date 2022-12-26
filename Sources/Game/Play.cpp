@@ -71,9 +71,11 @@ void Game::Play::update() {
 
     if (editingScene) {
         if (Engine::Input::mouseDown) {
+            auto world = camera.Invert() * Kore::vec3{Engine::Input::mousePosition.x(), Engine::Input::mousePosition.y(), 1};
+
             auto rounded = Kore::vec2{
-                static_cast<int>(Engine::Input::mousePosition.x() / 4) * 4,
-                static_cast<int>(Engine::Input::mousePosition.y() / 4) * 4};
+                static_cast<int>(world.x() / 4) * 4,
+                static_cast<int>(world.y() / 4) * 4};
 
             auto wall = new Game::Wall{rounded};
             walls.push_back(*wall);
@@ -84,7 +86,13 @@ void Game::Play::update() {
         if (Engine::Input::mouseDown) {
             auto bullet = new Game::Bullet();
             bullet->pos = controlledCar->pos;
-            bullet->angle = atan2(Engine::Input::mousePosition.y() - Kore::System::windowHeight() / 2, Engine::Input::mousePosition.x() - Kore::System::windowWidth() / 2);
+            auto directAngle = atan2(Engine::Input::mousePosition.y() - Kore::System::windowHeight() / 2, Engine::Input::mousePosition.x() - Kore::System::windowWidth() / 2);
+            auto angleRange = Engine::Core::getInstance().rand() - .5;
+            bullet->angle = directAngle + angleRange * .03;
+
+            auto startOffset = 20 * Engine::Core::getInstance().rand();
+            bullet->pos += Kore::vec2{std::cos(bullet->angle) * startOffset, std::sin(bullet->angle) * startOffset};
+
             bullets.push_back(*bullet);
         }
     }

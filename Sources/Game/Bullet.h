@@ -10,7 +10,7 @@
 namespace Game {
     class Bullet : public Game::Entity {
     private:
-        float speed = 30;
+        float speed = 25 + 4 * Engine::Core::getInstance().rand();
 
     public:
         float angle;
