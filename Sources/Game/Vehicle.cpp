@@ -5,6 +5,7 @@ void Game::Vehicle::update(std::vector<Game::Wall> &walls) {
     float breakSpeed = .5;
     float turnSpeed = .07;
     float frictionFactor = .99;
+    float wallFrictionFactor = .95;
     float maximumSpeed = 10;
 
     if (Engine::Input::keysDown[Kore::KeyCode::KeyW]) {
@@ -31,48 +32,19 @@ void Game::Vehicle::update(std::vector<Game::Wall> &walls) {
 
     auto collide = false;
     for (const Game::Wall wall : walls) {
-        if ((target - wall.position).squareLength() < (10 * 10 * 4 * 4)) {
+        auto overlap = target - wall.position;
+        if (overlap.squareLength() < (10 * 10 * 4 * 4)) {
 
-            auto d = (wall.position - pos).getLength();
-            auto theta = std::atan2(target.y() - pos.y(), target.x() - pos.x()) - std::atan2(wall.position.y() - pos.y(), wall.position.x() - pos.x());
-            auto t = d * std::cos(theta) - std::sqrt(std::pow(10 + 10, 2) - std::pow(d, 2) * std::pow(std::sin(theta), 2));
-
-            auto tVec = (target - pos);
-            tVec.multiply(t);
-            target = pos + tVec;
+            overlap.setLength(40);
+            target = wall.position + overlap;
 
             collide = true;
-
-            ////
-            /*
-            auto collision = target - wall.position;
-
-            auto correction = collision;
-            correction.setLength(10);
-
-            auto newTarget = target + correction;
-
-            auto newTargetFromPos = newTarget - pos;
-            // auto angleToNewTarget = std::atan2(newTargetFromPos.y(), newTargetFromPos.x());
-
-            // forwardsVelocity =
-
-            // angle = angleToNewTarget;
-            target = newTarget; //pos + Kore::vec2{std::cos(angle) * forwardsVelocity, std::sin(angle) * forwardsVelocity};
-            // break;
-
-            // target = newTarget;
-
-            // collide = true;
-            // break;
-            */
         }
     }
-    if (!collide) {
-        pos = target;
-    } else {
-        forwardsVelocity = .5;
+    if (collide) {
+        forwardsVelocity *= wallFrictionFactor;
     }
+    pos = target;
 }
 
 float Game::Vehicle::turnRateVelocityFactor(float speed, float maximumSpeed) {
