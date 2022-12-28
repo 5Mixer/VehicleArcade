@@ -18,13 +18,13 @@ namespace Engine {
     }
     void Engine::Graphics::drawTexture() {
         graphics->clear(0x585685);
-        graphics->drawScaledSubImage(grassTexture.get(), 0, 0, 1000, 600, 0, 0, 4 * 1000, 4 * 600);
+        graphics->drawScaledSubImage(grassTexture.get(), 0, 0, 1000, 600, 0, 0, 1000, 600);
     }
     void Engine::Graphics::drawSprite(int sprite, Kore::vec2 pos, float angle) {
         auto prior = graphics->transformation;
-        auto rotation = rotate(angle, pos.x() + 32, pos.y() + 32);
+        auto rotation = rotate(angle, pos.x() + 8, pos.y() + 8);
         transform(rotation);
-        graphics->drawScaledSubImage(texture.get(), sprite * 16, 0, 16, 16, pos.x(), pos.y(), 16 * 4, 16 * 4);
+        graphics->drawScaledSubImage(texture.get(), sprite * 16, 0, 16, 16, pos.x(), pos.y(), 16, 16);
         graphics->transformation = prior;
     }
     void Engine::Graphics::transform(Kore::mat3 transformation) {

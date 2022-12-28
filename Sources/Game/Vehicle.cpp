@@ -1,12 +1,12 @@
 #include "Vehicle.h"
 
 void Game::Vehicle::update(std::vector<Game::Wall> &walls) {
-    float accelerationSpeed = .3;
-    float breakSpeed = .5;
+    float accelerationSpeed = .08;
+    float breakSpeed = .1;
     float turnSpeed = .07;
     float frictionFactor = .99;
     float wallFrictionFactor = .95;
-    float maximumSpeed = 10;
+    float maximumSpeed = 2.5;
 
     if (Engine::Input::keysDown[Kore::KeyCode::KeyW]) {
         accelerate(accelerationSpeed);
@@ -33,9 +33,9 @@ void Game::Vehicle::update(std::vector<Game::Wall> &walls) {
     auto collide = false;
     for (const Game::Wall wall : walls) {
         auto overlap = target - wall.position;
-        if (overlap.squareLength() < (10 * 10 * 4 * 4)) {
+        if (overlap.squareLength() < (10 * 10)) {
 
-            overlap.setLength(40);
+            overlap.setLength(10);
             target = wall.position + overlap;
 
             collide = true;

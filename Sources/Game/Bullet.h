@@ -9,7 +9,7 @@
 namespace Game {
     class Bullet {
     private:
-        float speed = 25 + 4 * Engine::Core::getInstance().rand();
+        float speed = 6 + Engine::Core::getInstance().rand() * .1;
 
     public:
         Kore::vec2 pos;

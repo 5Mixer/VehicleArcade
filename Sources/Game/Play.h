@@ -1,10 +1,10 @@
 #ifndef GAME_PLAY_H
 #define GAME_PLAY_H
 
+#include "../Engine/Camera.h"
 #include "../Engine/Graphics.h"
 #include "../Engine/Scene.h"
 #include "Bullet.h"
-#include "Tilemap.h"
 #include "Vehicle.h"
 #include "Wall.h"
 #include <Kore/IO/FileReader.h>
@@ -21,7 +21,8 @@ namespace Game {
         std::vector<Game::Bullet> bullets;
         std::vector<Game::Wall> walls;
         std::shared_ptr<Game::Vehicle> controlledCar;
-        std::unique_ptr<Game::Tilemap> tilemap;
+        Engine::Camera camera;
+
         bool editingScene;
         void save();
 

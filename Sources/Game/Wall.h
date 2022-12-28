@@ -8,7 +8,7 @@ namespace Game {
     private:
     public:
         Kore::vec2 position;
-        Wall(Kore::vec2 y);
+        Wall(Kore::vec2 position);
     };
 } // namespace Game
 

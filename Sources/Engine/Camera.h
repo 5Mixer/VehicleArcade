@@ -3,22 +3,17 @@
 
 #include <Kore/Math/Matrix.h>
 #include <Kore/Math/Vector.h>
+#include <Kore/System.h>
 
 namespace Engine {
     class Camera {
     private:
     public:
-        Camera();
-        ~Camera();
+        float zoom = 4;
+        Kore::vec2 pos;
         Kore::mat3 getTransform();
+        Kore::vec2 getWorldPos(Kore::vec2 screenPos);
     };
-
-    Camera::Camera() {
-    }
-
-    Camera::~Camera() {
-    }
-
 } // namespace Engine
 
 #endif
