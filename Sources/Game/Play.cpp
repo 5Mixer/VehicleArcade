@@ -47,10 +47,6 @@ void Game::Play::update() {
 
     editingScene = Engine::Input::keysDown.at(Kore::KeyTab);
 
-    for (auto entity : entities) {
-        entity.update();
-    }
-
     bullets.erase(std::remove_if(bullets.begin(), bullets.end(), [&](Game::Bullet bullet) -> bool {
                       // TODO: Avoid n^2
                       for (auto &wall : walls) {

@@ -4,7 +4,6 @@
 #include "../Engine/Graphics.h"
 #include "../Engine/Scene.h"
 #include "Bullet.h"
-#include "Entity.h"
 #include "Tilemap.h"
 #include "Vehicle.h"
 #include "Wall.h"
@@ -19,7 +18,6 @@
 namespace Game {
     class Play : public Engine::Scene {
     private:
-        std::vector<Game::Entity> entities;
         std::vector<Game::Bullet> bullets;
         std::vector<Game::Wall> walls;
         std::shared_ptr<Game::Vehicle> controlledCar;

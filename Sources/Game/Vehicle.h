@@ -3,20 +3,20 @@
 
 #include "../Engine/Core.h"
 #include "../Engine/Graphics.h"
-#include "Entity.h"
 #include "Wall.h"
 #include <Kore/Math/Vector.h>
 #include <cmath>
 #include <vector>
 
 namespace Game {
-    class Vehicle : public Game::Entity {
+    class Vehicle {
     private:
         float forwardsVelocity;
         float angle;
         float turnRateVelocityFactor(float speed, float maximumSpeed);
 
     public:
+        Kore::vec2 pos;
         void accelerate(float acceleration);
         void turn(float angleDelta);
         void update(std::vector<Game::Wall> &walls);
