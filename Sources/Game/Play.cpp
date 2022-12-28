@@ -21,8 +21,7 @@ Game::Play::Play()
 }
 
 void Game::Play::render(Engine::Graphics &graphics) {
-    // TODO: Fix car shaking caused by int cast, which is for tilemap grid alignment.
-    auto camera = Kore::mat3::Translation(int(Kore::System::windowWidth() / 2 - controlledCar->pos.x()), int(Kore::System::windowHeight() / 2 - controlledCar->pos.y()));
+    auto camera = Kore::mat3::Translation((Kore::System::windowWidth() / 2 - controlledCar->pos.x()), (Kore::System::windowHeight() / 2 - controlledCar->pos.y()));
     graphics.transform(camera);
 
     graphics.drawTexture();
@@ -44,7 +43,6 @@ void Game::Play::render(Engine::Graphics &graphics) {
 }
 
 void Game::Play::update() {
-
     auto camera = Kore::mat3::Translation(int(Kore::System::windowWidth() / 2 - controlledCar->pos.x()), int(Kore::System::windowHeight() / 2 - controlledCar->pos.y()));
 
     editingScene = Engine::Input::keysDown.at(Kore::KeyTab);
@@ -64,10 +62,7 @@ void Game::Play::update() {
                   }),
                   bullets.end());
 
-    auto carTx = (controlledCar->pos.x() + 32) / 64;
-    auto carTy = (controlledCar->pos.y() + 32) / 64;
-
-    controlledCar->update();
+    controlledCar->update(walls);
 
     if (editingScene) {
         if (Engine::Input::mouseDown) {
@@ -77,10 +72,20 @@ void Game::Play::update() {
                 static_cast<int>(world.x() / 4) * 4,
                 static_cast<int>(world.y() / 4) * 4};
 
-            auto wall = new Game::Wall{rounded};
-            walls.push_back(*wall);
+            bool skip = false;
+            for (const Game::Wall wall : walls) {
+                if (wall.position.x() == rounded.x() && wall.position.y() == rounded.y()) {
+                    skip = true;
+                    break;
+                }
+            }
 
-            save(); // TODO: Optimise saving
+            if (!skip) {
+                auto wall = new Game::Wall{rounded};
+                walls.push_back(*wall);
+
+                save(); // TODO: Optimise saving
+            }
         }
     } else {
         if (Engine::Input::mouseDown) {
