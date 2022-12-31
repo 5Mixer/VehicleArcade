@@ -2,7 +2,8 @@
 
 Game::Net::Server::Server() {
     if (enet_initialize() != 0) {
-        throw "Could not initialise enet";
+        std::cerr << "Could not initialise enet" << std::endl;
+        exit(1);
     }
 
     ENetAddress address;
@@ -18,7 +19,8 @@ Game::Net::Server::Server() {
     server = enet_host_create(&address, allowedConnections, channels, incomingBandwidthLimit, outgoingBandwidthLimit);
 
     if (server == nullptr) {
-        throw "Could not setup server";
+        std::cerr << "Could not setup server" << std::endl;
+        exit(1);
     }
 
     std::cout << "Server initialised at " << address.host << ":" << address.port << std::endl;
@@ -34,7 +36,7 @@ void Game::Net::Server::service() {
     if (enet_host_service(server, &event, serviceBlockTimeMs)) {
         switch (event.type) {
             case ENET_EVENT_TYPE_CONNECT: {
-                std::cout << "Client connected [" << event.peer->address.host << ":" << event.peer->address.port << "]";
+                std::cout << "Client connected [" << event.peer->address.host << ":" << event.peer->address.port << "]" << std::endl;
                 break;
             }
             case ENET_EVENT_TYPE_DISCONNECT: {

@@ -5,6 +5,7 @@
 
 #include "Engine/Core.h"
 #include "Engine/Input.h"
+#include "Game/Net/Client.h"
 #include "Game/Net/Server.h"
 #include "Game/Play.h"
 
@@ -15,6 +16,8 @@ int kickstart(int argc, char **argv) {
         Game::Net::Server(); // TODO: Might stack alloc be problematic if server memory usage large?
         return 0;
     }
+    Game::Net::Client client;
+    client.service();
     Engine::Core &engine = Engine::Core::getInstance();
     engine.setScene(std::make_shared<Game::Play>());
     engine.start();
