@@ -9,6 +9,7 @@ namespace Game {
     public:
         Kore::vec2 position;
         Wall(Kore::vec2 position);
+        int health = 8;
     };
 } // namespace Game
 

@@ -50,12 +50,18 @@ void Game::Play::update() {
                       // TODO: Avoid n^2
                       for (auto &wall : walls) {
                           if ((bullet.pos - wall.position).squareLength() < (10 * 10)) {
+                              wall.health--;
                               return true;
                           }
                       }
                       return false;
                   }),
                   bullets.end());
+
+    walls.erase(std::remove_if(walls.begin(), walls.end(), [&](Game::Wall wall) -> bool {
+                    return wall.health <= 0;
+                }),
+                walls.end());
 
     controlledCar->update(walls);
 
