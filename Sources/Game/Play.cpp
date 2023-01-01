@@ -47,9 +47,14 @@ void Game::Play::onPlayerJoinMessage(uint8_t playerId) {
     std::cout << "New player with id " << static_cast<unsigned int>(playerId) << " joined" << std::endl;
 }
 
+void Game::Play::onPlayerMoveMessage(uint8_t playerId, int x, int y, float angle) {
+    std::cout << "Player with id " << static_cast<unsigned int>(playerId) << " moved. x: " << x << ", y: " << y << ", Θ: " << angle << std::endl;
+}
+
 void Game::Play::update() {
 
     client.service(*this);
+    client.sendPlayerMove(controlledCar->pos.x(), controlledCar->pos.y(), controlledCar->angle);
 
     editingScene = Engine::Input::keysDown.at(Kore::KeyTab);
 

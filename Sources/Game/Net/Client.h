@@ -3,6 +3,7 @@
 
 #include "Message.h"
 #include "MessageReceiver.h"
+#include <cstring>
 #include <enet/enet.h>
 #include <exception>
 #include <iostream>
@@ -16,6 +17,8 @@ namespace Game {
         public:
             Client();
             ~Client();
+
+            void sendPlayerMove(int x, int y, float angle);
 
             void service(MessageReceiver &receiver);
         };

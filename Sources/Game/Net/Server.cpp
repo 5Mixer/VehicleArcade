@@ -44,18 +44,39 @@ void Game::Net::Server::service() {
                           << ":"
                           << event.peer->address.port
                           << "] playerID: "
-                          << playerId
+                          << static_cast<unsigned int>(playerId)
                           << std::endl;
 
-                ENetPacket *joinPacket = playerJoinPacket(playerId);
-                enet_host_broadcast(server, 0, joinPacket);
+                event.peer->data = malloc(sizeof(std::uint8_t));
+                *(std::uint8_t *)(event.peer->data) = playerId;
+
+                enet_host_broadcast(server, 0, createPlayerJoinPacket(playerId));
 
                 break;
             }
             case ENET_EVENT_TYPE_DISCONNECT: {
+                free(event.peer->data);
                 break;
             }
             case ENET_EVENT_TYPE_RECEIVE: {
+                switch (event.packet->data[0]) {
+                    case static_cast<std::uint8_t>(MessageType::PLAYER_JOIN): {
+                        // receiver.onPlayerJoinMessage(event.packet->data[1]);
+                        break;
+                    }
+                    case static_cast<std::uint8_t>(MessageType::PLAYER_MOVE): {
+                        // receiver.onPlayerJoinMessage(event.packet->data[1]);
+                        enet_host_broadcast(server, 0, event.packet); // TODO: Remove this hack!
+                        enet_host_flush(server);
+                        return;
+                        break;
+                    }
+                    default: {
+                        std::cerr << "Received unknown message type " << static_cast<unsigned int>(event.packet->data[0]) << std::endl;
+                        break;
+                    }
+                }
+                enet_packet_destroy(event.packet);
                 break;
             }
             case ENET_EVENT_TYPE_NONE: {
@@ -65,7 +86,7 @@ void Game::Net::Server::service() {
     }
 }
 
-ENetPacket *Game::Net::Server::playerJoinPacket(std::uint8_t playerId) {
+ENetPacket *Game::Net::Server::createPlayerJoinPacket(std::uint8_t playerId) {
     uint8_t data[2] = {
         static_cast<std::uint8_t>(MessageType::PLAYER_JOIN), playerId};
     ENetPacket *packet = enet_packet_create(data, sizeof(data), ENET_PACKET_FLAG_RELIABLE);

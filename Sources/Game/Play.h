@@ -37,6 +37,7 @@ namespace Game {
         std::string toString();
 
         void onPlayerJoinMessage(uint8_t playerId);
+        void onPlayerMoveMessage(uint8_t playerId, int x, int y, float angle);
     };
 } // namespace Game
 

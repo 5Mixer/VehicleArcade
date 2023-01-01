@@ -16,7 +16,7 @@ namespace Game {
             void service();
             std::uint8_t nextPlayerId = 0;
 
-            ENetPacket *playerJoinPacket(uint8_t playerId);
+            ENetPacket *createPlayerJoinPacket(uint8_t playerId);
 
         public:
             Server();

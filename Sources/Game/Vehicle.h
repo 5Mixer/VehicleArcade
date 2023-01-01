@@ -12,11 +12,11 @@ namespace Game {
     class Vehicle {
     private:
         float forwardsVelocity;
-        float angle;
         float turnRateVelocityFactor(float speed, float maximumSpeed);
 
     public:
         Kore::vec2 pos;
+        float angle;
         void accelerate(float acceleration);
         void turn(float angleDelta);
         void update(std::vector<Game::Wall> &walls);
