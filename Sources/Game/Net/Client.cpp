@@ -26,13 +26,10 @@ Game::Net::Client::Client() {
         exit(1);
     }
 
-    /* Wait up to 5 seconds for the connection attempt to succeed. */
-    if (enet_host_service(client, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
+    /* Wait for the connection attempt to succeed. */
+    if (enet_host_service(client, &event, 2000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
         std::cout << "Connected to server" << std::endl;
     } else {
-        /* Either the 5 seconds are up or a disconnect event was */
-        /* received. Reset the peer in the event the 5 seconds   */
-        /* had run out without any significant event.            */
         enet_peer_reset(peer);
 
         std::cerr << "Failed to connect to server" << std::endl;
@@ -40,10 +37,34 @@ Game::Net::Client::Client() {
     }
 }
 
-void Game::Net::Client::service() {
+void Game::Net::Client::service(MessageReceiver &receiver) {
     ENetEvent event;
-    /* Wait up to 1000 milliseconds for an event. */
-    while (enet_host_service(client, &event, 1000) > 0) {
+
+    while (enet_host_service(client, &event, 0) > 0) {
+        switch (event.type) {
+            case ENET_EVENT_TYPE_CONNECT: {
+                std::cout << "Connected to server [" << event.peer->address.host << ":" << event.peer->address.port << "]" << std::endl;
+                break;
+            }
+            case ENET_EVENT_TYPE_DISCONNECT: {
+                break;
+            }
+            case ENET_EVENT_TYPE_RECEIVE: {
+                std::cout << "Received " << event.packet->data << std::endl;
+
+                switch (event.packet->data[0]) {
+                    case static_cast<std::uint8_t>(MessageType::PLAYER_JOIN): {
+                        receiver.onPlayerJoinMessage(event.packet->data[1]);
+                        break;
+                    }
+                }
+
+                break;
+            }
+            case ENET_EVENT_TYPE_NONE: {
+                break;
+            }
+        }
     }
 }
 

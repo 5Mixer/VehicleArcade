@@ -12,8 +12,8 @@
 namespace Engine {
     class Core {
     private:
-        std::shared_ptr<Graphics> graphics;
-        std::shared_ptr<Scene> scene;
+        std::unique_ptr<Graphics> graphics; // This must not be default initialised as K won't be initialised. Hence pointer.
+        Scene *scene;
 
     public:
         static Core &getInstance() {
@@ -32,7 +32,7 @@ namespace Engine {
         void init();
         void start();
         void update();
-        void setScene(std::shared_ptr<Scene> scene);
+        void setScene(Scene *const scene);
     };
 } // namespace Engine
 

@@ -5,6 +5,8 @@
 #include "../Engine/Graphics.h"
 #include "../Engine/Scene.h"
 #include "Bullet.h"
+#include "Net/Client.h"
+#include "Net/MessageReceiver.h"
 #include "Vehicle.h"
 #include "Wall.h"
 #include <Kore/IO/FileReader.h>
@@ -16,8 +18,10 @@
 #include <vector>
 
 namespace Game {
-    class Play : public Engine::Scene {
+    class Play : public Engine::Scene, public Game::Net::MessageReceiver {
     private:
+        Game::Net::Client &client;
+
         std::vector<Game::Bullet> bullets;
         std::vector<Game::Wall> walls;
         std::shared_ptr<Game::Vehicle> controlledCar;
@@ -27,10 +31,12 @@ namespace Game {
         void save();
 
     public:
-        Play();
+        Play(Game::Net::Client &client);
         void render(Engine::Graphics &g);
         void update();
         std::string toString();
+
+        void onPlayerJoinMessage(uint8_t playerId);
     };
 } // namespace Game
 

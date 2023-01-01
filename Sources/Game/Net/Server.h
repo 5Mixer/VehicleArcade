@@ -1,6 +1,8 @@
 #ifndef GAME_NET_SERVER
 #define GAME_NET_SERVER
 
+#include "Message.h"
+#include <cstdint>
 #include <enet/enet.h>
 #include <iostream>
 
@@ -12,6 +14,9 @@ namespace Game {
             int serviceBlockTimeMs = 200;
             ENetHost *server;
             void service();
+            std::uint8_t nextPlayerId = 0;
+
+            ENetPacket *playerJoinPacket(uint8_t playerId);
 
         public:
             Server();

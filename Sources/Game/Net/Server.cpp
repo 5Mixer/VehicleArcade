@@ -1,4 +1,5 @@
 #include "Server.h"
+#include <memory>
 
 Game::Net::Server::Server() {
     if (enet_initialize() != 0) {
@@ -36,7 +37,19 @@ void Game::Net::Server::service() {
     if (enet_host_service(server, &event, serviceBlockTimeMs)) {
         switch (event.type) {
             case ENET_EVENT_TYPE_CONNECT: {
-                std::cout << "Client connected [" << event.peer->address.host << ":" << event.peer->address.port << "]" << std::endl;
+                auto playerId = nextPlayerId++;
+
+                std::cout << "Client connected ["
+                          << event.peer->address.host
+                          << ":"
+                          << event.peer->address.port
+                          << "] playerID: "
+                          << playerId
+                          << std::endl;
+
+                ENetPacket *joinPacket = playerJoinPacket(playerId);
+                enet_host_broadcast(server, 0, joinPacket);
+
                 break;
             }
             case ENET_EVENT_TYPE_DISCONNECT: {
@@ -50,6 +63,14 @@ void Game::Net::Server::service() {
             }
         }
     }
+}
+
+ENetPacket *Game::Net::Server::playerJoinPacket(std::uint8_t playerId) {
+    uint8_t data[2] = {
+        static_cast<std::uint8_t>(MessageType::PLAYER_JOIN), playerId};
+    ENetPacket *packet = enet_packet_create(data, sizeof(data), ENET_PACKET_FLAG_RELIABLE);
+
+    return packet;
 }
 
 Game::Net::Server::~Server() {

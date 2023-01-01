@@ -7,12 +7,12 @@ namespace Engine {
     void Core::init() {
         Kore::System::init("Vehicle Arcade", 1024, 768);
 
-        graphics = std::make_shared<Graphics>();
+        graphics = std::make_unique<Graphics>();
 
         Input::init();
     }
 
-    void Core::setScene(std::shared_ptr<Engine::Scene> scene) {
+    void Core::setScene(Engine::Scene *const scene) {
         this->scene = scene;
     }
 

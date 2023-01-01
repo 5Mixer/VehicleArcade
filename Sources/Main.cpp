@@ -13,13 +13,16 @@
 
 int kickstart(int argc, char **argv) {
     if (argc == 2 && argv[1] == std::string("server")) {
-        Game::Net::Server(); // TODO: Might stack alloc be problematic if server memory usage large?
+        Game::Net::Server();
         return 0;
     }
-    Game::Net::Client client;
-    client.service();
+
+    std::unique_ptr<Game::Net::Client> client = std::make_unique<Game::Net::Client>();
+
     Engine::Core &engine = Engine::Core::getInstance();
-    engine.setScene(std::make_shared<Game::Play>());
+
+    auto playScene = std::unique_ptr<Game::Play>(new Game::Play(*(client.get())));
+    engine.setScene(playScene.get());
     engine.start();
 
     return 0;

@@ -1,8 +1,9 @@
 #include "Play.h"
 
-Game::Play::Play()
+Game::Play::Play(Game::Net::Client &client)
     : editingScene(false),
-      controlledCar(std::make_shared<Game::Vehicle>()) {
+      controlledCar(std::make_shared<Game::Vehicle>()),
+      client(client) {
 
     auto reader = Kore::FileReader();
 
@@ -42,14 +43,20 @@ void Game::Play::render(Engine::Graphics &graphics) {
     graphics.transform(camera.getTransform().Invert());
 }
 
+void Game::Play::onPlayerJoinMessage(uint8_t playerId) {
+    std::cout << "New player with id " << static_cast<unsigned int>(playerId) << " joined" << std::endl;
+}
+
 void Game::Play::update() {
+
+    client.service(*this);
 
     editingScene = Engine::Input::keysDown.at(Kore::KeyTab);
 
     bullets.erase(std::remove_if(bullets.begin(), bullets.end(), [&](Game::Bullet bullet) -> bool {
                       // TODO: Avoid n^2
                       for (auto &wall : walls) {
-                          if ((bullet.pos - wall.position).squareLength() < (10 * 10)) {
+                          if ((bullet.pos - wall.position).squareLength() < std::pow(10, 2)) {
                               wall.health--;
                               return true;
                           }
