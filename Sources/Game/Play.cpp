@@ -2,7 +2,7 @@
 
 Game::Play::Play(Game::Net::Client &client)
     : editingScene(false),
-      controlledCar(std::make_shared<Game::Vehicle>()),
+      controlledCar(std::shared_ptr<Game::Vehicle>(new Game::Vehicle(255))),
       client(client) {
 
     auto reader = Kore::FileReader();
@@ -38,23 +38,53 @@ void Game::Play::render(Engine::Graphics &graphics) {
         }
     }
 
+    for (auto &vehicle : vehicles) {
+        vehicle.render(graphics);
+    }
+
     controlledCar->render(graphics);
 
     graphics.transform(camera.getTransform().Invert());
 }
 
 void Game::Play::onPlayerJoinMessage(uint8_t playerId) {
+    if (controlledCar->id == playerId) {
+        return;
+    }
+
     std::cout << "New player with id " << static_cast<unsigned int>(playerId) << " joined" << std::endl;
+    vehicles.push_back(Game::Vehicle{playerId});
 }
 
-void Game::Play::onPlayerMoveMessage(uint8_t playerId, int x, int y, float angle) {
+void Game::Play::onPlayerJoinDownloadMessage(uint8_t playerId) {
+    controlledCar->id = playerId;
+}
+
+void Game::Play::onPlayerMoveMessage(uint8_t playerId, float x, float y, float angle) {
+    if (controlledCar->id == playerId) {
+        return;
+    }
     std::cout << "Player with id " << static_cast<unsigned int>(playerId) << " moved. x: " << x << ", y: " << y << ", Θ: " << angle << std::endl;
+    bool found = false;
+    for (auto &vehicle : vehicles) {
+
+        if (vehicle.id == playerId) {
+            vehicle.pos.x() = x;
+            vehicle.pos.y() = y;
+            vehicle.angle = angle;
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        vehicles.push_back(Game::Vehicle{playerId});
+    }
 }
 
 void Game::Play::update() {
 
     client.service(*this);
-    client.sendPlayerMove(controlledCar->pos.x(), controlledCar->pos.y(), controlledCar->angle);
+    client.sendPlayerMove(controlledCar->pos.x() * 10, controlledCar->pos.y() * 10, controlledCar->angle);
 
     editingScene = Engine::Input::keysDown.at(Kore::KeyTab);
 

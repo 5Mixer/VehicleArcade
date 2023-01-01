@@ -15,6 +15,8 @@ namespace Game {
         float turnRateVelocityFactor(float speed, float maximumSpeed);
 
     public:
+        Vehicle(std::uint8_t id) : id(id){};
+        std::uint8_t id;
         Kore::vec2 pos;
         float angle;
         void accelerate(float acceleration);

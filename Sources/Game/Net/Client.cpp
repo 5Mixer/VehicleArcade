@@ -55,21 +55,24 @@ void Game::Net::Client::service(MessageReceiver &receiver) {
                         receiver.onPlayerJoinMessage(event.packet->data[1]);
                         break;
                     }
+                    case static_cast<std::uint8_t>(MessageType::PLAYER_JOIN_DOWNLOAD): {
+                        receiver.onPlayerJoinDownloadMessage(event.packet->data[1]);
+                        break;
+                    }
                     case static_cast<std::uint8_t>(MessageType::PLAYER_MOVE): {
                         receiver.onPlayerMoveMessage(
                             event.packet->data[1],
-                            int((unsigned char)(event.packet->data[2 + 0]) << 24 |
-                                (unsigned char)(event.packet->data[2 + 1]) << 16 |
-                                (unsigned char)(event.packet->data[2 + 2]) << 8 |
-                                (unsigned char)(event.packet->data[2 + 3])),
-                            int((unsigned char)(event.packet->data[6 + 0]) << 24 |
-                                (unsigned char)(event.packet->data[6 + 1]) << 16 |
-                                (unsigned char)(event.packet->data[6 + 2]) << 8 |
-                                (unsigned char)(event.packet->data[6 + 3])),
-                            float((unsigned char)(event.packet->data[10 + 0]) << 24 |
-                                  (unsigned char)(event.packet->data[10 + 1]) << 16 |
-                                  (unsigned char)(event.packet->data[10 + 2]) << 8 |
-                                  (unsigned char)(event.packet->data[10 + 3])));
+                            float((unsigned char)(event.packet->data[2 + 0]) << 0 |
+                                  (unsigned char)(event.packet->data[2 + 1]) << 8 |
+                                  (unsigned char)(event.packet->data[2 + 2]) << 16 |
+                                  (unsigned char)(event.packet->data[2 + 3]) << 24) /
+                                10,
+                            float((unsigned char)(event.packet->data[6 + 0]) << 0 |
+                                  (unsigned char)(event.packet->data[6 + 1]) << 8 |
+                                  (unsigned char)(event.packet->data[6 + 2]) << 16 |
+                                  (unsigned char)(event.packet->data[6 + 3]) << 24) /
+                                10,
+                            float(event.packet->data[10]) / 255 * 3.14 * 2);
                         break;
                     }
                     default: {
@@ -90,13 +93,14 @@ void Game::Net::Client::service(MessageReceiver &receiver) {
 }
 
 void Game::Net::Client::sendPlayerMove(int x, int y, float angle) {
-    int8_t data[1 + 1 + 2 * sizeof(int) + sizeof(float)];
+    int8_t data[1 + 1 + 2 * sizeof(int) + 1];
 
     data[0] = static_cast<std::uint8_t>(MessageType::PLAYER_MOVE);
     data[1] = 0; // playerID
     std::memcpy(&data[2], &x, 4);
     std::memcpy(&data[2 + 4], &y, 4);
-    std::memcpy(&data[2 + 4 + 4], &angle, 4);
+    data[10] = static_cast<std::uint8_t>(std::fmod(angle, 2 * 3.14) / (2 * 3.14) * 255);
+    // std::memcpy(&data[2 + 4 + 4], &angle, 4);
 
     ENetPacket *packet = enet_packet_create(data, sizeof(data), ENET_PACKET_FLAG_UNSEQUENCED);
 

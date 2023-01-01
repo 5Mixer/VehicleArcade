@@ -39,6 +39,12 @@ void Game::Net::Server::service() {
             case ENET_EVENT_TYPE_CONNECT: {
                 auto playerId = nextPlayerId++;
 
+                uint8_t joinResponseData[2] = {
+                    static_cast<std::uint8_t>(MessageType::PLAYER_JOIN_DOWNLOAD), playerId};
+                ENetPacket *joinResponsePacket = enet_packet_create(joinResponseData, sizeof(joinResponseData), ENET_PACKET_FLAG_RELIABLE);
+
+                enet_peer_send(event.peer, 0, joinResponsePacket);
+
                 std::cout << "Client connected ["
                           << event.peer->address.host
                           << ":"
@@ -65,7 +71,9 @@ void Game::Net::Server::service() {
                         break;
                     }
                     case static_cast<std::uint8_t>(MessageType::PLAYER_MOVE): {
+
                         // receiver.onPlayerJoinMessage(event.packet->data[1]);
+                        (event.packet->data)[1] = *(std::uint8_t *)(event.peer->data);
                         enet_host_broadcast(server, 0, event.packet); // TODO: Remove this hack!
                         enet_host_flush(server);
                         return;

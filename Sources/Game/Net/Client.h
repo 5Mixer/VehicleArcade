@@ -3,6 +3,7 @@
 
 #include "Message.h"
 #include "MessageReceiver.h"
+#include <cmath>
 #include <cstring>
 #include <enet/enet.h>
 #include <exception>

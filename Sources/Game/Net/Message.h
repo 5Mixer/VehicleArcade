@@ -8,7 +8,8 @@ namespace Game {
         enum class MessageType : unsigned char {
             PLAYER_JOIN = 1,
             PLAYER_LEAVE = 2,
-            PLAYER_MOVE = 3
+            PLAYER_MOVE = 3,
+            PLAYER_JOIN_DOWNLOAD = 4,
         };
 
         /*class Message {

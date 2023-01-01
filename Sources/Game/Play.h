@@ -24,6 +24,7 @@ namespace Game {
 
         std::vector<Game::Bullet> bullets;
         std::vector<Game::Wall> walls;
+        std::vector<Game::Vehicle> vehicles;
         std::shared_ptr<Game::Vehicle> controlledCar;
         Engine::Camera camera;
 
@@ -37,7 +38,8 @@ namespace Game {
         std::string toString();
 
         void onPlayerJoinMessage(uint8_t playerId);
-        void onPlayerMoveMessage(uint8_t playerId, int x, int y, float angle);
+        void onPlayerMoveMessage(uint8_t playerId, float x, float y, float angle);
+        void onPlayerJoinDownloadMessage(uint8_t playerId); // server -> new client
     };
 } // namespace Game
 
