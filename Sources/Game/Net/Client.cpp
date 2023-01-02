@@ -70,7 +70,7 @@ void Game::Net::Client::service(MessageReceiver &receiver) {
 
 void Game::Net::Client::sendPlayerMove(int x, int y, float angle) {
     Packet packet;
-    packet.writeU8(static_cast<std::uint8_t>(MessageType::PLAYER_MOVE));
+    packet.write(MessageType::PLAYER_MOVE);
     packet.writeU8(0); //playerID
     packet.writeU32LE(x);
     packet.writeU32LE(y);

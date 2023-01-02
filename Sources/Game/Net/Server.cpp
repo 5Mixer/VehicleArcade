@@ -29,14 +29,14 @@ void Game::Net::Server::run() {
     std::cout << "Server initialised at " << address.host << ":" << address.port << std::endl;
 
     while (hosting) {
-        service();
+        service(*this);
     }
 }
 
-void Game::Net::Server::service() {
+void Game::Net::Server::service(MessageReceiver &receiver) {
     ENetEvent event;
 
-    if (enet_host_service(server, &event, serviceBlockTimeMs)) {
+    while (enet_host_service(server, &event, 0) > 0) {
         switch (event.type) {
             case ENET_EVENT_TYPE_CONNECT: {
                 auto playerId = nextPlayerId++;
@@ -63,40 +63,29 @@ void Game::Net::Server::service() {
                 break;
             }
             case ENET_EVENT_TYPE_DISCONNECT: {
+                receiver.onDisconnect();
+
                 if (event.peer->data != nullptr) {
                     free(event.peer->data);
                 }
+
                 break;
             }
             case ENET_EVENT_TYPE_RECEIVE: {
-                if (*(std::uint8_t *)event.peer->data == static_cast<std::uint8_t>(255)) {
-                    std::cout << "Ignoring playerId 255" << std::endl;
-                    return;
-                }
                 if (event.peer->data == nullptr) {
                     enet_peer_disconnect(event.peer, static_cast<std::uint32_t>(DisconnectReason::MESSAGE_BEFORE_JOIN));
                 }
 
-                switch (event.packet->data[0]) {
-                    case static_cast<std::uint8_t>(MessageType::PLAYER_JOIN): {
-                        // receiver.onPlayerJoinMessage(event.packet->data[1]);
-                        break;
-                    }
-                    case static_cast<std::uint8_t>(MessageType::PLAYER_MOVE): {
-
-                        // receiver.onPlayerJoinMessage(event.packet->data[1]);
-                        (event.packet->data)[1] = *(std::uint8_t *)(event.peer->data);
-                        enet_host_broadcast(server, 0, event.packet); // TODO: Remove this hack!
-                        enet_host_flush(server);
-                        return;
-                        break;
-                    }
-                    default: {
-                        std::cerr << "Received unknown message type " << static_cast<unsigned int>(event.packet->data[0]) << std::endl;
-                        break;
-                    }
+                // Don't trust the client to give their own playerID
+                // TODO: Revisit if there is a better way to deal with player ID's, passing the peer, etc, while
+                //       keeping MessageReceiver client applicable
+                if (static_cast<MessageType>(event.packet->data[0]) == MessageType::PLAYER_MOVE) {
+                    event.packet->data[1] = *static_cast<std::uint8_t *>(event.peer->data);
                 }
+
+                receiver.processRawPacket(event.packet->data, event.packet->dataLength);
                 enet_packet_destroy(event.packet);
+
                 break;
             }
             case ENET_EVENT_TYPE_NONE: {
@@ -104,6 +93,17 @@ void Game::Net::Server::service() {
             }
         }
     }
+}
+
+void Game::Net::Server::onPlayerMoveMessage(uint8_t playerId, float x, float y, float angle) {
+    Packet packet;
+    packet.write(MessageType::PLAYER_MOVE);
+    packet.writeU8(playerId);  //playerID, as overriden server-side
+    packet.writeU32LE(x * 10); // TODO: *10, /10 could be done outside MessageReceiver, or not at all?
+    packet.writeU32LE(y * 10);
+    packet.writeU8(static_cast<std::uint8_t>(angle / (2 * 3.14) * 255));
+
+    enet_host_broadcast(server, 0, packet.generate(ENET_PACKET_FLAG_UNSEQUENCED));
 }
 
 ENetPacket *Game::Net::Server::createPlayerJoinPacket(std::uint8_t playerId) {

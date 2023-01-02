@@ -1,6 +1,7 @@
 #ifndef GAME_NET_PACKET
 #define GAME_NET_PACKET
 
+#include "Message.h"
 #include <Kore/IO/Writer.h>
 #include <cstdint>
 #include <enet/enet.h>
@@ -17,6 +18,10 @@ namespace Game {
                 for (int i = 0; i < size; i++) {
                     bytes.push_back(*(reinterpret_cast<std::uint8_t *>(data) + i));
                 }
+            }
+
+            void write(MessageType messageType) {
+                writeU8(static_cast<std::uint8_t>(messageType));
             }
 
             ENetPacket *generate(enet_uint32 flags) {
