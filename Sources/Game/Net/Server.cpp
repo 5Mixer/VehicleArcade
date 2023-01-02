@@ -1,7 +1,9 @@
 #include "Server.h"
-#include <memory>
 
 Game::Net::Server::Server() {
+}
+
+void Game::Net::Server::run() {
     if (enet_initialize() != 0) {
         std::cerr << "Could not initialise enet" << std::endl;
         exit(1);
@@ -61,10 +63,16 @@ void Game::Net::Server::service() {
                 break;
             }
             case ENET_EVENT_TYPE_DISCONNECT: {
-                free(event.peer->data);
+                if (event.peer->data != nullptr) {
+                    free(event.peer->data);
+                }
                 break;
             }
             case ENET_EVENT_TYPE_RECEIVE: {
+                if (event.peer->data == nullptr) {
+                    enet_peer_disconnect(event.peer, static_cast<std::uint32_t>(DisconnectReason::MESSAGE_BEFORE_JOIN));
+                }
+
                 switch (event.packet->data[0]) {
                     case static_cast<std::uint8_t>(MessageType::PLAYER_JOIN): {
                         // receiver.onPlayerJoinMessage(event.packet->data[1]);
@@ -102,7 +110,14 @@ ENetPacket *Game::Net::Server::createPlayerJoinPacket(std::uint8_t playerId) {
     return packet;
 }
 
-Game::Net::Server::~Server() {
+void Game::Net::Server::kill() {
+    for (size_t i = 0; i < server->peerCount; i++) {
+        enet_peer_disconnect_now(&server->peers[i], 0);
+    }
     enet_host_destroy(server);
     enet_deinitialize();
+}
+
+Game::Net::Server::~Server() {
+    kill();
 }

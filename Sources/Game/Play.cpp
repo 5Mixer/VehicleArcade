@@ -55,8 +55,13 @@ void Game::Play::onPlayerJoinMessage(uint8_t playerId) {
     std::cout << "New player with id " << static_cast<unsigned int>(playerId) << " joined" << std::endl;
     vehicles.push_back(Game::Vehicle{playerId});
 }
+void Game::Play::onDisconnect() {
+    std::cerr << "Disconnected from server" << std::endl;
+    exit(1);
+}
 
 void Game::Play::onPlayerJoinDownloadMessage(uint8_t playerId) {
+    std::cout << "Received player id assignment " << static_cast<unsigned int>(playerId) << std::endl;
     controlledCar->id = playerId;
 }
 
@@ -64,7 +69,7 @@ void Game::Play::onPlayerMoveMessage(uint8_t playerId, float x, float y, float a
     if (controlledCar->id == playerId) {
         return;
     }
-    std::cout << "Player with id " << static_cast<unsigned int>(playerId) << " moved. x: " << x << ", y: " << y << ", Θ: " << angle << std::endl;
+    // std::cout << "Player with id " << static_cast<unsigned int>(playerId) << " moved. x: " << x << ", y: " << y << ", Θ: " << angle << std::endl;
     bool found = false;
     for (auto &vehicle : vehicles) {
 

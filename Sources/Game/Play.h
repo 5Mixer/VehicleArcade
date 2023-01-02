@@ -40,6 +40,7 @@ namespace Game {
         void onPlayerJoinMessage(uint8_t playerId);
         void onPlayerMoveMessage(uint8_t playerId, float x, float y, float angle);
         void onPlayerJoinDownloadMessage(uint8_t playerId); // server -> new client
+        void onDisconnect();
     };
 } // namespace Game
 

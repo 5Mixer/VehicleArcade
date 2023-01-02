@@ -1,5 +1,6 @@
 #include <Kore/IO/FileReader.h>
 #include <Kore/System.h>
+#include <csignal>
 #include <limits>
 #include <memory>
 
@@ -11,9 +12,18 @@
 
 #include <Kore/Graphics2/Graphics.h>
 
+Game::Net::Server *server;
+
+void onSigInt(int sig) {
+    server->kill();
+    exit(EXIT_SUCCESS);
+}
+
 int kickstart(int argc, char **argv) {
     if (argc == 2 && argv[1] == std::string("server")) {
-        Game::Net::Server();
+        signal(SIGINT, onSigInt);
+        server = new Game::Net::Server();
+        server->run(); // Blocking
         return 0;
     }
 

@@ -72,6 +72,7 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "hash_set": "cpp",
-        "shared_mutex": "cpp"
+        "shared_mutex": "cpp",
+        "csignal": "cpp"
     }
 }

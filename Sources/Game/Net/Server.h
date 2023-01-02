@@ -5,14 +5,15 @@
 #include <cstdint>
 #include <enet/enet.h>
 #include <iostream>
+#include <memory>
 
 namespace Game {
     namespace Net {
         class Server {
         private:
             bool hosting = true;
-            int serviceBlockTimeMs = 200;
             ENetHost *server;
+            int serviceBlockTimeMs = 200;
             void service();
             std::uint8_t nextPlayerId = 0;
 
@@ -21,6 +22,8 @@ namespace Game {
         public:
             Server();
             ~Server();
+            void run();
+            void kill();
         };
     } // namespace Net
 } // namespace Game

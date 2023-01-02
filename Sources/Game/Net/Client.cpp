@@ -40,6 +40,11 @@ Game::Net::Client::Client() {
 void Game::Net::Client::service(MessageReceiver &receiver) {
     ENetEvent event;
 
+    if (client->peerCount < 1) {
+        receiver.onTimeout();
+        return;
+    }
+
     while (enet_host_service(client, &event, 0) > 0) {
         switch (event.type) {
             case ENET_EVENT_TYPE_CONNECT: {
@@ -47,6 +52,7 @@ void Game::Net::Client::service(MessageReceiver &receiver) {
                 break;
             }
             case ENET_EVENT_TYPE_DISCONNECT: {
+                receiver.onDisconnect();
                 break;
             }
             case ENET_EVENT_TYPE_RECEIVE: {
