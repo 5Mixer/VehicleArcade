@@ -14,8 +14,8 @@ namespace Engine {
     private:
         void start();
         std::unique_ptr<Kore::Graphics2::Graphics2> graphics;
-        std::unique_ptr<Kore::Graphics4::Texture> texture;
-        std::unique_ptr<Kore::Graphics4::Texture> grassTexture;
+        Kore::Graphics4::Texture texture;
+        Kore::Graphics4::Texture grassTexture;
 
     public:
         Graphics();
