@@ -56,34 +56,7 @@ void Game::Net::Client::service(MessageReceiver &receiver) {
                 break;
             }
             case ENET_EVENT_TYPE_RECEIVE: {
-                Kore::BufferReader reader(event.packet->data, event.packet->dataLength);
-
-                std::uint8_t messageType = reader.readU8();
-
-                switch (messageType) {
-                    case static_cast<std::uint8_t>(MessageType::PLAYER_JOIN): {
-                        receiver.onPlayerJoinMessage(reader.readU8());
-                        break;
-                    }
-                    case static_cast<std::uint8_t>(MessageType::PLAYER_JOIN_DOWNLOAD): {
-                        receiver.onPlayerJoinDownloadMessage(reader.readU8());
-                        break;
-                    }
-                    case static_cast<std::uint8_t>(MessageType::PLAYER_MOVE): {
-                        std::uint8_t playerId = reader.readU8();
-                        float x = float(reader.readS32LE()) / 10;
-                        float y = float(reader.readS32LE()) / 10;
-                        float angle = float(reader.readU8()) / 255 * 3.14 * 2;
-
-                        receiver.onPlayerMoveMessage(playerId, x, y, angle);
-                        break;
-                    }
-                    default: {
-                        std::cerr << "Received unknown message type " << static_cast<unsigned int>(messageType);
-                        exit(1);
-                    }
-                }
-
+                receiver.processRawPacket(event.packet->data, event.packet->dataLength);
                 enet_packet_destroy(event.packet);
 
                 break;

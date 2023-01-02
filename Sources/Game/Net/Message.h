@@ -15,18 +15,6 @@ namespace Game {
         enum class DisconnectReason : std::uint32_t {
             MESSAGE_BEFORE_JOIN = 1, // A message was received from a peer without a playerId set
         };
-
-        /*class Message {
-        public:
-            const MessageType type;
-            Message(MessageType type) : type(type){};
-        };
-
-        class MessagePlayerJoin : public Message {
-        public:
-            const unsigned char playerId;
-        };*/
-
     } // namespace Net
 } // namespace Game
 

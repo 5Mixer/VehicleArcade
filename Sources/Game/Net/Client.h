@@ -4,7 +4,6 @@
 #include "Message.h"
 #include "MessageReceiver.h"
 #include "Packet.h"
-#include <Kore/IO/BufferReader.h>
 #include <cmath>
 #include <cstring>
 #include <enet/enet.h>

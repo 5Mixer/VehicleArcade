@@ -1,6 +1,11 @@
 #ifndef GAME_NET_MESSAGE_RECEIVER
 #define GAME_NET_MESSAGE_RECEIVER
 
+#include "Message.h"
+#include <Kore/IO/BufferReader.h>
+#include <cstdint>
+#include <iostream>
+
 /**
  * MessageReceiver is an abstract class that allows concrete classes to directly
  * handle every type of deserialised network message
@@ -17,6 +22,8 @@ namespace Game {
             virtual void onPlayerMoveMessage(uint8_t playerId, float x, float y, float angle) = 0;
             virtual void onDisconnect() = 0;
             void onTimeout() { onDisconnect(); };
+
+            void processRawPacket(const void *buffer, int size);
         };
 
     } // namespace Net
