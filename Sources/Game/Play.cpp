@@ -89,7 +89,7 @@ void Game::Play::onPlayerMoveMessage(uint8_t playerId, float x, float y, float a
 void Game::Play::update() {
 
     client.service(*this);
-    client.sendPlayerMove(controlledCar->pos.x() * 10, controlledCar->pos.y() * 10, controlledCar->angle);
+    client.sendPlayerMove(controlledCar->pos.x(), controlledCar->pos.y(), controlledCar->angle);
 
     editingScene = Engine::Input::keysDown.at(Kore::KeyTab);
 

@@ -41,11 +41,10 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
             case ENET_EVENT_TYPE_CONNECT: {
                 auto playerId = nextPlayerId++;
 
-                uint8_t joinResponseData[2] = {
-                    static_cast<std::uint8_t>(MessageType::PLAYER_JOIN_DOWNLOAD), playerId};
-                ENetPacket *joinResponsePacket = enet_packet_create(joinResponseData, sizeof(joinResponseData), ENET_PACKET_FLAG_RELIABLE);
+                Packet joinResponsePacket{MessageType::PLAYER_JOIN_DOWNLOAD};
+                joinResponsePacket.writeU8(playerId);
 
-                enet_peer_send(event.peer, 0, joinResponsePacket);
+                enet_peer_send(event.peer, 0, joinResponsePacket.generate(ENET_PACKET_FLAG_RELIABLE));
 
                 std::cout << "Client connected ["
                           << event.peer->address.host
@@ -96,22 +95,19 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
 }
 
 void Game::Net::Server::onPlayerMoveMessage(uint8_t playerId, float x, float y, float angle) {
-    Packet packet;
-    packet.write(MessageType::PLAYER_MOVE);
-    packet.writeU8(playerId);  //playerID, as overriden server-side
-    packet.writeU32LE(x * 10); // TODO: *10, /10 could be done outside MessageReceiver, or not at all?
-    packet.writeU32LE(y * 10);
-    packet.writeU8(static_cast<std::uint8_t>(angle / (2 * 3.14) * 255));
+    PacketPlayerMove packet{playerId,
+                            x,
+                            y,
+                            angle};
 
     enet_host_broadcast(server, 0, packet.generate(ENET_PACKET_FLAG_UNSEQUENCED));
 }
 
 ENetPacket *Game::Net::Server::createPlayerJoinPacket(std::uint8_t playerId) {
-    uint8_t data[2] = {
-        static_cast<std::uint8_t>(MessageType::PLAYER_JOIN), playerId};
-    ENetPacket *packet = enet_packet_create(data, sizeof(data), ENET_PACKET_FLAG_RELIABLE);
+    Packet packet{MessageType::PLAYER_JOIN};
+    packet.writeU8(playerId);
 
-    return packet;
+    return packet.generate(ENET_PACKET_FLAG_RELIABLE);
 }
 
 void Game::Net::Server::kill() {

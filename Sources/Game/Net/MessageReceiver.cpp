@@ -15,12 +15,8 @@ void Game::Net::MessageReceiver::processRawPacket(const void *buffer, int size) 
             break;
         }
         case MessageType::PLAYER_MOVE: {
-            std::uint8_t playerId = reader.readU8();
-            float x = float(reader.readS32LE()) / 10;
-            float y = float(reader.readS32LE()) / 10;
-            float angle = float(reader.readU8()) / 255 * 3.14 * 2;
-
-            onPlayerMoveMessage(playerId, x, y, angle);
+            PacketPlayerMove packet{reader};
+            onPlayerMoveMessage(packet.playerId, packet.x, packet.y, packet.angle);
             break;
         }
         default: {

@@ -68,13 +68,12 @@ void Game::Net::Client::service(MessageReceiver &receiver) {
     }
 }
 
-void Game::Net::Client::sendPlayerMove(int x, int y, float angle) {
-    Packet packet;
-    packet.write(MessageType::PLAYER_MOVE);
-    packet.writeU8(0); //playerID
-    packet.writeU32LE(x);
-    packet.writeU32LE(y);
-    packet.writeU8(static_cast<std::uint8_t>(std::fmod(angle, 2 * 3.14) / (2 * 3.14) * 255));
+void Game::Net::Client::sendPlayerMove(float x, float y, float angle) {
+    PacketPlayerMove packet{
+        0, // playerId
+        x,
+        y,
+        angle};
 
     enet_host_broadcast(client, 0, packet.generate(ENET_PACKET_FLAG_UNSEQUENCED));
 }

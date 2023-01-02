@@ -20,7 +20,7 @@ namespace Game {
             Client();
             ~Client();
 
-            void sendPlayerMove(int x, int y, float angle);
+            void sendPlayerMove(float x, float y, float angle);
 
             void service(MessageReceiver &receiver);
         };
