@@ -116,7 +116,7 @@ void Game::Play::update() {
         if (Engine::Input::mouseDown) {
             auto world = camera.getWorldPos(Kore::vec3{Engine::Input::mousePosition.x() - 8 * camera.zoom, Engine::Input::mousePosition.y() - 8 * camera.zoom});
 
-            auto rounded = Kore::vec2{static_cast<int>(world.x()), static_cast<int>(world.y())};
+            auto rounded = Kore::vec2{std::round(world.x()), std::round(world.y())};
 
             bool freeSpace = true;
             for (const Game::Wall wall : walls) {
