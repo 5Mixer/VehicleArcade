@@ -14,8 +14,8 @@ void Game::Net::Server::run() {
     address.host = ENET_HOST_ANY;
     address.port = 9320;
 
-    const int allowedConnections = 8;
-    const int channels = ENET_PROTOCOL_MAXIMUM_CHANNEL_COUNT;
+    const int allowedConnections = 64;
+    const int channels = 2;
     const int incomingBandwidthLimit = 0;
     const int outgoingBandwidthLimit = 0;
 
@@ -69,6 +69,10 @@ void Game::Net::Server::service() {
                 break;
             }
             case ENET_EVENT_TYPE_RECEIVE: {
+                if (*(std::uint8_t *)event.peer->data == static_cast<std::uint8_t>(255)) {
+                    std::cout << "Ignoring playerId 255" << std::endl;
+                    return;
+                }
                 if (event.peer->data == nullptr) {
                     enet_peer_disconnect(event.peer, static_cast<std::uint32_t>(DisconnectReason::MESSAGE_BEFORE_JOIN));
                 }

@@ -31,7 +31,7 @@ void Game::Vehicle::update(std::vector<Game::Wall> &walls) {
     auto target = pos + Kore::vec2{std::cos(angle) * forwardsVelocity, std::sin(angle) * forwardsVelocity};
 
     auto collide = false;
-    for (const Game::Wall wall : walls) {
+    for (const Game::Wall &wall : walls) {
         auto overlap = target - wall.position;
         if (overlap.squareLength() < (10 * 10)) {
 
