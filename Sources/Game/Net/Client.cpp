@@ -56,33 +56,30 @@ void Game::Net::Client::service(MessageReceiver &receiver) {
                 break;
             }
             case ENET_EVENT_TYPE_RECEIVE: {
-                switch (event.packet->data[0]) {
+                Kore::BufferReader reader(event.packet->data, event.packet->dataLength);
+
+                std::uint8_t messageType = reader.readU8();
+
+                switch (messageType) {
                     case static_cast<std::uint8_t>(MessageType::PLAYER_JOIN): {
-                        receiver.onPlayerJoinMessage(event.packet->data[1]);
+                        receiver.onPlayerJoinMessage(reader.readU8());
                         break;
                     }
                     case static_cast<std::uint8_t>(MessageType::PLAYER_JOIN_DOWNLOAD): {
-                        receiver.onPlayerJoinDownloadMessage(event.packet->data[1]);
+                        receiver.onPlayerJoinDownloadMessage(reader.readU8());
                         break;
                     }
                     case static_cast<std::uint8_t>(MessageType::PLAYER_MOVE): {
-                        receiver.onPlayerMoveMessage(
-                            event.packet->data[1],
-                            float((unsigned char)(event.packet->data[2 + 0]) << 0 |
-                                  (unsigned char)(event.packet->data[2 + 1]) << 8 |
-                                  (unsigned char)(event.packet->data[2 + 2]) << 16 |
-                                  (unsigned char)(event.packet->data[2 + 3]) << 24) /
-                                10,
-                            float((unsigned char)(event.packet->data[6 + 0]) << 0 |
-                                  (unsigned char)(event.packet->data[6 + 1]) << 8 |
-                                  (unsigned char)(event.packet->data[6 + 2]) << 16 |
-                                  (unsigned char)(event.packet->data[6 + 3]) << 24) /
-                                10,
-                            float(event.packet->data[10]) / 255 * 3.14 * 2);
+                        std::uint8_t playerId = reader.readU8();
+                        float x = float(reader.readS32LE()) / 10;
+                        float y = float(reader.readS32LE()) / 10;
+                        float angle = float(reader.readU8()) / 255 * 3.14 * 2;
+
+                        receiver.onPlayerMoveMessage(playerId, x, y, angle);
                         break;
                     }
                     default: {
-                        std::cerr << "Received unknown message type " << static_cast<unsigned int>(event.packet->data[0]);
+                        std::cerr << "Received unknown message type " << static_cast<unsigned int>(messageType);
                         exit(1);
                     }
                 }
@@ -99,18 +96,14 @@ void Game::Net::Client::service(MessageReceiver &receiver) {
 }
 
 void Game::Net::Client::sendPlayerMove(int x, int y, float angle) {
-    int8_t data[1 + 1 + 2 * sizeof(int) + 1];
+    Packet packet;
+    packet.writeU8(static_cast<std::uint8_t>(MessageType::PLAYER_MOVE));
+    packet.writeU8(0); //playerID
+    packet.writeU32LE(x);
+    packet.writeU32LE(y);
+    packet.writeU8(static_cast<std::uint8_t>(std::fmod(angle, 2 * 3.14) / (2 * 3.14) * 255));
 
-    data[0] = static_cast<std::uint8_t>(MessageType::PLAYER_MOVE);
-    data[1] = 0; // playerID
-    std::memcpy(&data[2], &x, 4);
-    std::memcpy(&data[2 + 4], &y, 4);
-    data[10] = static_cast<std::uint8_t>(std::fmod(angle, 2 * 3.14) / (2 * 3.14) * 255);
-    // std::memcpy(&data[2 + 4 + 4], &angle, 4);
-
-    ENetPacket *packet = enet_packet_create(data, sizeof(data), ENET_PACKET_FLAG_UNSEQUENCED);
-
-    enet_host_broadcast(client, 0, packet);
+    enet_host_broadcast(client, 0, packet.generate(ENET_PACKET_FLAG_UNSEQUENCED));
 }
 
 Game::Net::Client::~Client() {
