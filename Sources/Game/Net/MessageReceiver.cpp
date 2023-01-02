@@ -15,8 +15,8 @@ void Game::Net::MessageReceiver::processRawPacket(const void *buffer, int size) 
             break;
         }
         case MessageType::PLAYER_MOVE: {
-            PacketPlayerMove packet{reader};
-            onPlayerMoveMessage(packet.playerId, packet.x, packet.y, packet.angle);
+            auto packet = PacketPlayerMove{reader};
+            onPlayerMoveMessage(packet);
             break;
         }
         default: {

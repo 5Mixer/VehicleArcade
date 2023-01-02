@@ -65,24 +65,24 @@ void Game::Play::onPlayerJoinDownloadMessage(uint8_t playerId) {
     controlledCar->id = playerId;
 }
 
-void Game::Play::onPlayerMoveMessage(uint8_t playerId, float x, float y, float angle) {
-    if (controlledCar->id == playerId) {
+void Game::Play::onPlayerMoveMessage(Net::PacketPlayerMove &packet) {
+    if (controlledCar->id == packet.playerId) {
         return;
     }
     // std::cout << "Player with id " << static_cast<unsigned int>(playerId) << " moved. x: " << x << ", y: " << y << ", Θ: " << angle << std::endl;
     bool found = false;
     for (auto &vehicle : vehicles) {
 
-        if (vehicle.id == playerId) {
-            vehicle.pos.x() = x;
-            vehicle.pos.y() = y;
-            vehicle.angle = angle;
+        if (vehicle.id == packet.playerId) {
+            vehicle.pos.x() = packet.x;
+            vehicle.pos.y() = packet.y;
+            vehicle.angle = packet.angle;
             found = true;
             break;
         }
     }
     if (!found) {
-        vehicles.push_back(Game::Vehicle{playerId});
+        vehicles.push_back(Game::Vehicle{packet.playerId});
     }
 }
 

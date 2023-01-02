@@ -31,7 +31,7 @@ namespace Game {
             void onPlayerJoinMessage(uint8_t playerId){};         // server -> client
             void onDisconnect(){};                                // server -> client
 
-            void onPlayerMoveMessage(uint8_t playerId, float x, float y, float angle);
+            void onPlayerMoveMessage(PacketPlayerMove &packet);
         };
     } // namespace Net
 } // namespace Game

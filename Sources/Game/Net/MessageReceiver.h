@@ -20,7 +20,7 @@ namespace Game {
 
             virtual void onPlayerJoinMessage(uint8_t playerId) = 0;
             virtual void onPlayerJoinDownloadMessage(uint8_t playerId) = 0; // server -> new client
-            virtual void onPlayerMoveMessage(uint8_t playerId, float x, float y, float angle) = 0;
+            virtual void onPlayerMoveMessage(PacketPlayerMove &packet) = 0;
             virtual void onDisconnect() = 0;
             void onTimeout() { onDisconnect(); };
 

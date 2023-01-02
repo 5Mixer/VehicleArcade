@@ -94,12 +94,7 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
     }
 }
 
-void Game::Net::Server::onPlayerMoveMessage(uint8_t playerId, float x, float y, float angle) {
-    PacketPlayerMove packet{playerId,
-                            x,
-                            y,
-                            angle};
-
+void Game::Net::Server::onPlayerMoveMessage(PacketPlayerMove &packet) {
     enet_host_broadcast(server, 0, packet.generate(ENET_PACKET_FLAG_UNSEQUENCED));
 }
 
