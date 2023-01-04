@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "*.fbs": "c",
         "*.tcc": "cpp",
         "chrono": "cpp",
         "istream": "cpp",
@@ -73,6 +74,7 @@
         "valarray": "cpp",
         "hash_set": "cpp",
         "shared_mutex": "cpp",
-        "csignal": "cpp"
+        "csignal": "cpp",
+        "span": "cpp"
     }
 }

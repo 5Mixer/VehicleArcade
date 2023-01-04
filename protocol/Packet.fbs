@@ -1,0 +1,38 @@
+namespace Game.Net;
+
+struct Vec2 {
+    x: float;
+    y: float;
+}
+
+table PlayerMove {
+    player: ubyte;
+    pos: Vec2;
+    angle: float;
+}
+
+table PlayerShoot {
+    player: ubyte;
+    angle: float;
+}
+
+table PlayerJoin {
+    player: ubyte;
+}
+
+table PlayerJoinDownload {
+    player: ubyte;
+}
+
+union PacketType {
+    PlayerJoin,
+    PlayerJoinDownload,
+    PlayerMove,
+    PlayerShoot,
+}
+
+table Packet {
+    type: PacketType;
+}
+
+root_type Packet;

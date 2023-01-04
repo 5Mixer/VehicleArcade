@@ -2,8 +2,7 @@
 
 namespace Engine {
     Engine::Graphics::Graphics()
-        : graphics(std::unique_ptr<Kore::Graphics2::Graphics2>(new Kore::Graphics2::Graphics2(Kore::System::windowWidth(), Kore::System::windowHeight()))),
-          texture(Kore::Graphics4::Texture("../Assets/textures.png", true)),
+        : texture(Kore::Graphics4::Texture("../Assets/textures.png", true)),
           grassTexture(Kore::Graphics4::Texture("../Assets/grass.png", true)) {
     }
 

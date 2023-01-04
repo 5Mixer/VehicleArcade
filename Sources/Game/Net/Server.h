@@ -3,7 +3,6 @@
 
 #include "Message.h"
 #include "MessageReceiver.h"
-#include "Packet.h"
 #include <cstdint>
 #include <enet/enet.h>
 #include <iostream>
@@ -31,7 +30,7 @@ namespace Game {
             void onPlayerJoinMessage(uint8_t playerId){};         // server -> client
             void onDisconnect(){};                                // server -> client
 
-            void onPlayerMoveMessage(PacketPlayerMove &packet);
+            void onPlayerMoveMessage(const PlayerMove *packet);
         };
     } // namespace Net
 } // namespace Game

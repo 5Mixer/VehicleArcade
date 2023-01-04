@@ -7,7 +7,6 @@
 #include "Bullet.h"
 #include "Net/Client.h"
 #include "Net/MessageReceiver.h"
-#include "Net/Packet.h"
 #include "Vehicle.h"
 #include "Wall.h"
 #include <Kore/IO/FileReader.h>
@@ -39,7 +38,7 @@ namespace Game {
         std::string toString();
 
         void onPlayerJoinMessage(uint8_t playerId);
-        void onPlayerMoveMessage(Net::PacketPlayerMove &packet);
+        void onPlayerMoveMessage(const Net::PlayerMove *packet);
         void onPlayerJoinDownloadMessage(uint8_t playerId); // server -> new client
         void onDisconnect();
     };

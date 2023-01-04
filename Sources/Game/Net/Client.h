@@ -3,12 +3,13 @@
 
 #include "Message.h"
 #include "MessageReceiver.h"
-#include "Packet.h"
 #include <cmath>
 #include <cstring>
 #include <enet/enet.h>
 #include <exception>
 #include <iostream>
+
+#include "PacketGenerated.h"
 
 namespace Game {
     namespace Net {

@@ -56,7 +56,9 @@ void Game::Net::Client::service(MessageReceiver &receiver) {
                 break;
             }
             case ENET_EVENT_TYPE_RECEIVE: {
-                receiver.processRawPacket(event.packet->data, event.packet->dataLength);
+                auto packet = GetMutablePacket(event.packet->data);
+
+                receiver.processRawPacket(*packet);
                 enet_packet_destroy(event.packet);
 
                 break;
@@ -69,13 +71,16 @@ void Game::Net::Client::service(MessageReceiver &receiver) {
 }
 
 void Game::Net::Client::sendPlayerMove(float x, float y, float angle) {
-    PacketPlayerMove packet{
-        0, // playerId
-        x,
-        y,
-        angle};
+    flatbuffers::FlatBufferBuilder builder{50};
 
-    enet_host_broadcast(client, 0, packet.generate(ENET_PACKET_FLAG_UNSEQUENCED));
+    auto pos = Vec2{x, y};
+    auto move = CreatePlayerMove(builder, 0, &pos, angle);
+    auto packet = CreatePacket(builder, PacketType::PlayerMove, move.Union());
+
+    builder.Finish(packet);
+
+    auto netPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_UNSEQUENCED);
+    enet_host_broadcast(client, 0, netPacket);
 }
 
 Game::Net::Client::~Client() {

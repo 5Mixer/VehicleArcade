@@ -41,10 +41,11 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
             case ENET_EVENT_TYPE_CONNECT: {
                 auto playerId = nextPlayerId++;
 
-                Packet joinResponsePacket{MessageType::PLAYER_JOIN_DOWNLOAD};
-                joinResponsePacket.writeU8(playerId);
-
-                enet_peer_send(event.peer, 0, joinResponsePacket.generate(ENET_PACKET_FLAG_RELIABLE));
+                flatbuffers::FlatBufferBuilder builder{50};
+                auto packet = CreatePacket(builder, PacketType::PlayerJoinDownload, CreatePlayerJoinDownload(builder, playerId).Union());
+                builder.Finish(packet);
+                auto netPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_RELIABLE);
+                enet_peer_send(event.peer, 0, netPacket);
 
                 std::cout << "Client connected ["
                           << event.peer->address.host
@@ -75,14 +76,16 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                     enet_peer_disconnect(event.peer, static_cast<std::uint32_t>(DisconnectReason::MESSAGE_BEFORE_JOIN));
                 }
 
+                auto deserialisedPacket = GetMutablePacket(event.packet->data);
                 // Don't trust the client to give their own playerID
-                // TODO: Revisit if there is a better way to deal with player ID's, passing the peer, etc, while
-                //       keeping MessageReceiver client applicable
-                if (static_cast<MessageType>(event.packet->data[0]) == MessageType::PLAYER_MOVE) {
-                    event.packet->data[1] = *static_cast<std::uint8_t *>(event.peer->data);
+                auto move = deserialisedPacket->UnPack()->type.AsPlayerMove();
+                if (move != nullptr) {
+                    move->player = *(std::uint8_t *)event.peer->data;
+                    std::cout << "Overriding to " << int(move->player) << std::endl;
+                    std::cout << "Now set to " << int(deserialisedPacket->UnPack()->type.AsPlayerMove()->player) << std::endl;
                 }
 
-                receiver.processRawPacket(event.packet->data, event.packet->dataLength);
+                receiver.processRawPacket(*deserialisedPacket);
                 enet_packet_destroy(event.packet);
 
                 break;
@@ -94,15 +97,25 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
     }
 }
 
-void Game::Net::Server::onPlayerMoveMessage(PacketPlayerMove &packet) {
-    enet_host_broadcast(server, 0, packet.generate(ENET_PACKET_FLAG_UNSEQUENCED));
+void Game::Net::Server::onPlayerMoveMessage(const PlayerMove *packet) {
+    flatbuffers::FlatBufferBuilder builder{50};
+
+    auto pos = Vec2{packet->pos()->x(), packet->pos()->y()};
+    auto move = CreatePlayerMove(builder, packet->player(), &pos, packet->angle());
+    auto outboundPacketData = CreatePacket(builder, PacketType::PlayerMove, move.Union());
+
+    builder.Finish(outboundPacketData);
+
+    auto outboundPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_UNSEQUENCED);
+
+    enet_host_broadcast(server, 0, outboundPacket);
 }
 
 ENetPacket *Game::Net::Server::createPlayerJoinPacket(std::uint8_t playerId) {
-    Packet packet{MessageType::PLAYER_JOIN};
-    packet.writeU8(playerId);
-
-    return packet.generate(ENET_PACKET_FLAG_RELIABLE);
+    flatbuffers::FlatBufferBuilder builder{50};
+    auto packet = CreatePacket(builder, PacketType::PlayerJoin, CreatePlayerJoin(builder, playerId).Union());
+    builder.Finish(packet);
+    return enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_RELIABLE);
 }
 
 void Game::Net::Server::kill() {
