@@ -78,11 +78,19 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
 
                 auto deserialisedPacket = GetMutablePacket(event.packet->data);
                 // Don't trust the client to give their own playerID
-                auto move = deserialisedPacket->UnPack()->type.AsPlayerMove();
-                if (move != nullptr) {
-                    move->player = *(std::uint8_t *)event.peer->data;
-                    std::cout << "Overriding to " << int(move->player) << std::endl;
-                    std::cout << "Now set to " << int(deserialisedPacket->UnPack()->type.AsPlayerMove()->player) << std::endl;
+
+                if (deserialisedPacket->type_type() == PacketType::PlayerMove && event.peer->data != nullptr) {
+                    PacketT packetObj;
+                    deserialisedPacket->UnPackTo(&packetObj);
+
+                    packetObj.type.AsPlayerMove()->player = *(std::uint8_t *)event.peer->data;
+
+                    flatbuffers::FlatBufferBuilder builder;
+                    builder.Finish(Packet::Pack(builder, &packetObj));
+
+                    auto repackedData = builder.GetBufferPointer();
+                    auto repacked = GetMutablePacket(repackedData);
+                    deserialisedPacket = repacked;
                 }
 
                 receiver.processRawPacket(*deserialisedPacket);

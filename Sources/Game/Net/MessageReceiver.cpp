@@ -16,9 +16,11 @@ void Game::Net::MessageReceiver::processRawPacket(Packet &packet) {
             onPlayerMoveMessage(packet.type_as_PlayerMove());
             break;
         }
+        case PacketType::PlayerShoot: {
+            break;
+        }
         default: {
-            // std::cerr << "Received unknown message type " << static_cast<unsigned int>(messageType);
-            exit(1);
+            std::cerr << "Received unknown message type" << int(packet.type_type()) << std::endl;
         }
     }
 }
