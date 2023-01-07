@@ -40,7 +40,7 @@ namespace Game {
         std::string toString();
 
         void onPlayerPlaceWallMessage(const Net::PlayerPlaceWall *packet);
-        void onPlayerJoinMessage(uint8_t playerId);
+        void onPlayerJoinMessage(const Net::PlayerJoin *packet);
         void onPlayerMoveMessage(const Net::PlayerMove *packet);
         void onPlayerShootMessage(const Net::PlayerShoot *packet);
         void onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *packet); // server -> new client

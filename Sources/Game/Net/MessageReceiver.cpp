@@ -3,7 +3,7 @@
 void Game::Net::MessageReceiver::processRawPacket(const Packet *packet) {
     switch (packet->type_type()) {
         case PacketType::PlayerJoin: {
-            onPlayerJoinMessage(packet->type_as_PlayerJoin()->player());
+            onPlayerJoinMessage(packet->type_as_PlayerJoin());
             break;
         }
         case PacketType::PlayerJoinDownload: {

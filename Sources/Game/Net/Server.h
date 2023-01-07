@@ -36,7 +36,7 @@ namespace Game {
             void kill();
 
             void onPlayerJoinDownloadMessage(const PlayerJoinDownload *packet){}; // server -> new client
-            void onPlayerJoinMessage(uint8_t playerId){};                         // server -> client
+            void onPlayerJoinMessage(const PlayerJoin *packet){};                 // server -> client
             void onDisconnect(){};                                                // server -> client
 
             void onPlayerPlaceWallMessage(const PlayerPlaceWall *packet);

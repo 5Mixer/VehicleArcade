@@ -32,13 +32,13 @@ void Game::Play::render(Engine::Graphics &graphics) {
     graphics.transform(camera.getTransform().Invert());
 }
 
-void Game::Play::onPlayerJoinMessage(uint8_t playerId) {
-    if (client.getId() == playerId) {
+void Game::Play::onPlayerJoinMessage(const Net::PlayerJoin *packet) {
+    if (client.getId() == packet->player()) {
         return;
     }
 
-    std::cout << "New player with id " << static_cast<unsigned int>(playerId) << " joined" << std::endl;
-    vehicles.push_back(Game::Vehicle{playerId});
+    std::cout << "New player with id " << static_cast<unsigned int>(packet->player()) << " joined" << std::endl;
+    vehicles.push_back(Game::Vehicle{packet->player()});
 }
 void Game::Play::onDisconnect() {
     std::cerr << "Disconnected from server" << std::endl;

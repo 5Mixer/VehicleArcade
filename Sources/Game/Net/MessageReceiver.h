@@ -17,7 +17,7 @@ namespace Game {
             MessageReceiver() {}
             virtual ~MessageReceiver() {}
 
-            virtual void onPlayerJoinMessage(std::uint8_t playerId) = 0;
+            virtual void onPlayerJoinMessage(const PlayerJoin *packet) = 0;
             virtual void onPlayerJoinDownloadMessage(const PlayerJoinDownload *packet) = 0; // server -> new client
             virtual void onPlayerMoveMessage(const PlayerMove *packet) = 0;
             virtual void onPlayerShootMessage(const PlayerShoot *packet) = 0;
