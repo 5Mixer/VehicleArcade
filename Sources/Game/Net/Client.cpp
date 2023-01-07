@@ -101,8 +101,8 @@ void Game::Net::Client::sendPlayerMove(float x, float y, float angle) {
 void Game::Net::Client::sendPlayerShoot(Bullet &bullet) {
     flatbuffers::FlatBufferBuilder builder{50};
 
-    auto pos = Vec2{bullet.pos.x(), bullet.pos.y()};
-    auto shoot = CreatePlayerShoot(builder, id, &pos, bullet.angle);
+    auto bulletData = bullet.getData();
+    auto shoot = CreatePlayerShoot(builder, &bulletData);
     auto packet = CreatePacket(builder, PacketType::PlayerShoot, shoot.Union());
 
     builder.Finish(packet);

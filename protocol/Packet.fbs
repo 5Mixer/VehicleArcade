@@ -9,9 +9,7 @@ table PlayerMove {
 }
 
 table PlayerShoot {
-    player: ubyte;
-    pos: Vec2;
-    angle: float;
+    bullet: BulletData;
 }
 
 table PlayerPlaceWall {

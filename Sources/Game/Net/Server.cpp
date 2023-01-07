@@ -165,7 +165,7 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                         break;
                     }
                     case PacketType::PlayerShoot: {
-                        playerIdValid = deserialisedPacket->type_as_PlayerShoot()->player() == peerPlayerId;
+                        playerIdValid = deserialisedPacket->type_as_PlayerShoot()->bullet()->shooter() == peerPlayerId;
                         break;
                     }
                     case PacketType::PlayerPlaceWall: {
@@ -226,18 +226,12 @@ void Game::Net::Server::onPlayerPlaceWallMessage(const PlayerPlaceWall *packet) 
 
 void Game::Net::Server::onPlayerShootMessage(const PlayerShoot *packet) {
     // update server side state for bullet location
-    bullets.push_back(Bullet{
-        packet->player(),
-        Kore::vec2{
-            packet->pos()->x(),
-            packet->pos()->y()},
-        packet->angle()});
+    bullets.push_back(Bullet(packet->bullet()));
 
     // Broadcast shoot to other players
     flatbuffers::FlatBufferBuilder builder{50};
 
-    auto pos = Vec2{packet->pos()->x(), packet->pos()->y()};
-    auto shoot = CreatePlayerShoot(builder, packet->player(), &pos, packet->angle());
+    auto shoot = CreatePlayerShoot(builder, packet->bullet());
     auto outboundPacketData = CreatePacket(builder, PacketType::PlayerShoot, shoot.Union());
 
     builder.Finish(outboundPacketData);

@@ -62,12 +62,7 @@ void Game::Play::onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *pack
             playerData->angle()});
     }
     for (const Net::BulletData *bulletData : *packet->bullets()) {
-        bullets.push_back(Bullet{
-            bulletData->shooter(),
-            Kore::vec2{
-                bulletData->pos().x(),
-                bulletData->pos().y()},
-            bulletData->angle()});
+        bullets.push_back(Bullet(bulletData));
     }
     for (const Net::WallData *wallData : *packet->walls()) {
         walls.push_back(Wall{
@@ -107,17 +102,11 @@ void Game::Play::onPlayerPlaceWallMessage(const Net::PlayerPlaceWall *packet) {
 }
 
 void Game::Play::onPlayerShootMessage(const Net::PlayerShoot *packet) {
-    if (client.getId() == packet->player()) {
+    if (client.getId() == packet->bullet()->shooter()) {
         return;
     }
 
-    bullets.push_back(Game::Bullet{
-        client.getId(),
-        Kore::vec2{
-            packet->pos()->x(),
-            packet->pos()->y(),
-        },
-        packet->angle()});
+    bullets.push_back(Game::Bullet(packet->bullet()));
 }
 
 void Game::Play::shoot() {

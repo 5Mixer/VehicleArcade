@@ -7,3 +7,12 @@ void Game::Bullet::update() {
 void Game::Bullet::render(Engine::Graphics &g) {
     g.drawSprite(4, pos, angle);
 }
+
+const Game::Net::BulletData Game::Bullet::getData() {
+    return Game::Net::BulletData{
+        shooter,
+        Game::Net::Vec2{
+            pos.x(),
+            pos.y()},
+        angle};
+}
