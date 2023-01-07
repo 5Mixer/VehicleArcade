@@ -12,6 +12,9 @@ namespace Game {
         float speed = .1; // 6 + Engine::Core::getInstance().rand() * .1;
 
     public:
+        Bullet(std::uint8_t shooter, Kore::vec2 pos, float angle)
+            : shooter(shooter), pos(pos), angle(angle){};
+
         Kore::vec2 pos;
         std::uint8_t shooter;
         float angle;

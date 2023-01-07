@@ -113,7 +113,7 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 // Associate the network peer with it's playerId, on the heap. Deleted on disconnect.
                 event.peer->data = new std::uint8_t(playerId);
 
-                vehicles.insert({playerId, Vehicle{playerId}});
+                vehicles.insert({playerId, Vehicle{playerId, Kore::vec2{}, 0}});
 
                 enet_host_broadcast(server, 0, createPlayerJoinPacket(playerId));
 
@@ -179,12 +179,13 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
 
 void Game::Net::Server::onPlayerPlaceWallMessage(const PlayerPlaceWall *packet) {
     // update server side state for wall location
-    Wall wall{Kore::vec2{
-        packet->wall()->pos().x(),
-        packet->wall()->pos().y()}};
-    wall.placer = packet->wall()->placer();
-    wall.health = packet->wall()->health();
-    walls.push_back(wall);
+    walls.push_back(Wall{
+        packet->wall()->placer(),
+        Kore::vec2{
+            packet->wall()->pos().x(),
+            packet->wall()->pos().y()},
+
+        packet->wall()->health()});
 
     // Broadcast placement of wall to other players
     flatbuffers::FlatBufferBuilder builder{50};
@@ -200,11 +201,12 @@ void Game::Net::Server::onPlayerPlaceWallMessage(const PlayerPlaceWall *packet) 
 
 void Game::Net::Server::onPlayerShootMessage(const PlayerShoot *packet) {
     // update server side state for bullet location
-    Bullet bullet;
-    bullet.pos.x() = packet->pos()->x();
-    bullet.pos.y() = packet->pos()->y();
-    bullet.angle = packet->angle();
-    bullets.push_back(bullet);
+    bullets.push_back(Bullet{
+        packet->player(),
+        Kore::vec2{
+            packet->pos()->x(),
+            packet->pos()->y()},
+        packet->angle()});
 
     // Broadcast shoot to other players
     flatbuffers::FlatBufferBuilder builder{50};

@@ -25,7 +25,7 @@ namespace Game {
         std::vector<Game::Bullet> bullets;
         std::vector<Game::Wall> walls;
         std::vector<Game::Vehicle> vehicles;
-        std::shared_ptr<Game::Vehicle> controlledCar;
+        Game::Vehicle controlledCar;
         Engine::Camera camera;
 
         void shoot();

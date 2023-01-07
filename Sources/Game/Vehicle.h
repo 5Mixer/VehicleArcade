@@ -15,10 +15,12 @@ namespace Game {
         float turnRateVelocityFactor(float speed, float maximumSpeed);
 
     public:
-        Vehicle(std::uint8_t id) : id(id){};
+        Vehicle(std::uint8_t id, Kore::vec2 pos, float angle)
+            : id(id), pos(pos), angle(angle){};
         std::uint8_t id;
         Kore::vec2 pos{0, 0};
         float angle = 0;
+
         void accelerate(float acceleration);
         void turn(float angleDelta);
         void update(std::vector<Game::Wall> &walls);
