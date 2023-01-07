@@ -18,6 +18,7 @@ namespace Game {
         private:
             ENetHost *client;
             std::uint8_t id;
+            bool ready = false;
 
         public:
             Client();

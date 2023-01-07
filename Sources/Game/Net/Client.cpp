@@ -60,6 +60,7 @@ void Game::Net::Client::service(MessageReceiver &receiver) {
 
                 if (packet->type_type() == PacketType::PlayerJoinDownload) {
                     id = packet->type_as_PlayerJoinDownload()->id();
+                    ready = true;
                 }
 
                 receiver.processRawPacket(packet);
@@ -75,6 +76,10 @@ void Game::Net::Client::service(MessageReceiver &receiver) {
 }
 
 void Game::Net::Client::sendPlayerMove(float x, float y, float angle) {
+    if (!ready) {
+        return;
+    }
+
     flatbuffers::FlatBufferBuilder builder{50};
 
     auto pos = Vec2{x, y};

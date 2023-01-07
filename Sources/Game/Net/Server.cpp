@@ -161,6 +161,7 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 }
 
                 if (!playerIdValid) {
+                    std::cout << "Warning: Received packet " << int(deserialisedPacket->type_type()) << " with invalid playerId" << std::endl;
                     break;
                 }
 
@@ -177,6 +178,14 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
 }
 
 void Game::Net::Server::onPlayerPlaceWallMessage(const PlayerPlaceWall *packet) {
+    // update server side state for wall location
+    Wall wall{Kore::vec2{
+        packet->wall()->pos().x(),
+        packet->wall()->pos().y()}};
+    wall.placer = packet->wall()->placer();
+    wall.health = packet->wall()->health();
+    walls.push_back(wall);
+
     // Broadcast placement of wall to other players
     flatbuffers::FlatBufferBuilder builder{50};
 
