@@ -38,6 +38,7 @@ namespace Game {
             void onPlayerJoinMessage(uint8_t playerId){};                         // server -> client
             void onDisconnect(){};                                                // server -> client
 
+            void onPlayerPlaceWallMessage(const PlayerPlaceWall *packet);
             void onPlayerMoveMessage(const PlayerMove *packet);
             void onPlayerShootMessage(const PlayerShoot *packet);
         };

@@ -32,11 +32,11 @@ void Game::Vehicle::update(std::vector<Game::Wall> &walls) {
 
     auto collide = false;
     for (const Game::Wall &wall : walls) {
-        auto overlap = target - wall.position;
+        auto overlap = target - wall.pos;
         if (overlap.squareLength() < (10 * 10)) {
 
             overlap.setLength(10);
-            target = wall.position + overlap;
+            target = wall.pos + overlap;
 
             collide = true;
         }

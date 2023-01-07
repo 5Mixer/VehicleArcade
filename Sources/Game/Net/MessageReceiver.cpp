@@ -19,8 +19,12 @@ void Game::Net::MessageReceiver::processRawPacket(Packet &packet) {
             onPlayerShootMessage(packet.type_as_PlayerShoot());
             break;
         }
+        case PacketType::PlayerPlaceWall: {
+            onPlayerPlaceWallMessage(packet.type_as_PlayerPlaceWall());
+            break;
+        }
         default: {
-            std::cerr << "Received unknown message type" << int(packet.type_type()) << std::endl;
+            std::cerr << "Received unknown message type " << int(packet.type_type()) << std::endl;
         }
     }
 }

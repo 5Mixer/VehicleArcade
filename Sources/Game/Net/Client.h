@@ -2,6 +2,7 @@
 #define GAME_NET_CLIENT
 
 #include "../Bullet.h"
+#include "../Wall.h"
 #include "Message.h"
 #include "MessageReceiver.h"
 #include <cmath>
@@ -24,7 +25,8 @@ namespace Game {
             ~Client();
 
             void sendPlayerMove(float x, float y, float angle);
-            void sendPlayerShoot(Bullet *bullet);
+            void sendPlayerShoot(Bullet &bullet);
+            void sendPlayerPlaceWall(Wall &wall);
 
             void service(MessageReceiver &receiver);
         };

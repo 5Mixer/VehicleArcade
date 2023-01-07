@@ -29,9 +29,9 @@ namespace Game {
         Engine::Camera camera;
 
         void shoot();
+        void placeWall();
 
         bool editingScene;
-        void save();
 
     public:
         Play(Game::Net::Client &client);
@@ -39,6 +39,7 @@ namespace Game {
         void update();
         std::string toString();
 
+        void onPlayerPlaceWallMessage(const Net::PlayerPlaceWall *packet);
         void onPlayerJoinMessage(uint8_t playerId);
         void onPlayerMoveMessage(const Net::PlayerMove *packet);
         void onPlayerShootMessage(const Net::PlayerShoot *packet);

@@ -145,6 +145,10 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                         playerIdValid = deserialisedPacket->type_as_PlayerShoot()->player() == peerPlayerId;
                         break;
                     }
+                    case PacketType::PlayerPlaceWall: {
+                        playerIdValid = deserialisedPacket->type_as_PlayerPlaceWall()->wall()->placer() == peerPlayerId;
+                        break;
+                    }
                     default: {
                     }
                 }
@@ -163,6 +167,19 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
             }
         }
     }
+}
+
+void Game::Net::Server::onPlayerPlaceWallMessage(const PlayerPlaceWall *packet) {
+    // Broadcast placement of wall to other players
+    flatbuffers::FlatBufferBuilder builder{50};
+
+    auto placeWall = CreatePlayerPlaceWall(builder, packet->wall());
+    auto outboundPacketData = CreatePacket(builder, PacketType::PlayerPlaceWall, placeWall.Union());
+    builder.Finish(outboundPacketData);
+
+    auto outboundPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_UNSEQUENCED);
+
+    enet_host_broadcast(server, 0, outboundPacket);
 }
 
 void Game::Net::Server::onPlayerShootMessage(const PlayerShoot *packet) {

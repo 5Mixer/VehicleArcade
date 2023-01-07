@@ -17,6 +17,10 @@ table PlayerShoot {
     angle: float;
 }
 
+table PlayerPlaceWall {
+    wall: WallData;
+}
+
 table PlayerJoin {
     player: ubyte;
 }
@@ -26,16 +30,24 @@ struct PlayerData {
     pos: Vec2;
     angle: float;
 }
+
 struct BulletData {
     shooter: ubyte;
     pos: Vec2;
     angle: float;
 }
 
+struct WallData {
+    placer: ubyte;
+    pos: Vec2;
+    health: int;
+}
+
 table PlayerJoinDownload {
     id: ubyte; // ID Assigned to new player
     players: [PlayerData];
     bullets: [BulletData];
+    walls: [WallData];
 }
 
 union PacketType {
@@ -43,6 +55,7 @@ union PacketType {
     PlayerJoinDownload,
     PlayerMove,
     PlayerShoot,
+    PlayerPlaceWall,
 }
 
 table Packet {

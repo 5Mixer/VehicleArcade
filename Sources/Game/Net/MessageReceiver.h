@@ -22,6 +22,7 @@ namespace Game {
             virtual void onPlayerJoinDownloadMessage(const PlayerJoinDownload *packet) = 0; // server -> new client
             virtual void onPlayerMoveMessage(const PlayerMove *packet) = 0;
             virtual void onPlayerShootMessage(const PlayerShoot *packet) = 0;
+            virtual void onPlayerPlaceWallMessage(const PlayerPlaceWall *packet) = 0;
             virtual void onDisconnect() = 0;
             void onTimeout() { onDisconnect(); };
 

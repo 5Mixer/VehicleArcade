@@ -87,12 +87,26 @@ void Game::Net::Client::sendPlayerMove(float x, float y, float angle) {
     enet_host_broadcast(client, 0, netPacket);
 }
 
-void Game::Net::Client::sendPlayerShoot(Bullet *bullet) {
+void Game::Net::Client::sendPlayerShoot(Bullet &bullet) {
     flatbuffers::FlatBufferBuilder builder{50};
 
-    auto pos = Vec2{bullet->pos.x(), bullet->pos.y()};
-    auto shoot = CreatePlayerShoot(builder, id, &pos, bullet->angle);
+    auto pos = Vec2{bullet.pos.x(), bullet.pos.y()};
+    auto shoot = CreatePlayerShoot(builder, id, &pos, bullet.angle);
     auto packet = CreatePacket(builder, PacketType::PlayerShoot, shoot.Union());
+
+    builder.Finish(packet);
+
+    auto netPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_RELIABLE);
+    enet_host_broadcast(client, 0, netPacket);
+}
+
+void Game::Net::Client::sendPlayerPlaceWall(Wall &wall) {
+    flatbuffers::FlatBufferBuilder builder{50};
+
+    auto pos = Vec2{wall.pos.x(), wall.pos.y()};
+    auto wallData = WallData{id, pos, wall.health};
+    auto wallPacketSerialisation = CreatePlayerPlaceWall(builder, &wallData);
+    auto packet = CreatePacket(builder, PacketType::PlayerPlaceWall, wallPacketSerialisation.Union());
 
     builder.Finish(packet);
 
