@@ -41,9 +41,10 @@ namespace Game {
 
         void onPlayerPlaceWallMessage(const Net::PlayerPlaceWall *packet);
         void onPlayerJoinMessage(const Net::PlayerJoin *packet);
+        void onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *packet); // server -> new client
+        void onPlayerDisconnectMessage(const Net::PlayerDisconnect *packet);
         void onPlayerMoveMessage(const Net::PlayerMove *packet);
         void onPlayerShootMessage(const Net::PlayerShoot *packet);
-        void onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *packet); // server -> new client
         void onDisconnect();
     };
 } // namespace Game

@@ -28,6 +28,7 @@ namespace Game {
             void sendPlayerShoot(Bullet &bullet);
             void sendPlayerPlaceWall(Wall &wall);
             std::uint8_t getId() { return id; };
+            void disconnect();
 
             void service(MessageReceiver &receiver);
         };

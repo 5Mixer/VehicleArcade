@@ -12,26 +12,37 @@
 
 #include <Kore/Graphics2/Graphics.h>
 
-Game::Net::Server *server;
+Game::Net::Server *server = nullptr;
+Game::Net::Client *client = nullptr;
 
 void onSigInt(int sig) {
-    server->kill();
+    if (client != nullptr) {
+        client->disconnect();
+    } else {
+        server->kill();
+    }
     exit(EXIT_SUCCESS);
 }
 
+void disconnectClient() {
+    client->disconnect();
+}
+
 int kickstart(int argc, char **argv) {
+    signal(SIGINT, onSigInt);
+
     if (argc == 2 && argv[1] == std::string("server")) {
-        signal(SIGINT, onSigInt);
         server = new Game::Net::Server();
         server->run(); // Blocking
         return 0;
     }
 
-    std::unique_ptr<Game::Net::Client> client = std::make_unique<Game::Net::Client>();
-
+    client = new Game::Net::Client();
     Engine::Core &engine = Engine::Core::getInstance();
 
-    auto playScene = std::unique_ptr<Game::Play>(new Game::Play(*(client.get())));
+    Kore::System::setShutdownCallback(disconnectClient);
+
+    auto playScene = std::unique_ptr<Game::Play>(new Game::Play(*client));
     engine.setScene(playScene.get());
     engine.start();
 

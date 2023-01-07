@@ -22,6 +22,10 @@ table PlayerJoin {
     player: ubyte;
 }
 
+table PlayerDisconnect {
+    player: ubyte;
+}
+
 table PlayerJoinDownload {
     id: ubyte; // ID Assigned to new player
     players: [PlayerData];
@@ -32,6 +36,7 @@ table PlayerJoinDownload {
 union PacketType {
     PlayerJoin,
     PlayerJoinDownload,
+    PlayerDisconnect,
     PlayerMove,
     PlayerShoot,
     PlayerPlaceWall,

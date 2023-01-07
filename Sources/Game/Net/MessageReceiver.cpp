@@ -10,6 +10,10 @@ void Game::Net::MessageReceiver::processRawPacket(const Packet *packet) {
             onPlayerJoinDownloadMessage(packet->type_as_PlayerJoinDownload());
             break;
         }
+        case PacketType::PlayerDisconnect: {
+            onPlayerDisconnectMessage(packet->type_as_PlayerDisconnect());
+            break;
+        }
         case PacketType::PlayerMove: {
             onPlayerMoveMessage(packet->type_as_PlayerMove());
             break;

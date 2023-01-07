@@ -38,6 +38,7 @@ namespace Game {
             void onPlayerJoinDownloadMessage(const PlayerJoinDownload *packet){}; // server -> new client
             void onPlayerJoinMessage(const PlayerJoin *packet){};                 // server -> client
             void onDisconnect(){};                                                // server -> client
+            void onPlayerDisconnectMessage(const PlayerDisconnect *packet){};     // server -> client
 
             void onPlayerPlaceWallMessage(const PlayerPlaceWall *packet);
             void onPlayerMoveMessage(const PlayerMove *packet);

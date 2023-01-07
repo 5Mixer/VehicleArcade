@@ -122,6 +122,22 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
             case ENET_EVENT_TYPE_DISCONNECT: {
                 receiver.onDisconnect();
 
+                vehicles.erase(*(std::uint8_t *)event.peer->data);
+
+                flatbuffers::FlatBufferBuilder builder{50};
+                auto packet = CreatePacket(
+                    builder,
+                    PacketType::PlayerDisconnect,
+                    CreatePlayerDisconnect(
+                        builder,
+                        *(std::uint8_t *)event.peer->data
+                    )
+                        .Union()
+                );
+                builder.Finish(packet);
+                auto netPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_RELIABLE);
+                enet_host_broadcast(server, 0, netPacket);
+
                 if (event.peer->data != nullptr) {
                     delete (std::uint8_t *)event.peer->data;
                 }
@@ -156,6 +172,10 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                         playerIdValid = deserialisedPacket->type_as_PlayerPlaceWall()->wall()->placer() == peerPlayerId;
                         break;
                     }
+                    case PacketType::PlayerDisconnect: {
+                        playerIdValid = deserialisedPacket->type_as_PlayerDisconnect()->player() == peerPlayerId;
+                        break;
+                    }
                     default: {
                     }
                 }
@@ -166,6 +186,11 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 }
 
                 receiver.processRawPacket(deserialisedPacket);
+
+                if (deserialisedPacket->type_type() == PacketType::PlayerDisconnect) {
+                    enet_peer_disconnect(event.peer, 0);
+                }
+
                 enet_packet_destroy(event.packet);
 
                 break;

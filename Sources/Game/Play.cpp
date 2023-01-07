@@ -37,8 +37,13 @@ void Game::Play::onPlayerJoinMessage(const Net::PlayerJoin *packet) {
         return;
     }
 
-    std::cout << "New player with id " << static_cast<unsigned int>(packet->player()) << " joined" << std::endl;
     vehicles.push_back(Game::Vehicle{packet->player(), Kore::vec2{}, 0});
+}
+void Game::Play::onPlayerDisconnectMessage(const Net::PlayerDisconnect *packet) {
+    vehicles.erase(std::remove_if(vehicles.begin(), vehicles.end(), [&](Game::Vehicle vehicle) -> bool {
+                       return vehicle.id == packet->player();
+                   }),
+                   vehicles.end());
 }
 void Game::Play::onDisconnect() {
     std::cerr << "Disconnected from server" << std::endl;
