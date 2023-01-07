@@ -38,7 +38,6 @@ Game::Net::Client::Client() {
 }
 
 void Game::Net::Client::disconnect() {
-    std::cout << "Disconnecting!" << std::endl;
     enet_peer_disconnect_now(&(client->peers[0]), 0);
     enet_host_destroy(client);
 }
@@ -65,7 +64,7 @@ void Game::Net::Client::service(MessageReceiver &receiver) {
                 auto packet = GetPacket(event.packet->data);
 
                 if (packet->type_type() == PacketType::PlayerJoinDownload) {
-                    id = packet->type_as_PlayerJoinDownload()->id();
+                    id = packet->type_as_PlayerJoinDownload()->player()->id();
                     ready = true;
                 }
 

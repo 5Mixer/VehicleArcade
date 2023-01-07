@@ -26,7 +26,7 @@ namespace Game {
             std::vector<Game::Bullet> bullets{};
             std::vector<Game::Wall> walls{};
 
-            ENetPacket *createPlayerJoinPacket(uint8_t playerId);
+            ENetPacket *createPlayerJoinPacket(Game::Vehicle vehicle);
             void updateEntities();
 
         public:

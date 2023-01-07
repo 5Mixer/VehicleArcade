@@ -33,14 +33,14 @@ void Game::Play::render(Engine::Graphics &graphics) {
 }
 
 void Game::Play::onPlayerJoinMessage(const Net::PlayerJoin *packet) {
-    if (client.getId() == packet->player()) {
+    if (client.getId() == packet->player()->id()) {
         return;
     }
 
-    vehicles.push_back(Game::Vehicle{packet->player(), Kore::vec2{}, 0});
+    vehicles.push_back(Vehicle(packet->player()));
 }
 void Game::Play::onPlayerDisconnectMessage(const Net::PlayerDisconnect *packet) {
-    vehicles.erase(std::remove_if(vehicles.begin(), vehicles.end(), [&](Game::Vehicle vehicle) -> bool {
+    vehicles.erase(std::remove_if(vehicles.begin(), vehicles.end(), [&](Vehicle vehicle) -> bool {
                        return vehicle.id == packet->player();
                    }),
                    vehicles.end());
@@ -51,15 +51,10 @@ void Game::Play::onDisconnect() {
 }
 
 void Game::Play::onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *packet) {
-    controlledCar.id = packet->id();
+    controlledCar = Vehicle(packet->player());
 
     for (auto playerData : *packet->players()) {
-        vehicles.push_back(Vehicle{
-            playerData->id(),
-            Kore::vec2{
-                playerData->pos().x(),
-                playerData->pos().y()},
-            playerData->angle()});
+        vehicles.push_back(Vehicle(playerData));
     }
     for (const Net::BulletData *bulletData : *packet->bullets()) {
         bullets.push_back(Bullet(bulletData));

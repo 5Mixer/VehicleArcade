@@ -17,7 +17,7 @@ table PlayerPlaceWall {
 }
 
 table PlayerJoin {
-    player: ubyte;
+    player: PlayerData;
 }
 
 table PlayerDisconnect {
@@ -25,7 +25,7 @@ table PlayerDisconnect {
 }
 
 table PlayerJoinDownload {
-    id: ubyte; // ID Assigned to new player
+    player: PlayerData;
     players: [PlayerData];
     bullets: [BulletData];
     walls: [WallData];

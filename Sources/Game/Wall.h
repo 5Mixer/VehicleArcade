@@ -18,7 +18,7 @@ namespace Game {
                   data->pos().y()}),
               health(data->health()){};
 
-        Net::WallData getData();
+        const Net::WallData getData();
 
         std::uint8_t placer;
         Kore::vec2 pos;

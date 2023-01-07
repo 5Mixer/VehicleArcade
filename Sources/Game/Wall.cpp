@@ -1,6 +1,6 @@
 #include "Wall.h"
 
-Game::Net::WallData Game::Wall::getData() {
+const Game::Net::WallData Game::Wall::getData() {
     return Game::Net::WallData{
         placer,
         Game::Net::Vec2{

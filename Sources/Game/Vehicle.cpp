@@ -1,5 +1,12 @@
 #include "Vehicle.h"
 
+const Game::Net::PlayerData Game::Vehicle::getData() {
+    return Game::Net::PlayerData{
+        id,
+        Game::Net::Vec2{pos.x(), pos.y()},
+        angle};
+}
+
 void Game::Vehicle::update(std::vector<Game::Wall> &walls) {
     float accelerationSpeed = .08;
     float breakSpeed = .1;
