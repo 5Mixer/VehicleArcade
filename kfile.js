@@ -1,7 +1,7 @@
 let project = new Project('Car');
 
 var exec = require('child_process').exec;
-exec('flatc -c --scoped-enums --filename-suffix Generated --cpp-field-case-style lower --warnings-as-errors --gen-mutable -o ./Sources/Game/Net/ ./protocol/*', function callback(error, stdout, stderr) {
+exec('flatc -c --scoped-enums --filename-suffix Generated --cpp-field-case-style lower --warnings-as-errors -o ./Sources/Game/Net/ ./protocol/*', function callback(error, stdout, stderr) {
 	if (error) {
 		console.log('flatc error:', error, stdout, stderr);
 	} else {

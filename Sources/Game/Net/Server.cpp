@@ -129,7 +129,7 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 }
                 std::uint8_t peerPlayerId = *(std::uint8_t *)event.peer->data;
 
-                auto deserialisedPacket = GetMutablePacket(event.packet->data);
+                auto deserialisedPacket = GetPacket(event.packet->data);
 
                 // Drop packets where the client is dishonest about their player ID
                 // This should be more efficient than overriding the player ID (requiring unpacking, mutation, repacking)
@@ -157,7 +157,7 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                     break;
                 }
 
-                receiver.processRawPacket(*deserialisedPacket);
+                receiver.processRawPacket(deserialisedPacket);
                 enet_packet_destroy(event.packet);
 
                 break;

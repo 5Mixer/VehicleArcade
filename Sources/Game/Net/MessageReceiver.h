@@ -26,7 +26,7 @@ namespace Game {
             virtual void onDisconnect() = 0;
             void onTimeout() { onDisconnect(); };
 
-            void processRawPacket(Packet &packet);
+            void processRawPacket(const Packet *packet);
         };
 
     } // namespace Net

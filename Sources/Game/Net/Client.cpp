@@ -56,13 +56,13 @@ void Game::Net::Client::service(MessageReceiver &receiver) {
                 break;
             }
             case ENET_EVENT_TYPE_RECEIVE: {
-                auto packet = GetMutablePacket(event.packet->data);
+                auto packet = GetPacket(event.packet->data);
 
                 if (packet->type_type() == PacketType::PlayerJoinDownload) {
                     id = packet->type_as_PlayerJoinDownload()->id();
                 }
 
-                receiver.processRawPacket(*packet);
+                receiver.processRawPacket(packet);
                 enet_packet_destroy(event.packet);
 
                 break;
