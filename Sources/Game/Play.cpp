@@ -65,10 +65,7 @@ void Game::Play::onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *pack
         bullets.push_back(Bullet(bulletData));
     }
     for (const Net::WallData *wallData : *packet->walls()) {
-        walls.push_back(Wall{
-            wallData->placer(),
-            Kore::vec2{wallData->pos().x(), wallData->pos().y()},
-            wallData->health()});
+        walls.push_back(Wall(wallData));
     }
 }
 
@@ -93,12 +90,7 @@ void Game::Play::onPlayerPlaceWallMessage(const Net::PlayerPlaceWall *packet) {
         return;
     }
 
-    walls.push_back(Game::Wall{
-        packet->wall()->placer(),
-        Kore::vec2{
-            packet->wall()->pos().x(),
-            packet->wall()->pos().y()},
-        packet->wall()->health()});
+    walls.push_back(Wall(packet->wall()));
 }
 
 void Game::Play::onPlayerShootMessage(const Net::PlayerShoot *packet) {
@@ -106,7 +98,7 @@ void Game::Play::onPlayerShootMessage(const Net::PlayerShoot *packet) {
         return;
     }
 
-    bullets.push_back(Game::Bullet(packet->bullet()));
+    bullets.push_back(Bullet(packet->bullet()));
 }
 
 void Game::Play::shoot() {

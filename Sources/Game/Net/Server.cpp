@@ -73,24 +73,14 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 // create vector of bullets to be sent in PlayerJoinDownload packet
                 std::vector<BulletData> bulletData;
                 for (auto &bullet : bullets) {
-                    bulletData.push_back(BulletData{
-                        bullet.shooter,
-                        Vec2{
-                            bullet.pos.x(),
-                            bullet.pos.y()},
-                        bullet.angle});
+                    bulletData.push_back(bullet.getData());
                 }
                 auto vectorOfBulletData = builder.CreateVectorOfStructs(bulletData);
 
                 // create vector of walls to be sent in PlayerJoinDownload packet
                 std::vector<WallData> wallData;
                 for (auto &wall : walls) {
-                    wallData.push_back(WallData{
-                        wall.placer,
-                        Vec2{
-                            wall.pos.x(),
-                            wall.pos.y()},
-                        wall.health});
+                    wallData.push_back(wall.getData());
                 }
                 auto vectorOfWallData = builder.CreateVectorOfStructs(wallData);
 
@@ -204,13 +194,7 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
 
 void Game::Net::Server::onPlayerPlaceWallMessage(const PlayerPlaceWall *packet) {
     // update server side state for wall location
-    walls.push_back(Wall{
-        packet->wall()->placer(),
-        Kore::vec2{
-            packet->wall()->pos().x(),
-            packet->wall()->pos().y()},
-
-        packet->wall()->health()});
+    walls.push_back(Wall(packet->wall()));
 
     // Broadcast placement of wall to other players
     flatbuffers::FlatBufferBuilder builder{50};

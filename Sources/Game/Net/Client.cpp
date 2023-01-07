@@ -114,8 +114,7 @@ void Game::Net::Client::sendPlayerShoot(Bullet &bullet) {
 void Game::Net::Client::sendPlayerPlaceWall(Wall &wall) {
     flatbuffers::FlatBufferBuilder builder{50};
 
-    auto pos = Vec2{wall.pos.x(), wall.pos.y()};
-    auto wallData = WallData{id, pos, wall.health};
+    auto wallData = wall.getData();
     auto wallPacketSerialisation = CreatePlayerPlaceWall(builder, &wallData);
     auto packet = CreatePacket(builder, PacketType::PlayerPlaceWall, wallPacketSerialisation.Union());
 
