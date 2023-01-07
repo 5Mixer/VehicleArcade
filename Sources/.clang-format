@@ -9,3 +9,4 @@ IndentCaseLabels: true
 ColumnLimit: 0
 AccessModifierOffset: -4
 NamespaceIndentation: All
+AlignAfterOpenBracket: BlockIndent

@@ -39,7 +39,7 @@ namespace Game {
 
         void onPlayerJoinMessage(uint8_t playerId);
         void onPlayerMoveMessage(const Net::PlayerMove *packet);
-        void onPlayerJoinDownloadMessage(uint8_t playerId); // server -> new client
+        void onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *packet); // server -> new client
         void onDisconnect();
     };
 } // namespace Game

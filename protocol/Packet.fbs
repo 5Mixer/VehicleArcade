@@ -20,8 +20,15 @@ table PlayerJoin {
     player: ubyte;
 }
 
+struct PlayerData {
+    id: ubyte;
+    pos: Vec2;
+    angle: float;
+}
+
 table PlayerJoinDownload {
-    player: ubyte;
+    id: ubyte; // ID Assigned to new player
+    players: [PlayerData];
 }
 
 union PacketType {

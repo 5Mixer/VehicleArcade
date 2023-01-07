@@ -1,6 +1,6 @@
 {
     "files.associations": {
-        "*.fbs": "c",
+        "*.fbs": "plaintext",
         "*.tcc": "cpp",
         "chrono": "cpp",
         "istream": "cpp",

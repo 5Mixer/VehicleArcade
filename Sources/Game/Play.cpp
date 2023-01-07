@@ -60,9 +60,28 @@ void Game::Play::onDisconnect() {
     exit(1);
 }
 
-void Game::Play::onPlayerJoinDownloadMessage(uint8_t playerId) {
-    std::cout << "Received player id assignment " << static_cast<unsigned int>(playerId) << std::endl;
-    controlledCar->id = playerId;
+void Game::Play::onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *packet) {
+    std::cout << "Received player id assignment " << static_cast<unsigned int>(packet->id()) << std::endl;
+    controlledCar->id = packet->id();
+
+    for (auto playerData : *packet->players()) {
+        std::cout << "Adding player id "
+                  << playerData->id()
+                  << " at "
+                  << playerData->pos().x()
+                  << ", "
+                  << playerData->pos().y()
+                  << ", angle: "
+                  << playerData->angle()
+                  << std::endl;
+
+        Vehicle newVehicle = Vehicle{playerData->id()};
+        newVehicle.pos.x() = playerData->pos().x();
+        newVehicle.pos.y() = playerData->pos().y();
+        newVehicle.angle = playerData->angle();
+
+        vehicles.push_back(newVehicle);
+    }
 }
 
 void Game::Play::onPlayerMoveMessage(const Net::PlayerMove *packet) {
@@ -79,9 +98,6 @@ void Game::Play::onPlayerMoveMessage(const Net::PlayerMove *packet) {
             found = true;
             break;
         }
-    }
-    if (!found) {
-        vehicles.push_back(Game::Vehicle{packet->player()});
     }
 }
 

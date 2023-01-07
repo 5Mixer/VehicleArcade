@@ -1,12 +1,14 @@
 #ifndef GAME_NET_SERVER
 #define GAME_NET_SERVER
 
+#include "../Vehicle.h"
 #include "Message.h"
 #include "MessageReceiver.h"
 #include <cstdint>
 #include <enet/enet.h>
 #include <iostream>
 #include <memory>
+#include <unordered_map>
 
 namespace Game {
     namespace Net {
@@ -18,6 +20,8 @@ namespace Game {
             void service(MessageReceiver &receiver);
             std::uint8_t nextPlayerId = 0;
 
+            std::unordered_map<std::uint8_t, Game::Vehicle> vehicles{};
+
             ENetPacket *createPlayerJoinPacket(uint8_t playerId);
 
         public:
@@ -26,9 +30,9 @@ namespace Game {
             void run();
             void kill();
 
-            void onPlayerJoinDownloadMessage(uint8_t playerId){}; // server -> new client
-            void onPlayerJoinMessage(uint8_t playerId){};         // server -> client
-            void onDisconnect(){};                                // server -> client
+            void onPlayerJoinDownloadMessage(const PlayerJoinDownload *packet){}; // server -> new client
+            void onPlayerJoinMessage(uint8_t playerId){};                         // server -> client
+            void onDisconnect(){};                                                // server -> client
 
             void onPlayerMoveMessage(const PlayerMove *packet);
         };

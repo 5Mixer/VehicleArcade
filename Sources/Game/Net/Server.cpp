@@ -42,7 +42,29 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 auto playerId = nextPlayerId++;
 
                 flatbuffers::FlatBufferBuilder builder{50};
-                auto packet = CreatePacket(builder, PacketType::PlayerJoinDownload, CreatePlayerJoinDownload(builder, playerId).Union());
+
+                // create vector of players to be sent in PlayerJoinDownload packet
+                std::vector<PlayerData> vehicleData;
+                for (auto &vehicle : vehicles) {
+                    vehicleData.push_back(PlayerData{
+                        vehicle.first,
+                        Vec2{
+                            vehicle.second.pos.x(),
+                            vehicle.second.pos.y()},
+                        vehicle.second.angle});
+                }
+                auto vectorOfVehicleData = builder.CreateVectorOfStructs(vehicleData);
+
+                auto packet = CreatePacket(
+                    builder,
+                    PacketType::PlayerJoinDownload,
+                    CreatePlayerJoinDownload(
+                        builder,
+                        playerId,
+                        vectorOfVehicleData
+                    )
+                        .Union()
+                );
                 builder.Finish(packet);
                 auto netPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_RELIABLE);
                 enet_peer_send(event.peer, 0, netPacket);
@@ -57,6 +79,8 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
 
                 event.peer->data = malloc(sizeof(std::uint8_t));
                 *(std::uint8_t *)(event.peer->data) = playerId;
+
+                vehicles.insert({playerId, Vehicle{playerId}});
 
                 enet_host_broadcast(server, 0, createPlayerJoinPacket(playerId));
 
@@ -106,6 +130,13 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
 }
 
 void Game::Net::Server::onPlayerMoveMessage(const PlayerMove *packet) {
+    // update server side state for player location
+    Vehicle &vehicle = vehicles.at(packet->player());
+    vehicle.pos.x() = packet->pos()->x();
+    vehicle.pos.y() = packet->pos()->y();
+    vehicle.angle = packet->angle();
+
+    // Broadcast move to other players
     flatbuffers::FlatBufferBuilder builder{50};
 
     auto pos = Vec2{packet->pos()->x(), packet->pos()->y()};
