@@ -26,10 +26,16 @@ struct PlayerData {
     pos: Vec2;
     angle: float;
 }
+struct BulletData {
+    shooter: ubyte;
+    pos: Vec2;
+    angle: float;
+}
 
 table PlayerJoinDownload {
     id: ubyte; // ID Assigned to new player
     players: [PlayerData];
+    bullets: [BulletData];
 }
 
 union PacketType {

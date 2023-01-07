@@ -9,10 +9,11 @@
 namespace Game {
     class Bullet {
     private:
-        float speed = 6; // 6 + Engine::Core::getInstance().rand() * .1;
+        float speed = .1; // 6 + Engine::Core::getInstance().rand() * .1;
 
     public:
         Kore::vec2 pos;
+        std::uint8_t shooter;
         float angle;
         void update();
         void render(Engine::Graphics &g);

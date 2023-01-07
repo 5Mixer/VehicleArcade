@@ -28,8 +28,23 @@ void Game::Net::Server::run() {
 
     std::cout << "Server initialised at " << address.host << ":" << address.port << std::endl;
 
+    auto last = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::steady_clock::now());
+
     while (hosting) {
         service(*this);
+
+        auto now = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::steady_clock::now());
+
+        if (std::chrono::duration_cast<std::chrono::milliseconds>((now - last)).count() > 1000 / 60) {
+            updateEntities();
+            last = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::steady_clock::now());
+        }
+    }
+}
+
+void Game::Net::Server::updateEntities() {
+    for (auto &bullet : bullets) {
+        bullet.update();
     }
 }
 
@@ -55,13 +70,26 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 }
                 auto vectorOfVehicleData = builder.CreateVectorOfStructs(vehicleData);
 
+                // create vector of bullets to be sent in PlayerJoinDownload packet
+                std::vector<BulletData> bulletData;
+                for (auto &bullet : bullets) {
+                    bulletData.push_back(BulletData{
+                        bullet.shooter,
+                        Vec2{
+                            bullet.pos.x(),
+                            bullet.pos.y()},
+                        bullet.angle});
+                }
+                auto vectorOfBulletData = builder.CreateVectorOfStructs(bulletData);
+
                 auto packet = CreatePacket(
                     builder,
                     PacketType::PlayerJoinDownload,
                     CreatePlayerJoinDownload(
                         builder,
                         playerId,
-                        vectorOfVehicleData
+                        vectorOfVehicleData,
+                        vectorOfBulletData
                     )
                         .Union()
                 );
@@ -138,6 +166,13 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
 }
 
 void Game::Net::Server::onPlayerShootMessage(const PlayerShoot *packet) {
+    // update server side state for bullet location
+    Bullet bullet;
+    bullet.pos.x() = packet->pos()->x();
+    bullet.pos.y() = packet->pos()->y();
+    bullet.angle = packet->angle();
+    bullets.push_back(bullet);
+
     // Broadcast shoot to other players
     flatbuffers::FlatBufferBuilder builder{50};
 

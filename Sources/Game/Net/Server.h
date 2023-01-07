@@ -1,9 +1,11 @@
 #ifndef GAME_NET_SERVER
 #define GAME_NET_SERVER
 
+#include "../Bullet.h"
 #include "../Vehicle.h"
 #include "Message.h"
 #include "MessageReceiver.h"
+#include <chrono>
 #include <cstdint>
 #include <enet/enet.h>
 #include <iostream>
@@ -21,8 +23,10 @@ namespace Game {
             std::uint8_t nextPlayerId = 0;
 
             std::unordered_map<std::uint8_t, Game::Vehicle> vehicles{};
+            std::vector<Game::Bullet> bullets{};
 
             ENetPacket *createPlayerJoinPacket(uint8_t playerId);
+            void updateEntities();
 
         public:
             Server();

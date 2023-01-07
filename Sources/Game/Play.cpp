@@ -82,6 +82,15 @@ void Game::Play::onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *pack
 
         vehicles.push_back(newVehicle);
     }
+    for (const Net::BulletData *bulletData : *packet->bullets()) {
+        Bullet newBullet = Bullet();
+        newBullet.shooter = bulletData->shooter();
+        newBullet.pos.x() = bulletData->pos().x();
+        newBullet.pos.y() = bulletData->pos().y();
+        newBullet.angle = bulletData->angle();
+
+        bullets.push_back(newBullet);
+    }
 }
 
 void Game::Play::onPlayerMoveMessage(const Net::PlayerMove *packet) {
