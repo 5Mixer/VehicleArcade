@@ -16,6 +16,7 @@ void Game::Net::MessageReceiver::processRawPacket(Packet &packet) {
             break;
         }
         case PacketType::PlayerShoot: {
+            onPlayerShootMessage(packet.type_as_PlayerShoot());
             break;
         }
         default: {

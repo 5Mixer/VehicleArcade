@@ -35,6 +35,7 @@ namespace Game {
             void onDisconnect(){};                                                // server -> client
 
             void onPlayerMoveMessage(const PlayerMove *packet);
+            void onPlayerShootMessage(const PlayerShoot *packet);
         };
     } // namespace Net
 } // namespace Game

@@ -58,6 +58,10 @@ void Game::Net::Client::service(MessageReceiver &receiver) {
             case ENET_EVENT_TYPE_RECEIVE: {
                 auto packet = GetMutablePacket(event.packet->data);
 
+                if (packet->type_type() == PacketType::PlayerJoinDownload) {
+                    id = packet->type_as_PlayerJoinDownload()->id();
+                }
+
                 receiver.processRawPacket(*packet);
                 enet_packet_destroy(event.packet);
 
@@ -74,12 +78,25 @@ void Game::Net::Client::sendPlayerMove(float x, float y, float angle) {
     flatbuffers::FlatBufferBuilder builder{50};
 
     auto pos = Vec2{x, y};
-    auto move = CreatePlayerMove(builder, 0, &pos, angle);
+    auto move = CreatePlayerMove(builder, id, &pos, angle);
     auto packet = CreatePacket(builder, PacketType::PlayerMove, move.Union());
 
     builder.Finish(packet);
 
     auto netPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_UNSEQUENCED);
+    enet_host_broadcast(client, 0, netPacket);
+}
+
+void Game::Net::Client::sendPlayerShoot(Bullet *bullet) {
+    flatbuffers::FlatBufferBuilder builder{50};
+
+    auto pos = Vec2{bullet->pos.x(), bullet->pos.y()};
+    auto shoot = CreatePlayerShoot(builder, id, &pos, bullet->angle);
+    auto packet = CreatePacket(builder, PacketType::PlayerShoot, shoot.Union());
+
+    builder.Finish(packet);
+
+    auto netPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_RELIABLE);
     enet_host_broadcast(client, 0, netPacket);
 }
 

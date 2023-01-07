@@ -28,6 +28,8 @@ namespace Game {
         std::shared_ptr<Game::Vehicle> controlledCar;
         Engine::Camera camera;
 
+        void shoot();
+
         bool editingScene;
         void save();
 
@@ -39,6 +41,7 @@ namespace Game {
 
         void onPlayerJoinMessage(uint8_t playerId);
         void onPlayerMoveMessage(const Net::PlayerMove *packet);
+        void onPlayerShootMessage(const Net::PlayerShoot *packet);
         void onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *packet); // server -> new client
         void onDisconnect();
     };

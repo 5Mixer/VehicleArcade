@@ -99,22 +99,30 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 if (event.peer->data == nullptr) {
                     enet_peer_disconnect(event.peer, static_cast<std::uint32_t>(DisconnectReason::MESSAGE_BEFORE_JOIN));
                 }
+                std::uint8_t peerPlayerId = *(std::uint8_t *)event.peer->data;
 
                 auto deserialisedPacket = GetMutablePacket(event.packet->data);
-                // Don't trust the client to give their own playerID
 
-                if (deserialisedPacket->type_type() == PacketType::PlayerMove && event.peer->data != nullptr) {
-                    PacketT packetObj;
-                    deserialisedPacket->UnPackTo(&packetObj);
+                // Drop packets where the client is dishonest about their player ID
+                // This should be more efficient than overriding the player ID (requiring unpacking, mutation, repacking)
+                // Whilst having no downside cost - clients should know their assigned player ID as soon as they receive
+                // their player join download packet
+                bool playerIdValid = true;
+                switch (deserialisedPacket->type_type()) {
+                    case PacketType::PlayerMove: {
+                        playerIdValid = deserialisedPacket->type_as_PlayerMove()->player() == peerPlayerId;
+                        break;
+                    }
+                    case PacketType::PlayerShoot: {
+                        playerIdValid = deserialisedPacket->type_as_PlayerShoot()->player() == peerPlayerId;
+                        break;
+                    }
+                    default: {
+                    }
+                }
 
-                    packetObj.type.AsPlayerMove()->player = *(std::uint8_t *)event.peer->data;
-
-                    flatbuffers::FlatBufferBuilder builder;
-                    builder.Finish(Packet::Pack(builder, &packetObj));
-
-                    auto repackedData = builder.GetBufferPointer();
-                    auto repacked = GetMutablePacket(repackedData);
-                    deserialisedPacket = repacked;
+                if (!playerIdValid) {
+                    break;
                 }
 
                 receiver.processRawPacket(*deserialisedPacket);
@@ -127,6 +135,21 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
             }
         }
     }
+}
+
+void Game::Net::Server::onPlayerShootMessage(const PlayerShoot *packet) {
+    // Broadcast shoot to other players
+    flatbuffers::FlatBufferBuilder builder{50};
+
+    auto pos = Vec2{packet->pos()->x(), packet->pos()->y()};
+    auto shoot = CreatePlayerShoot(builder, packet->player(), &pos, packet->angle());
+    auto outboundPacketData = CreatePacket(builder, PacketType::PlayerShoot, shoot.Union());
+
+    builder.Finish(outboundPacketData);
+
+    auto outboundPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_UNSEQUENCED);
+
+    enet_host_broadcast(server, 0, outboundPacket);
 }
 
 void Game::Net::Server::onPlayerMoveMessage(const PlayerMove *packet) {

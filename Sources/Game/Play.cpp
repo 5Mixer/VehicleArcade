@@ -101,6 +101,34 @@ void Game::Play::onPlayerMoveMessage(const Net::PlayerMove *packet) {
     }
 }
 
+void Game::Play::onPlayerShootMessage(const Net::PlayerShoot *packet) {
+    if (controlledCar->id == packet->player()) {
+        return;
+    }
+
+    auto bullet = Game::Bullet();
+    bullet.pos.x() = packet->pos()->x();
+    bullet.pos.y() = packet->pos()->y();
+    bullet.angle = packet->angle();
+
+    bullets.push_back(bullet);
+}
+
+void Game::Play::shoot() {
+    auto bullet = Game::Bullet();
+    bullet.pos = controlledCar->pos;
+    auto directAngle = atan2(Engine::Input::mousePosition.y() - Kore::System::windowHeight() / 2, Engine::Input::mousePosition.x() - Kore::System::windowWidth() / 2);
+    auto angleRange = Engine::Core::getInstance().rand() - .5;
+    bullet.angle = directAngle + angleRange * .01;
+
+    auto startOffset = 20 * Engine::Core::getInstance().rand();
+    bullet.pos += Kore::vec2{std::cos(bullet.angle) * startOffset, std::sin(bullet.angle) * startOffset};
+
+    bullets.push_back(bullet);
+
+    client.sendPlayerShoot(&bullet);
+}
+
 void Game::Play::update() {
 
     client.service(*this);
@@ -149,16 +177,7 @@ void Game::Play::update() {
         }
     } else {
         if (Engine::Input::mouseDown) {
-            auto bullet = new Game::Bullet();
-            bullet->pos = controlledCar->pos;
-            auto directAngle = atan2(Engine::Input::mousePosition.y() - Kore::System::windowHeight() / 2, Engine::Input::mousePosition.x() - Kore::System::windowWidth() / 2);
-            auto angleRange = Engine::Core::getInstance().rand() - .5;
-            bullet->angle = directAngle + angleRange * .01;
-
-            auto startOffset = 20 * Engine::Core::getInstance().rand();
-            bullet->pos += Kore::vec2{std::cos(bullet->angle) * startOffset, std::sin(bullet->angle) * startOffset};
-
-            bullets.push_back(*bullet);
+            shoot();
         }
     }
 }
