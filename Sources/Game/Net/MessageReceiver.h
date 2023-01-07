@@ -1,7 +1,6 @@
 #ifndef GAME_NET_MESSAGE_RECEIVER
 #define GAME_NET_MESSAGE_RECEIVER
 
-#include "Message.h"
 #include "PacketGenerated.h"
 #include <Kore/IO/BufferReader.h>
 #include <cstdint>

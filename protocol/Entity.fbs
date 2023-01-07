@@ -1,0 +1,23 @@
+namespace Game.Net;
+
+struct Vec2 {
+    x: float;
+    y: float;
+}
+struct PlayerData {
+    id: ubyte;
+    pos: Vec2;
+    angle: float;
+}
+
+struct BulletData {
+    shooter: ubyte;
+    pos: Vec2;
+    angle: float;
+}
+
+struct WallData {
+    placer: ubyte;
+    pos: Vec2;
+    health: int;
+}

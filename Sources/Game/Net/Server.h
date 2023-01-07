@@ -3,7 +3,7 @@
 
 #include "../Bullet.h"
 #include "../Vehicle.h"
-#include "Message.h"
+#include "../Wall.h"
 #include "MessageReceiver.h"
 #include <chrono>
 #include <cstdint>
@@ -24,6 +24,7 @@ namespace Game {
 
             std::unordered_map<std::uint8_t, Game::Vehicle> vehicles{};
             std::vector<Game::Bullet> bullets{};
+            std::vector<Game::Wall> walls{};
 
             ENetPacket *createPlayerJoinPacket(uint8_t playerId);
             void updateEntities();

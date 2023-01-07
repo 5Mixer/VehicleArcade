@@ -82,6 +82,18 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 }
                 auto vectorOfBulletData = builder.CreateVectorOfStructs(bulletData);
 
+                // create vector of walls to be sent in PlayerJoinDownload packet
+                std::vector<WallData> wallData;
+                for (auto &wall : walls) {
+                    wallData.push_back(WallData{
+                        wall.placer,
+                        Vec2{
+                            wall.pos.x(),
+                            wall.pos.y()},
+                        wall.health});
+                }
+                auto vectorOfWallData = builder.CreateVectorOfStructs(wallData);
+
                 auto packet = CreatePacket(
                     builder,
                     PacketType::PlayerJoinDownload,
@@ -89,7 +101,8 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                         builder,
                         playerId,
                         vectorOfVehicleData,
-                        vectorOfBulletData
+                        vectorOfBulletData,
+                        vectorOfWallData
                     )
                         .Union()
                 );
@@ -97,16 +110,8 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 auto netPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_RELIABLE);
                 enet_peer_send(event.peer, 0, netPacket);
 
-                std::cout << "Client connected ["
-                          << event.peer->address.host
-                          << ":"
-                          << event.peer->address.port
-                          << "] playerID: "
-                          << static_cast<unsigned int>(playerId)
-                          << std::endl;
-
-                event.peer->data = malloc(sizeof(std::uint8_t));
-                *(std::uint8_t *)(event.peer->data) = playerId;
+                // Associate the network peer with it's playerId, on the heap. Deleted on disconnect.
+                event.peer->data = new std::uint8_t(playerId);
 
                 vehicles.insert({playerId, Vehicle{playerId}});
 
@@ -118,14 +123,16 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 receiver.onDisconnect();
 
                 if (event.peer->data != nullptr) {
-                    free(event.peer->data);
+                    delete (std::uint8_t *)event.peer->data;
                 }
 
                 break;
             }
             case ENET_EVENT_TYPE_RECEIVE: {
                 if (event.peer->data == nullptr) {
-                    enet_peer_disconnect(event.peer, static_cast<std::uint32_t>(DisconnectReason::MESSAGE_BEFORE_JOIN));
+                    // Reject packets from peers without an assigned playerId
+                    enet_peer_disconnect(event.peer, 0);
+                    break;
                 }
                 std::uint8_t peerPlayerId = *(std::uint8_t *)event.peer->data;
 

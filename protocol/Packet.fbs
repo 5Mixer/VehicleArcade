@@ -1,9 +1,6 @@
-namespace Game.Net;
+include "Entity.fbs";
 
-struct Vec2 {
-    x: float;
-    y: float;
-}
+namespace Game.Net;
 
 table PlayerMove {
     player: ubyte;
@@ -23,24 +20,6 @@ table PlayerPlaceWall {
 
 table PlayerJoin {
     player: ubyte;
-}
-
-struct PlayerData {
-    id: ubyte;
-    pos: Vec2;
-    angle: float;
-}
-
-struct BulletData {
-    shooter: ubyte;
-    pos: Vec2;
-    angle: float;
-}
-
-struct WallData {
-    placer: ubyte;
-    pos: Vec2;
-    health: int;
 }
 
 table PlayerJoinDownload {

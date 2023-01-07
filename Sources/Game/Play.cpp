@@ -3,22 +3,7 @@
 Game::Play::Play(Game::Net::Client &client)
     : editingScene(false),
       controlledCar(std::shared_ptr<Game::Vehicle>(new Game::Vehicle(255))),
-      client(client) {
-
-    auto reader = Kore::FileReader();
-
-    if (reader.open("Save", Kore::FileReader::Save)) {
-        int wallCount = reader.readU32LE();
-
-        for (int i = 0; i < wallCount; i++) {
-            int x = reader.readS32LE();
-            int y = reader.readS32LE();
-            auto wall = new Game::Wall{Kore::vec2{float(x), float(y)}};
-            walls.push_back(*wall);
-        }
-        reader.close();
-    }
-}
+      client(client) {}
 
 void Game::Play::render(Engine::Graphics &graphics) {
     camera.pos = controlledCar->pos;
@@ -48,7 +33,7 @@ void Game::Play::render(Engine::Graphics &graphics) {
 }
 
 void Game::Play::onPlayerJoinMessage(uint8_t playerId) {
-    if (controlledCar->id == playerId) {
+    if (client.getId() == playerId) {
         return;
     }
 
@@ -61,21 +46,10 @@ void Game::Play::onDisconnect() {
 }
 
 void Game::Play::onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *packet) {
-    std::cout << "Received player id assignment " << static_cast<unsigned int>(packet->id()) << std::endl;
     controlledCar->id = packet->id();
 
     for (auto playerData : *packet->players()) {
-        std::cout << "Adding player id "
-                  << playerData->id()
-                  << " at "
-                  << playerData->pos().x()
-                  << ", "
-                  << playerData->pos().y()
-                  << ", angle: "
-                  << playerData->angle()
-                  << std::endl;
-
-        Vehicle newVehicle = Vehicle{playerData->id()};
+        Vehicle newVehicle{playerData->id()};
         newVehicle.pos.x() = playerData->pos().x();
         newVehicle.pos.y() = playerData->pos().y();
         newVehicle.angle = playerData->angle();
@@ -83,7 +57,7 @@ void Game::Play::onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *pack
         vehicles.push_back(newVehicle);
     }
     for (const Net::BulletData *bulletData : *packet->bullets()) {
-        Bullet newBullet = Bullet();
+        Bullet newBullet;
         newBullet.shooter = bulletData->shooter();
         newBullet.pos.x() = bulletData->pos().x();
         newBullet.pos.y() = bulletData->pos().y();
@@ -91,10 +65,17 @@ void Game::Play::onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *pack
 
         bullets.push_back(newBullet);
     }
+    for (const Net::WallData *wallData : *packet->walls()) {
+        Wall newWall{Kore::vec2{wallData->pos().x(), wallData->pos().y()}};
+        newWall.placer = wallData->placer();
+        newWall.health = wallData->health();
+
+        walls.push_back(newWall);
+    }
 }
 
 void Game::Play::onPlayerMoveMessage(const Net::PlayerMove *packet) {
-    if (controlledCar->id == packet->player()) {
+    if (client.getId() == packet->player()) {
         return;
     }
     bool found = false;
@@ -111,22 +92,22 @@ void Game::Play::onPlayerMoveMessage(const Net::PlayerMove *packet) {
 }
 
 void Game::Play::onPlayerPlaceWallMessage(const Net::PlayerPlaceWall *packet) {
-    if (packet->wall()->placer() == controlledCar->id) {
+    if (packet->wall()->placer() == client.getId()) {
         return;
     }
 
-    auto wall = Game::Wall{Kore::vec2{packet->wall()->pos().x(), packet->wall()->pos().y()}};
+    Game::Wall wall{Kore::vec2{packet->wall()->pos().x(), packet->wall()->pos().y()}};
     wall.health = packet->wall()->health();
     wall.placer = packet->wall()->placer();
     walls.push_back(wall);
 }
 
 void Game::Play::onPlayerShootMessage(const Net::PlayerShoot *packet) {
-    if (controlledCar->id == packet->player()) {
+    if (client.getId() == packet->player()) {
         return;
     }
 
-    auto bullet = Game::Bullet();
+    Game::Bullet bullet{};
     bullet.pos.x() = packet->pos()->x();
     bullet.pos.y() = packet->pos()->y();
     bullet.angle = packet->angle();
@@ -135,7 +116,7 @@ void Game::Play::onPlayerShootMessage(const Net::PlayerShoot *packet) {
 }
 
 void Game::Play::shoot() {
-    auto bullet = Game::Bullet();
+    Game::Bullet bullet{};
     bullet.pos = controlledCar->pos;
     auto directAngle = atan2(Engine::Input::mousePosition.y() - Kore::System::windowHeight() / 2, Engine::Input::mousePosition.x() - Kore::System::windowWidth() / 2);
     auto angleRange = Engine::Core::getInstance().rand() - .5;
@@ -149,9 +130,8 @@ void Game::Play::shoot() {
 }
 
 void Game::Play::placeWall() {
-    auto world = camera.getWorldPos(Kore::vec3{Engine::Input::mousePosition.x() - 8 * camera.zoom, Engine::Input::mousePosition.y() - 8 * camera.zoom});
-
-    auto rounded = Kore::vec2{std::round(world.x()), std::round(world.y())};
+    Kore::vec2 world{camera.getWorldPos(Kore::vec3{Engine::Input::mousePosition.x() - 8 * camera.zoom, Engine::Input::mousePosition.y() - 8 * camera.zoom})};
+    Kore::vec2 rounded{std::round(world.x()), std::round(world.y())};
 
     bool freeSpace = true;
     for (const Game::Wall wall : walls) {
@@ -162,14 +142,13 @@ void Game::Play::placeWall() {
     }
 
     if (freeSpace) {
-        auto wall = Game::Wall{rounded};
+        Game::Wall wall{rounded};
         client.sendPlayerPlaceWall(wall);
         walls.push_back(wall);
     }
 }
 
 void Game::Play::update() {
-
     client.service(*this);
     client.sendPlayerMove(controlledCar->pos.x(), controlledCar->pos.y(), controlledCar->angle);
 

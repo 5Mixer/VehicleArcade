@@ -11,7 +11,6 @@ void Game::Net::MessageReceiver::processRawPacket(const Packet *packet) {
             break;
         }
         case PacketType::PlayerMove: {
-            // std::cout << "Player with id " << static_cast<unsigned int>(packet.type_as_PlayerMove()->player()) << " moved. x: " << packet.type_as_PlayerMove()->pos()->x() << ", y: " << packet.type_as_PlayerMove()->pos()->y() << ", Θ: " << packet.type_as_PlayerMove()->angle() << std::endl;
             onPlayerMoveMessage(packet->type_as_PlayerMove());
             break;
         }

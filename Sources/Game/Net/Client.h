@@ -3,7 +3,6 @@
 
 #include "../Bullet.h"
 #include "../Wall.h"
-#include "Message.h"
 #include "MessageReceiver.h"
 #include <cmath>
 #include <cstring>
@@ -27,6 +26,7 @@ namespace Game {
             void sendPlayerMove(float x, float y, float angle);
             void sendPlayerShoot(Bullet &bullet);
             void sendPlayerPlaceWall(Wall &wall);
+            std::uint8_t getId() { return id; };
 
             void service(MessageReceiver &receiver);
         };
