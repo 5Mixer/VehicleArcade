@@ -24,6 +24,7 @@ void Game::Vehicle::update(std::vector<Game::Wall> &walls) {
     }
 
     float turnRate = this->turnRateVelocityFactor(forwardsVelocity, maximumSpeed);
+    visualAngleDelta = visualAngleDelta * .8;
     if (Engine::Input::keysDown[Kore::KeyCode::KeyA]) {
         turn(-turnSpeed * turnRate);
     }
@@ -61,7 +62,7 @@ float Game::Vehicle::turnRateVelocityFactor(float speed, float maximumSpeed) {
 
 void Game::Vehicle::render(Engine::Graphics &g) {
     // g.drawSprite(0, pos, angle + 3.14 / 2);
-    g.drawVehicle(pos, angle);
+    g.drawVehicle(pos, angle, visualAngleDelta * 20);
 }
 
 void Game::Vehicle::accelerate(float acceleration) {
@@ -69,4 +70,6 @@ void Game::Vehicle::accelerate(float acceleration) {
 }
 void Game::Vehicle::turn(float angleDelta) {
     angle += angleDelta;
+    // visualAngleDelta = angleDelta;
+    visualAngleDelta += (angleDelta - visualAngleDelta) / 10;
 }

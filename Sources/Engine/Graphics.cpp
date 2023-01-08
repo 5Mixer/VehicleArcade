@@ -9,6 +9,7 @@ namespace Engine {
           wall1Texture(Kore::Graphics4::Texture("../Assets/wall1.png", true)),
           wall2Texture(Kore::Graphics4::Texture("../Assets/wall2.png", true)),
           wall3Texture(Kore::Graphics4::Texture("../Assets/wall3.png", true)),
+          wheelTexture(Kore::Graphics4::Texture("../Assets/carWheel.png", true)),
           grassTexture(Kore::Graphics4::Texture("../Assets/grass.png", true)) {
     }
 
@@ -32,11 +33,23 @@ namespace Engine {
         graphics->drawScaledSubImage(&texture, sprite * 16, 0, 16, 16, pos.x(), pos.y(), 16, 16);
         graphics->transformation = prior;
     }
-    void Engine::Graphics::drawVehicle(Kore::vec2 pos, float angle) {
+    void Engine::Graphics::drawVehicle(Kore::vec2 pos, float angle, float angleDelta) {
         auto prior = graphics->transformation;
         auto rotation = rotate(angle, pos.x(), pos.y());
         transform(rotation);
         graphics->drawScaledSubImage(&carTexture, 0, 0, 196, 100, pos.x() - 196 / 2, pos.y() - 100 / 2, 196, 100);
+
+        auto leftWheelPos = rotation * Kore::vec3(pos.x() + 40, pos.y() - 35, 1);
+        auto rightWheelPos = rotation * Kore::vec3(pos.x() + 40, pos.y() + 35, 1);
+
+        auto leftRotation = rotate(angle + angleDelta, leftWheelPos.x(), leftWheelPos.y());
+        graphics->transformation = prior * (leftRotation);
+        graphics->drawScaledSubImage(&wheelTexture, 0, 0, 30, 15, leftWheelPos.x() - 30 / 2, leftWheelPos.y() - 15 / 2, 30, 15);
+
+        auto rightRotation = rotate(angle + angleDelta, rightWheelPos.x(), rightWheelPos.y());
+        graphics->transformation = prior * (rightRotation);
+        graphics->drawScaledSubImage(&wheelTexture, 0, 0, 30, 15, rightWheelPos.x() - 30 / 2, rightWheelPos.y() - 15 / 2, 30, 15);
+
         graphics->transformation = prior;
     }
     void Engine::Graphics::drawBullet(Kore::vec2 pos, float angle) {

@@ -14,6 +14,7 @@ namespace Game {
     private:
         float forwardsVelocity = 0;
         float turnRateVelocityFactor(float speed, float maximumSpeed);
+        float visualAngleDelta = 0;
 
     public:
         Vehicle(std::uint8_t id, Kore::vec2 pos, float angle)
