@@ -6,6 +6,9 @@ namespace Engine {
           texture(Kore::Graphics4::Texture("../Assets/textures.png", true)),
           carTexture(Kore::Graphics4::Texture("../Assets/car.png", true)),
           bulletTexture(Kore::Graphics4::Texture("../Assets/bullet.png", true)),
+          wall1Texture(Kore::Graphics4::Texture("../Assets/wall1.png", true)),
+          wall2Texture(Kore::Graphics4::Texture("../Assets/wall2.png", true)),
+          wall3Texture(Kore::Graphics4::Texture("../Assets/wall3.png", true)),
           grassTexture(Kore::Graphics4::Texture("../Assets/grass.png", true)) {
     }
 
@@ -38,6 +41,14 @@ namespace Engine {
     }
     void Engine::Graphics::drawBullet(Kore::vec2 pos, float angle) {
         graphics->drawScaledSubImage(&bulletTexture, 0, 0, 18, 18, pos.x() - 18 / 2, pos.y() - 18 / 2, 18, 18);
+    }
+    void Engine::Graphics::drawWall(Kore::vec2 pos, int layer) {
+        if (layer == 0)
+            graphics->drawScaledSubImage(&wall1Texture, 0, 0, 96, 103, pos.x() - 96 / 2, pos.y() - 103 / 2, 96, 103);
+        if (layer == 1)
+            graphics->drawScaledSubImage(&wall2Texture, 0, 0, 96, 103, pos.x() - 96 / 2, pos.y() - 103 / 2, 96, 103);
+        if (layer == 2)
+            graphics->drawScaledSubImage(&wall3Texture, 0, 0, 96, 103, pos.x() - 96 / 2, pos.y() - 103 / 2, 96, 103);
     }
     void Engine::Graphics::transform(Kore::mat3 transformation) {
         graphics->transformation *= transformation;

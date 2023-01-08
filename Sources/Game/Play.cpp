@@ -19,7 +19,8 @@ void Game::Play::render(Engine::Graphics &graphics) {
     // Draw walls
     for (int layer = 0; layer < 3; layer++) {
         for (auto &wall : walls) {
-            graphics.drawSprite(5 + layer, wall.pos);
+            // graphics.drawSprite(5 + layer, wall.pos);
+            graphics.drawWall(wall.pos, layer);
         }
     }
 

@@ -18,6 +18,9 @@ namespace Engine {
         Kore::Graphics4::Texture carTexture;
         Kore::Graphics4::Texture grassTexture;
         Kore::Graphics4::Texture bulletTexture;
+        Kore::Graphics4::Texture wall1Texture;
+        Kore::Graphics4::Texture wall2Texture;
+        Kore::Graphics4::Texture wall3Texture;
 
     public:
         Graphics();
@@ -27,6 +30,7 @@ namespace Engine {
         void drawSprite(int sprite, Kore::vec2 pos, float angle = 0);
         void drawVehicle(Kore::vec2 pos, float angle = 0);
         void drawBullet(Kore::vec2 pos, float angle = 0);
+        void drawWall(Kore::vec2 pos, int layer);
         void transform(Kore::mat3 transformation);
         Kore::mat3 rotate(float angle, float centerx, float centery);
     }; // namespace Engine

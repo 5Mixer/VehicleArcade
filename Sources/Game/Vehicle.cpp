@@ -8,12 +8,12 @@ const Game::Net::PlayerData Game::Vehicle::getData() {
 }
 
 void Game::Vehicle::update(std::vector<Game::Wall> &walls) {
-    float accelerationSpeed = .09;
+    float accelerationSpeed = .1;
     float breakSpeed = .1;
     float turnSpeed = .04;
     float frictionFactor = .99;
     float wallFrictionFactor = .95;
-    float maximumSpeed = 8;
+    float maximumSpeed = 10;
 
     if (Engine::Input::keysDown[Kore::KeyCode::KeyW]) {
         accelerate(accelerationSpeed);
@@ -38,11 +38,12 @@ void Game::Vehicle::update(std::vector<Game::Wall> &walls) {
     auto target = pos + Kore::vec2{std::cos(angle) * forwardsVelocity, std::sin(angle) * forwardsVelocity};
 
     auto collide = false;
+    auto combinedRadius = 70;
     for (const Game::Wall &wall : walls) {
         auto overlap = target - wall.pos;
-        if (overlap.squareLength() < (10 * 10)) {
+        if (overlap.squareLength() < (combinedRadius * combinedRadius)) {
 
-            overlap.setLength(10);
+            overlap.setLength(combinedRadius);
             target = wall.pos + overlap;
 
             collide = true;
