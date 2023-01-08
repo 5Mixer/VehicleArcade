@@ -1,12 +1,12 @@
 #ifndef GAME_NET_CLIENT
 #define GAME_NET_CLIENT
 
+#include "../../enet.h"
 #include "../Bullet.h"
 #include "../Wall.h"
 #include "MessageReceiver.h"
 #include <cmath>
 #include <cstring>
-#include <enet/enet.h>
 #include <exception>
 #include <iostream>
 

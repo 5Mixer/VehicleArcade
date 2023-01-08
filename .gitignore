@@ -1,3 +1,6 @@
 build/
 Deployment/
 **Generated.h
+Sources/flatbuffers
+Sources/enet.h
+design mockup.svg

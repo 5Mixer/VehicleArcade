@@ -16,7 +16,7 @@ Game::Net::Client::Client() {
     ENetAddress address;
     ENetEvent event;
     ENetPeer *peer;
-    enet_address_set_host(&address, "localhost");
+    enet_address_set_host(&address, "128.199.138.81");
     address.port = 9320;
 
     /* Initiate the connection, allocating the two channels 0 and 1. */
@@ -45,6 +45,8 @@ void Game::Net::Client::disconnect() {
 void Game::Net::Client::service(MessageReceiver &receiver) {
     ENetEvent event;
 
+    std::cout << client->totalSentData << ", " << client->totalSentPackets << std::endl;
+
     if (client->peerCount < 1) {
         receiver.onTimeout();
         return;
@@ -53,7 +55,7 @@ void Game::Net::Client::service(MessageReceiver &receiver) {
     while (enet_host_service(client, &event, 0) > 0) {
         switch (event.type) {
             case ENET_EVENT_TYPE_CONNECT: {
-                std::cout << "Connected to server [" << event.peer->address.host << ":" << event.peer->address.port << "]" << std::endl;
+                // std::cout << "Connected to server [" << event.peer->address.host << ":" << event.peer->address.port << "]" << std::endl;
                 break;
             }
             case ENET_EVENT_TYPE_DISCONNECT: {

@@ -26,7 +26,7 @@ void Game::Net::Server::run() {
         exit(1);
     }
 
-    std::cout << "Server initialised at " << address.host << ":" << address.port << std::endl;
+    // std::cout << "Server initialised at " << address.host << ":" << address.port << std::endl;
 
     auto last = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::steady_clock::now());
 

@@ -1,13 +1,13 @@
 #ifndef GAME_NET_SERVER
 #define GAME_NET_SERVER
 
+#include "../../enet.h"
 #include "../Bullet.h"
 #include "../Vehicle.h"
 #include "../Wall.h"
 #include "MessageReceiver.h"
 #include <chrono>
 #include <cstdint>
-#include <enet/enet.h>
 #include <iostream>
 #include <memory>
 #include <unordered_map>
