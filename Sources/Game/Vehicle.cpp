@@ -8,12 +8,12 @@ const Game::Net::PlayerData Game::Vehicle::getData() {
 }
 
 void Game::Vehicle::update(std::vector<Game::Wall> &walls) {
-    float accelerationSpeed = .08;
+    float accelerationSpeed = .09;
     float breakSpeed = .1;
-    float turnSpeed = .07;
+    float turnSpeed = .04;
     float frictionFactor = .99;
     float wallFrictionFactor = .95;
-    float maximumSpeed = 2.5;
+    float maximumSpeed = 8;
 
     if (Engine::Input::keysDown[Kore::KeyCode::KeyW]) {
         accelerate(accelerationSpeed);
@@ -59,7 +59,8 @@ float Game::Vehicle::turnRateVelocityFactor(float speed, float maximumSpeed) {
 }
 
 void Game::Vehicle::render(Engine::Graphics &g) {
-    g.drawSprite(0, pos, angle + 3.14 / 2);
+    // g.drawSprite(0, pos, angle + 3.14 / 2);
+    g.drawVehicle(pos, angle);
 }
 
 void Game::Vehicle::accelerate(float acceleration) {

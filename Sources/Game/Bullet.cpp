@@ -5,7 +5,7 @@ void Game::Bullet::update() {
 }
 
 void Game::Bullet::render(Engine::Graphics &g) {
-    g.drawSprite(4, pos, angle);
+    g.drawBullet(pos, angle);
 }
 
 const Game::Net::BulletData Game::Bullet::getData() {

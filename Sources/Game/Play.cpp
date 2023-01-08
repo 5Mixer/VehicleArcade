@@ -105,7 +105,7 @@ void Game::Play::shoot() {
         controlledCar.pos,
         directAngle + angleRange * .01f};
 
-    auto startOffset = 20 * Engine::Core::getInstance().rand();
+    auto startOffset = 80 + 20 * Engine::Core::getInstance().rand();
     bullet.pos += Kore::vec2{std::cos(bullet.angle) * startOffset, std::sin(bullet.angle) * startOffset};
 
     client.sendPlayerShoot(bullet);

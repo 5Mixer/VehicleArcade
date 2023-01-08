@@ -15,7 +15,9 @@ namespace Engine {
         void start();
         std::unique_ptr<Kore::Graphics2::Graphics2> graphics;
         Kore::Graphics4::Texture texture;
+        Kore::Graphics4::Texture carTexture;
         Kore::Graphics4::Texture grassTexture;
+        Kore::Graphics4::Texture bulletTexture;
 
     public:
         Graphics();
@@ -23,6 +25,8 @@ namespace Engine {
         void end();
         void drawTexture();
         void drawSprite(int sprite, Kore::vec2 pos, float angle = 0);
+        void drawVehicle(Kore::vec2 pos, float angle = 0);
+        void drawBullet(Kore::vec2 pos, float angle = 0);
         void transform(Kore::mat3 transformation);
         Kore::mat3 rotate(float angle, float centerx, float centery);
     }; // namespace Engine

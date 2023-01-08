@@ -45,8 +45,6 @@ void Game::Net::Client::disconnect() {
 void Game::Net::Client::service(MessageReceiver &receiver) {
     ENetEvent event;
 
-    std::cout << client->totalSentData << ", " << client->totalSentPackets << std::endl;
-
     if (client->peerCount < 1) {
         receiver.onTimeout();
         return;
