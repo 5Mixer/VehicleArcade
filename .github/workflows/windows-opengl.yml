@@ -1,0 +1,27 @@
+name: Windows (OpenGL)
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get Submodules
+      run: .\get_dlc.bat
+    - name: Compile
+      run: .\make.bat -v vs2022 -g opengl --compile
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: |
+          build/**

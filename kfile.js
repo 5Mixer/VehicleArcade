@@ -15,6 +15,13 @@ exec('./fmt', function callback(error, stdout, stderr) {
 		console.log('fmt executed.', stdout, stderr);
 	}
 });
+exec('./installLibs.sh', function callback(error, stdout, stderr) {
+	if (error) {
+		console.log('Lib installation error:', error, stdout, stderr);
+	} else {
+		console.log('Lib installation done.', stdout, stderr);
+	}
+});
 
 project.cpp = true;
 
