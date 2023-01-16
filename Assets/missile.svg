@@ -29,8 +29,8 @@
      inkscape:document-units="mm"
      showgrid="true"
      inkscape:zoom="19.434485"
-     inkscape:cx="45.460429"
-     inkscape:cy="16.542759"
+     inkscape:cx="45.820613"
+     inkscape:cy="17.005854"
      inkscape:window-width="2363"
      inkscape:window-height="1366"
      inkscape:window-x="1077"
@@ -103,19 +103,6 @@
          offset="0.88901824"
          id="stop1007" />
     </linearGradient>
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter9399"
-       x="-0.2519099"
-       y="-0.17038776"
-       width="1.5038198"
-       height="1.3407755">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.91010233"
-         id="feGaussianBlur9401" />
-    </filter>
     <linearGradient
        inkscape:collect="always"
        id="linearGradient3599">
@@ -242,6 +229,19 @@
        fx="102.63018"
        fy="69.432159"
        r="0.27583713" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter2975"
+       x="-0.20043855"
+       y="-0.13346852"
+       width="1.4008771"
+       height="1.266937">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.7308787"
+         id="feGaussianBlur2977" />
+    </filter>
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -253,17 +253,12 @@
        d="m 94.687767,67.617112 -1.447294,-1.098891 9.536987,2.021575 z"
        id="path2654-5"
        sodipodi:nodetypes="cccc" />
-    <rect
-       style="opacity:0.460068;mix-blend-mode:normal;fill:#eceef7;fill-opacity:0.489512;stroke:none;stroke-width:0.155;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:0.393184;paint-order:markers fill stroke;filter:url(#filter9399)"
+    <path
        id="rect22628"
-       width="8.6707411"
-       height="12.819263"
-       x="57.253109"
-       y="67.160767"
-       ry="2.2159662"
+       style="opacity:0.460068;fill:#b0d1d2;fill-opacity:0.41683161;stroke-width:0.155;stroke-linecap:round;stroke-linejoin:bevel;stroke-opacity:0.393184;paint-order:markers fill stroke;filter:url(#filter2975)"
        transform="matrix(0.00119894,0.7755432,-1.1565826,0.001788,185.3477,21.898949)"
-       rx="4.2495284"
-       sodipodi:insensitive="true" />
+       d="m 62.896994,69.580165 3.026856,8.183899 c 0.4407,1.191548 -1.89529,2.215966 -4.249528,2.215966 l -0.171685,0 c -2.354238,0 -4.544027,-1.004308 -4.249528,-2.215966 l 1.996299,-8.21337 c 1.939977,-3.806765 1.894518,-3.432542 3.647586,0.02947 z"
+       sodipodi:nodetypes="csssscc" />
     <path
        style="fill:url(#radialGradient2723);fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 94.746946,71.131651 -1.447294,1.098891 9.536978,-2.021575 z"

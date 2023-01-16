@@ -113,6 +113,10 @@ void Game::Play::onPlayerShootMissileMessage(const Net::PlayerShootMissile *pack
 }
 
 void Game::Play::shootBullet() {
+    if (std::chrono::steady_clock::now() < lastBulletShootTime + std::chrono::milliseconds(150)) {
+        return;
+    }
+
     float directAngle = atan2(Engine::Input::mousePosition.y() - Kore::System::windowHeight() / 2, Engine::Input::mousePosition.x() - Kore::System::windowWidth() / 2);
     float angleRange = Engine::Core::getInstance().rand() - .5;
 
@@ -126,6 +130,8 @@ void Game::Play::shootBullet() {
 
     client.sendPlayerShootBullet(bullet);
     bullets.push_back(std::move(bullet));
+
+    lastBulletShootTime = std::chrono::steady_clock::now();
 }
 
 void Game::Play::shootMissile() {
@@ -180,7 +186,7 @@ void Game::Play::update() {
         }
     } else {
         if (Engine::Input::mouseDown) {
-            Engine::Core::getInstance().rand() > .9 ? shootMissile() : shootBullet();
+            shootBullet();
         }
     }
 }

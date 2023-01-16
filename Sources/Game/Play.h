@@ -14,6 +14,7 @@
 #include <Kore/IO/FileWriter.h>
 #include <Kore/Math/Matrix.h>
 #include <algorithm>
+#include <chrono>
 #include <memory>
 #include <string>
 #include <vector>
@@ -29,6 +30,7 @@ namespace Game {
         std::vector<Game::Vehicle> vehicles;
         Game::Vehicle controlledCar;
         Engine::Camera camera;
+        std::chrono::steady_clock::time_point lastBulletShootTime;
 
         void shootBullet();
         void shootMissile();
