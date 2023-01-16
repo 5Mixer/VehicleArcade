@@ -138,22 +138,7 @@ void Game::Play::update() {
 
     editingScene = Engine::Input::keysDown.at(Kore::KeyTab);
 
-    bullets.erase(std::remove_if(bullets.begin(), bullets.end(), [&](Game::Bullet bullet) -> bool {
-                      // TODO: Avoid n^2
-                      for (auto &wall : walls) {
-                          if ((bullet.pos - wall.pos).squareLength() < std::pow(10, 2)) {
-                              wall.health--;
-                              return true;
-                          }
-                      }
-                      return false;
-                  }),
-                  bullets.end());
-
-    walls.erase(std::remove_if(walls.begin(), walls.end(), [&](Game::Wall wall) -> bool {
-                    return wall.health <= 0;
-                }),
-                walls.end());
+    Game::interactBulletsAndWalls(bullets, walls);
 
     controlledCar.update(walls);
 

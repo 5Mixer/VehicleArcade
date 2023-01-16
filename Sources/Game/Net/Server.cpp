@@ -46,6 +46,7 @@ void Game::Net::Server::updateEntities() {
     for (auto &bullet : bullets) {
         bullet.update();
     }
+    Game::interactBulletsAndWalls(bullets, walls);
 }
 
 void Game::Net::Server::service(MessageReceiver &receiver) {

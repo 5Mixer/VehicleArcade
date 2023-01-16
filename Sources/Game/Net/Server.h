@@ -3,6 +3,7 @@
 
 #include "../../enet.h"
 #include "../Bullet.h"
+#include "../Simulation.h"
 #include "../Vehicle.h"
 #include "../Wall.h"
 #include "MessageReceiver.h"

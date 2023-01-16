@@ -7,6 +7,7 @@
 #include "Bullet.h"
 #include "Net/Client.h"
 #include "Net/MessageReceiver.h"
+#include "Simulation.h"
 #include "Vehicle.h"
 #include "Wall.h"
 #include <Kore/IO/FileReader.h>
