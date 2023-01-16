@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/Sources",
-                "${workspaceFolder}/Kore"
+                "${workspaceFolder}/Kore/Sources/**",
+                "${workspaceFolder}/Kore/Kinc/Sources/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
