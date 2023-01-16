@@ -36,10 +36,10 @@ void Game::Vehicle::update(std::vector<Game::Wall> &walls) {
         forwardsVelocity = maximumSpeed * (forwardsVelocity > 0 ? 1 : -1);
     }
 
-    auto target = pos + Kore::vec2{std::cos(angle) * forwardsVelocity, std::sin(angle) * forwardsVelocity};
+    auto target = pos + Kore::vec2{std::cos(angle + visualAngleDelta * 20) * forwardsVelocity, std::sin(angle + visualAngleDelta * 20) * forwardsVelocity};
 
     auto collide = false;
-    auto combinedRadius = 70;
+    auto combinedRadius = 100;
     for (const Game::Wall &wall : walls) {
         auto overlap = target - wall.pos;
         if (overlap.squareLength() < (combinedRadius * combinedRadius)) {

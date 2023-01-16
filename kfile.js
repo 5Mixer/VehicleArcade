@@ -1,5 +1,8 @@
 let project = new Project('Car');
 
+// TODO: Windows CI builds, flatc compilation in CI
+"https://github.com/google/flatbuffers/releases/latest/download/Windows.flatc.binary.zip"
+
 var exec = require('child_process').exec;
 exec('flatc -c --scoped-enums --filename-suffix Generated --cpp-field-case-style lower --warnings-as-errors -o ./Sources/Game/Net/ ./protocol/*', function callback(error, stdout, stderr) {
 	if (error) {
