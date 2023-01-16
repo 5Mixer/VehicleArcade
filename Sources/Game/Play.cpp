@@ -115,7 +115,7 @@ void Game::Play::shoot() {
 
 void Game::Play::placeWall() {
     Kore::vec2 world{camera.getWorldPos(Kore::vec3{Engine::Input::mousePosition.x() - 8 * camera.zoom, Engine::Input::mousePosition.y() - 8 * camera.zoom})};
-    Kore::vec2 rounded{std::round(world.x()), std::round(world.y())};
+    Kore::vec2 rounded{std::round(world.x() / 100) * 100, std::round(world.y() / 100) * 100};
 
     bool freeSpace = true;
     for (const Game::Wall wall : walls) {
@@ -128,7 +128,7 @@ void Game::Play::placeWall() {
     if (freeSpace) {
         Game::Wall wall{client.getId(), rounded};
         client.sendPlayerPlaceWall(wall);
-        walls.push_back(wall);
+        walls.push_back(std::move(wall));
     }
 }
 
