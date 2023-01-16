@@ -26,8 +26,6 @@ void Game::Net::Server::run() {
         exit(1);
     }
 
-    // std::cout << "Server initialised at " << address.host << ":" << address.port << std::endl;
-
     auto last = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::steady_clock::now());
 
     while (hosting) {
@@ -46,7 +44,11 @@ void Game::Net::Server::updateEntities() {
     for (auto &bullet : bullets) {
         bullet.update();
     }
+    for (auto &missile : missiles) {
+        missile.update();
+    }
     Game::interactBulletsAndWalls(bullets, walls);
+    Game::interactMissilesAndWalls(missiles, walls);
 }
 
 void Game::Net::Server::service(MessageReceiver &receiver) {
@@ -73,6 +75,13 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 }
                 auto vectorOfBulletData = builder.CreateVectorOfStructs(bulletData);
 
+                // create vector of missiles to be sent in PlayerJoinDownload packet
+                std::vector<BulletData> missileData;
+                for (auto &missile : missiles) {
+                    missileData.push_back(missile.getData());
+                }
+                auto vectorOfMissileData = builder.CreateVectorOfStructs(missileData);
+
                 // create vector of walls to be sent in PlayerJoinDownload packet
                 std::vector<WallData> wallData;
                 for (auto &wall : walls) {
@@ -92,6 +101,7 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                         &playerData,
                         vectorOfVehicleData,
                         vectorOfBulletData,
+                        vectorOfMissileData,
                         vectorOfWallData
                     )
                         .Union()
@@ -217,6 +227,23 @@ void Game::Net::Server::onPlayerShootMessage(const PlayerShoot *packet) {
 
     auto shoot = CreatePlayerShoot(builder, packet->bullet());
     auto outboundPacketData = CreatePacket(builder, PacketType::PlayerShoot, shoot.Union());
+
+    builder.Finish(outboundPacketData);
+
+    auto outboundPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_UNSEQUENCED);
+
+    enet_host_broadcast(server, 0, outboundPacket);
+}
+
+void Game::Net::Server::onPlayerShootMissileMessage(const PlayerShootMissile *packet) {
+    // update server side state for missile location
+    missiles.push_back(Missile(packet->bullet()));
+
+    // Broadcast shoot to other players
+    flatbuffers::FlatBufferBuilder builder{50};
+
+    auto shoot = CreatePlayerShootMissile(builder, packet->bullet());
+    auto outboundPacketData = CreatePacket(builder, PacketType::PlayerShootMissile, shoot.Union());
 
     builder.Finish(outboundPacketData);
 

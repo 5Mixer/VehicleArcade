@@ -75,6 +75,8 @@
         "hash_set": "cpp",
         "shared_mutex": "cpp",
         "csignal": "cpp",
-        "span": "cpp"
+        "span": "cpp",
+        "bitset": "cpp",
+        "regex": "cpp"
     }
 }

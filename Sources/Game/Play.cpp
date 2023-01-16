@@ -15,6 +15,10 @@ void Game::Play::render(Engine::Graphics &graphics) {
         bullet.update();
         bullet.render(graphics);
     }
+    for (auto &missile : missiles) {
+        missile.update();
+        missile.render(graphics);
+    }
 
     // Draw walls
     for (int layer = 0; layer < 3; layer++) {
@@ -60,6 +64,9 @@ void Game::Play::onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *pack
     for (const Net::BulletData *bulletData : *packet->bullets()) {
         bullets.push_back(Bullet(bulletData));
     }
+    for (const Net::BulletData *missileData : *packet->missiles()) {
+        missiles.push_back(Missile(missileData));
+    }
     for (const Net::WallData *wallData : *packet->walls()) {
         walls.push_back(Wall(wallData));
     }
@@ -97,7 +104,15 @@ void Game::Play::onPlayerShootMessage(const Net::PlayerShoot *packet) {
     bullets.push_back(Bullet(packet->bullet()));
 }
 
-void Game::Play::shoot() {
+void Game::Play::onPlayerShootMissileMessage(const Net::PlayerShootMissile *packet) {
+    if (client.getId() == packet->bullet()->shooter()) {
+        return;
+    }
+
+    missiles.push_back(Missile(packet->bullet()));
+}
+
+void Game::Play::shootBullet() {
     float directAngle = atan2(Engine::Input::mousePosition.y() - Kore::System::windowHeight() / 2, Engine::Input::mousePosition.x() - Kore::System::windowWidth() / 2);
     float angleRange = Engine::Core::getInstance().rand() - .5;
 
@@ -109,8 +124,24 @@ void Game::Play::shoot() {
     auto startOffset = 80 + 20 * Engine::Core::getInstance().rand();
     bullet.pos += Kore::vec2{std::cos(bullet.angle) * startOffset, std::sin(bullet.angle) * startOffset};
 
-    client.sendPlayerShoot(bullet);
-    bullets.push_back(bullet);
+    client.sendPlayerShootBullet(bullet);
+    bullets.push_back(std::move(bullet));
+}
+
+void Game::Play::shootMissile() {
+    float directAngle = atan2(Engine::Input::mousePosition.y() - Kore::System::windowHeight() / 2, Engine::Input::mousePosition.x() - Kore::System::windowWidth() / 2);
+    float angleRange = Engine::Core::getInstance().rand() - .5;
+
+    Game::Missile missile{
+        client.getId(),
+        controlledCar.pos,
+        directAngle + angleRange * .005f};
+
+    auto startOffset = 80 + 20 * Engine::Core::getInstance().rand();
+    missile.pos += Kore::vec2{std::cos(missile.angle) * startOffset, std::sin(missile.angle) * startOffset};
+
+    client.sendPlayerShootMissile(missile);
+    missiles.push_back(std::move(missile));
 }
 
 void Game::Play::placeWall() {
@@ -139,6 +170,7 @@ void Game::Play::update() {
     editingScene = Engine::Input::keysDown.at(Kore::KeyTab);
 
     Game::interactBulletsAndWalls(bullets, walls);
+    Game::interactMissilesAndWalls(missiles, walls);
 
     controlledCar.update(walls);
 
@@ -148,7 +180,7 @@ void Game::Play::update() {
         }
     } else {
         if (Engine::Input::mouseDown) {
-            shoot();
+            Engine::Core::getInstance().rand() > .9 ? shootMissile() : shootBullet();
         }
     }
 }

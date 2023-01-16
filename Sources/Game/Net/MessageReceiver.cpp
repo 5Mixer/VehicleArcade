@@ -22,6 +22,10 @@ void Game::Net::MessageReceiver::processRawPacket(const Packet *packet) {
             onPlayerShootMessage(packet->type_as_PlayerShoot());
             break;
         }
+        case PacketType::PlayerShootMissile: {
+            onPlayerShootMissileMessage(packet->type_as_PlayerShootMissile());
+            break;
+        }
         case PacketType::PlayerPlaceWall: {
             onPlayerPlaceWallMessage(packet->type_as_PlayerPlaceWall());
             break;

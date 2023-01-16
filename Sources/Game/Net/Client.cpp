@@ -96,12 +96,25 @@ void Game::Net::Client::sendPlayerMove(float x, float y, float angle) {
     enet_host_broadcast(client, 0, netPacket);
 }
 
-void Game::Net::Client::sendPlayerShoot(Bullet &bullet) {
+void Game::Net::Client::sendPlayerShootBullet(Bullet &bullet) {
     flatbuffers::FlatBufferBuilder builder{50};
 
     auto bulletData = bullet.getData();
     auto shoot = CreatePlayerShoot(builder, &bulletData);
     auto packet = CreatePacket(builder, PacketType::PlayerShoot, shoot.Union());
+
+    builder.Finish(packet);
+
+    auto netPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_RELIABLE);
+    enet_host_broadcast(client, 0, netPacket);
+}
+
+void Game::Net::Client::sendPlayerShootMissile(Missile &missile) {
+    flatbuffers::FlatBufferBuilder builder{50};
+
+    auto missileData = missile.getData();
+    auto shoot = CreatePlayerShootMissile(builder, &missileData);
+    auto packet = CreatePacket(builder, PacketType::PlayerShootMissile, shoot.Union());
 
     builder.Finish(packet);
 

@@ -24,12 +24,14 @@ namespace Game {
         Game::Net::Client &client;
 
         std::vector<Game::Bullet> bullets;
+        std::vector<Game::Missile> missiles;
         std::vector<Game::Wall> walls;
         std::vector<Game::Vehicle> vehicles;
         Game::Vehicle controlledCar;
         Engine::Camera camera;
 
-        void shoot();
+        void shootBullet();
+        void shootMissile();
         void placeWall();
 
         bool editingScene;
@@ -46,6 +48,7 @@ namespace Game {
         void onPlayerDisconnectMessage(const Net::PlayerDisconnect *packet);
         void onPlayerMoveMessage(const Net::PlayerMove *packet);
         void onPlayerShootMessage(const Net::PlayerShoot *packet);
+        void onPlayerShootMissileMessage(const Net::PlayerShootMissile *packet);
         void onDisconnect();
     };
 } // namespace Game

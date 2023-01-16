@@ -25,6 +25,7 @@ namespace Game {
 
             std::unordered_map<std::uint8_t, Game::Vehicle> vehicles{};
             std::vector<Game::Bullet> bullets{};
+            std::vector<Game::Missile> missiles{};
             std::vector<Game::Wall> walls{};
 
             ENetPacket *createPlayerJoinPacket(Game::Vehicle vehicle);
@@ -44,6 +45,7 @@ namespace Game {
             void onPlayerPlaceWallMessage(const PlayerPlaceWall *packet);
             void onPlayerMoveMessage(const PlayerMove *packet);
             void onPlayerShootMessage(const PlayerShoot *packet);
+            void onPlayerShootMissileMessage(const PlayerShootMissile *packet);
         };
     } // namespace Net
 } // namespace Game

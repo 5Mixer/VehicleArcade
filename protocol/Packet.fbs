@@ -12,6 +12,10 @@ table PlayerShoot {
     bullet: BulletData;
 }
 
+table PlayerShootMissile {
+    bullet: BulletData;
+}
+
 table PlayerPlaceWall {
     wall: WallData;
 }
@@ -28,6 +32,7 @@ table PlayerJoinDownload {
     player: PlayerData;
     players: [PlayerData];
     bullets: [BulletData];
+    missiles: [BulletData];
     walls: [WallData];
 }
 
@@ -37,6 +42,7 @@ union PacketType {
     PlayerDisconnect,
     PlayerMove,
     PlayerShoot,
+    PlayerShootMissile,
     PlayerPlaceWall,
 }
 

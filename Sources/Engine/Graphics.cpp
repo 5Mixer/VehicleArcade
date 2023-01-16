@@ -6,6 +6,7 @@ namespace Engine {
           texture(Kore::Graphics4::Texture("../Assets/textures.png", true)),
           carTexture(Kore::Graphics4::Texture("../Assets/car.png", true)),
           bulletTexture(Kore::Graphics4::Texture("../Assets/bullet.png", true)),
+          missileTexture(Kore::Graphics4::Texture("../Assets/missile.png", true)),
           wall1Texture(Kore::Graphics4::Texture("../Assets/wall1.png", true)),
           wall2Texture(Kore::Graphics4::Texture("../Assets/wall2.png", true)),
           wall3Texture(Kore::Graphics4::Texture("../Assets/wall3.png", true)),
@@ -54,6 +55,13 @@ namespace Engine {
     }
     void Engine::Graphics::drawBullet(Kore::vec2 pos, float angle) {
         graphics->drawScaledSubImage(&bulletTexture, 0, 0, 18, 18, pos.x() - 18 / 2, pos.y() - 18 / 2, 18, 18);
+    }
+    void Engine::Graphics::drawMissile(Kore::vec2 pos, float angle) {
+        auto prior = graphics->transformation;
+        auto rotation = rotate(angle, pos.x(), pos.y());
+        transform(rotation);
+        graphics->drawImage(&missileTexture, pos.x() - 196 / 2, pos.y() - 100 / 2);
+        graphics->transformation = prior;
     }
     void Engine::Graphics::drawWall(Kore::vec2 pos, int layer) {
         if (layer == 0)

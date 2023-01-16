@@ -61,7 +61,6 @@ float Game::Vehicle::turnRateVelocityFactor(float speed, float maximumSpeed) {
 }
 
 void Game::Vehicle::render(Engine::Graphics &g) {
-    // g.drawSprite(0, pos, angle + 3.14 / 2);
     g.drawVehicle(pos, angle, visualAngleDelta * 20);
 }
 
