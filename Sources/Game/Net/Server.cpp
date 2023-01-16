@@ -31,12 +31,12 @@ void Game::Net::Server::run() {
     while (hosting) {
         service(*this);
 
-        auto now = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::steady_clock::now());
+        updateEntities();
 
-        if (std::chrono::duration_cast<std::chrono::milliseconds>((now - last)).count() > 1000 / 60) {
-            updateEntities();
-            last = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::steady_clock::now());
-        }
+        // std::this_thread::sleep_until(last + std::chrono::duration<float>(1000 / 60.));
+        std::this_thread::sleep_for(std::chrono::duration<float>(1 / 60.));
+
+        last = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::steady_clock::now());
     }
 }
 

@@ -11,6 +11,7 @@
 #include <cstdint>
 #include <iostream>
 #include <memory>
+#include <thread>
 #include <unordered_map>
 
 namespace Game {
