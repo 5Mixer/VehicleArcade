@@ -5,6 +5,7 @@
 #include "../Engine/Graphics.h"
 #include "../Engine/Scene.h"
 #include "Bullet.h"
+#include "Grass.h"
 #include "Net/Client.h"
 #include "Net/MessageReceiver.h"
 #include "Simulation.h"
@@ -27,6 +28,7 @@ namespace Game {
         std::vector<Game::Bullet> bullets;
         std::vector<Game::Missile> missiles;
         std::vector<Game::Wall> walls;
+        std::vector<Game::Grass> grass;
         std::vector<Game::Vehicle> vehicles;
         Game::Vehicle controlledCar;
         Engine::Camera camera;

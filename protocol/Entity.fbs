@@ -16,6 +16,12 @@ struct BulletData {
     angle: float;
 }
 
+struct GrassData {
+    variety: ubyte;
+    pos: Vec2;
+    angle: float;
+}
+
 struct WallData {
     placer: ubyte;
     pos: Vec2;

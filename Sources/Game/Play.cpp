@@ -3,14 +3,27 @@
 Game::Play::Play(Game::Net::Client &client)
     : editingScene(false),
       controlledCar(Game::Vehicle(255, Kore::vec2(), 0)),
-      client(client) {}
+      client(client) {
+
+    for (int i = 0; i < 1000000; i++) {
+        grass.push_back(Grass(
+            Kore::vec2{
+                Engine::Core::getInstance().rand() * 5000,
+                Engine::Core::getInstance().rand() * 5000},
+            Engine::Core::getInstance().rand() * 3.14 * 2,
+            8 + std::floor(Engine::Core::getInstance().rand() * static_cast<float>(4))
+        ));
+    }
+}
 
 void Game::Play::render(Engine::Graphics &graphics) {
     camera.pos = controlledCar.pos;
 
     graphics.transform(camera.getTransform());
 
-    graphics.drawTexture();
+    for (auto &singleGrass : grass) {
+        singleGrass.render(graphics);
+    }
     for (auto &bullet : bullets) {
         bullet.update();
         bullet.render(graphics);
@@ -135,6 +148,10 @@ void Game::Play::shootBullet() {
 }
 
 void Game::Play::shootMissile() {
+    if (std::chrono::steady_clock::now() < lastBulletShootTime + std::chrono::milliseconds(400)) {
+        return;
+    }
+
     float directAngle = atan2(Engine::Input::mousePosition.y() - Kore::System::windowHeight() / 2, Engine::Input::mousePosition.x() - Kore::System::windowWidth() / 2);
     float angleRange = Engine::Core::getInstance().rand() - .5;
 
@@ -148,6 +165,8 @@ void Game::Play::shootMissile() {
 
     client.sendPlayerShootMissile(missile);
     missiles.push_back(std::move(missile));
+
+    lastBulletShootTime = std::chrono::steady_clock::now();
 }
 
 void Game::Play::placeWall() {
@@ -186,7 +205,7 @@ void Game::Play::update() {
         }
     } else {
         if (Engine::Input::mouseDown) {
-            shootBullet();
+            shootMissile();
         }
     }
 }

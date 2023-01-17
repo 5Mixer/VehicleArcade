@@ -28,8 +28,8 @@ namespace Engine {
         Graphics();
         void begin();
         void end();
-        void drawTexture();
         void drawSprite(int sprite, Kore::vec2 pos, float angle = 0);
+        void drawGrass(Kore::vec2 pos, float angle, std::uint8_t variety);
         void drawVehicle(Kore::vec2 pos, float angle = 0, float angleDelta = 0);
         void drawBullet(Kore::vec2 pos, float angle = 0);
         void drawMissile(Kore::vec2 pos, float angle = 0);
