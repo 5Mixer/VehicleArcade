@@ -142,7 +142,8 @@ void Game::Play::shootBullet() {
         return;
     }
 
-    float directAngle = atan2(Engine::Input::mousePosition.y() - Kore::System::windowHeight() / 2, Engine::Input::mousePosition.x() - Kore::System::windowWidth() / 2);
+    Kore::vec2 mouseWorldPos = getMouseWorldPos();
+    float directAngle = atan2(mouseWorldPos.y() - controlledCar.pos.y(), mouseWorldPos.x() - controlledCar.pos.x());
     float angleRange = Engine::Core::getInstance().rand() - .5;
 
     Game::Bullet bullet{
@@ -164,7 +165,8 @@ void Game::Play::shootMissile() {
         return;
     }
 
-    float directAngle = atan2(Engine::Input::mousePosition.y() - Kore::System::windowHeight() / 2, Engine::Input::mousePosition.x() - Kore::System::windowWidth() / 2);
+    Kore::vec2 mouseWorldPos = getMouseWorldPos();
+    float directAngle = atan2(mouseWorldPos.y() - controlledCar.pos.y(), mouseWorldPos.x() - controlledCar.pos.x());
     float angleRange = Engine::Core::getInstance().rand() - .5;
 
     Game::Missile missile{
@@ -182,7 +184,7 @@ void Game::Play::shootMissile() {
 }
 
 void Game::Play::placeWall() {
-    Kore::vec2 world{camera.getWorldPos(Kore::vec3{Engine::Input::mousePosition.x() - 8 * camera.zoom, Engine::Input::mousePosition.y() - 8 * camera.zoom})};
+    Kore::vec2 world = getMouseWorldPos();
     Kore::vec2 rounded{std::round(world.x() / 100) * 100, std::round(world.y() / 100) * 100};
 
     bool freeSpace = true;
@@ -198,6 +200,11 @@ void Game::Play::placeWall() {
         client.sendPlayerPlaceWall(wall);
         walls.push_back(std::move(wall));
     }
+}
+
+Kore::vec2 Game::Play::getMouseWorldPos() {
+    auto worldPos = camera.getTransform().Invert() * Kore::vec3{Engine::Input::mousePosition.x(), Engine::Input::mousePosition.y(), 1};
+    return Kore::vec2{worldPos.x(), worldPos.y()}; // Drop irrelevent z homogeneous coordinate
 }
 
 void Game::Play::update() {

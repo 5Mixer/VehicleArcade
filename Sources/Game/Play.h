@@ -41,6 +41,8 @@ namespace Game {
         void shootMissile();
         void placeWall();
 
+        Kore::vec2 getMouseWorldPos();
+
         bool editingScene;
 
     public:
