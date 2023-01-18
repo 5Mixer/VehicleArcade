@@ -1,4 +1,3 @@
-#!/bin/bash
 echo "Formatting: " > /dev/tty
 find Sources/ \
  \( -ipath "*.cpp" -o -ipath "*.h" \) \

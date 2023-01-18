@@ -30,6 +30,14 @@ const exec = util.promisify(require('child_process').exec);
 		console.log('Lib installation done.', stdout, stderr);
 	}
 }
+{
+	const { stdout, stderr } = await exec('./compileAssets.sh');
+	if (stderr) {
+		console.log('compileAssets error:', stdout, stderr);
+	} else {
+		console.log('compileAssets executed.', stdout, stderr);
+	}
+}
 
 project.cpp = true;
 
