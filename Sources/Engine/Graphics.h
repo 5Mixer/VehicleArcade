@@ -1,6 +1,7 @@
 #ifndef ENGINE_GRAPHICS
 #define ENGINE_GRAPHICS
 
+#include "../simdjson.h"
 #include <Kore/Graphics2/Graphics.h>
 #include <Kore/Graphics4/Graphics.h>
 #include <Kore/Math/Matrix.h>

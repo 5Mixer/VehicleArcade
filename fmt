@@ -1,1 +1,1 @@
-find Sources/ -iname *.h -o -iname *.cpp | xargs clang-format -i
+find Sources/ -iname *.h -o -iname *.cpp ! -iname *enet*|*flatbuffers*|*simdjson* | xargs clang-format -i

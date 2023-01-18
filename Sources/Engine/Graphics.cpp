@@ -14,6 +14,11 @@ namespace Engine {
           wall3Texture(Kore::Graphics4::Texture("../Assets/wall3.png")),
           wheelTexture(Kore::Graphics4::Texture("../Assets/carWheel.png")),
           grassTexture(Kore::Graphics4::Texture("../Assets/grass.png")) {
+
+        simdjson::ondemand::parser parser;
+        simdjson::padded_string json = simdjson::padded_string::load("../Assets/sprites.json");
+        simdjson::ondemand::document sprites = parser.iterate(json);
+        std::cout << uint64_t(sprites["a"]) << " results." << std::endl;
     }
 
     void Engine::Graphics::start() {
