@@ -6,24 +6,29 @@ const project = new Project('Car');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
-const { stdout, stderr } = await exec('flatc -c --scoped-enums --filename-suffix Generated --cpp-field-case-style lower --warnings-as-errors -o ./Sources/Game/Net/ ./protocol/*');
-if (stderr) {
-	console.log('flatc error:', stdout, stderr);
-} else {
-	console.log('flatc executed.', stdout, stderr);
+{
+	const { stdout, stderr } = await exec('flatc -c --scoped-enums --filename-suffix Generated --cpp-field-case-style lower --warnings-as-errors -o ./Sources/Game/Net/ ./protocol/*');
+	if (stderr) {
+		console.log('flatc error:', stdout, stderr);
+	} else {
+		console.log('flatc executed.', stdout, stderr);
+	}
 }
-await exec('./fmt');
-if (stderr) {
-	console.log('fmt error:', stdout, stderr);
-} else {
-	console.log('fmt executed.', stdout, stderr);
+{
+	const { stdout, stderr } = await exec('./fmt');
+	if (stderr) {
+		console.log('fmt error:', stdout, stderr);
+	} else {
+		console.log('fmt executed.', stdout, stderr);
+	}
 }
-
-await exec('./installLibs.sh');
-if (stderr) {
-	console.log('Lib installation error:', stdout, stderr);
-} else {
-	console.log('Lib installation done.', stdout, stderr);
+{
+	const { stdout, stderr } = await exec('./installLibs.sh');
+	if (stderr) {
+		console.log('Lib installation error:', stdout, stderr);
+	} else {
+		console.log('Lib installation done.', stdout, stderr);
+	}
 }
 
 project.cpp = true;
