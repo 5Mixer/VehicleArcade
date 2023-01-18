@@ -5,19 +5,31 @@ Game::Play::Play(Game::Net::Client &client)
       controlledCar(Game::Vehicle(255, Kore::vec2(), 0)),
       client(client) {
 
-    for (int i = 0; i < 1000000; i++) {
+    for (int i = 0; i < 10000; i++) {
         grass.push_back(Grass(
             Kore::vec2{
                 Engine::Core::getInstance().rand() * 5000,
-                Engine::Core::getInstance().rand() * 5000},
+                Engine::Core::getInstance().rand() * 2000},
             Engine::Core::getInstance().rand() * 3.14 * 2,
-            8 + std::floor(Engine::Core::getInstance().rand() * static_cast<float>(4))
+            std::floor(Engine::Core::getInstance().rand() * static_cast<float>(4))
         ));
     }
 }
 
 void Game::Play::render(Engine::Graphics &graphics) {
     camera.pos = controlledCar.pos;
+    if (camera.pos.x() < Kore::System::windowWidth() / 2) {
+        camera.pos.x() = Kore::System::windowWidth() / 2;
+    }
+    if (camera.pos.y() < Kore::System::windowHeight() / 2) {
+        camera.pos.y() = Kore::System::windowHeight() / 2;
+    }
+    if (camera.pos.x() > worldWidth - Kore::System::windowWidth() / 2) {
+        camera.pos.x() = worldWidth - Kore::System::windowWidth() / 2;
+    }
+    if (camera.pos.y() > worldHeight - Kore::System::windowHeight() / 2) {
+        camera.pos.y() = worldHeight - Kore::System::windowHeight() / 2;
+    }
 
     graphics.transform(camera.getTransform());
 
@@ -197,7 +209,7 @@ void Game::Play::update() {
     Game::interactBulletsAndWalls(bullets, walls);
     Game::interactMissilesAndWalls(missiles, walls);
 
-    controlledCar.update(walls);
+    controlledCar.update(walls, worldWidth, worldHeight);
 
     if (editingScene) {
         if (Engine::Input::mouseDown) {

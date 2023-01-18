@@ -32,7 +32,7 @@ namespace Game {
 
         void accelerate(float acceleration);
         void turn(float angleDelta);
-        void update(std::vector<Game::Wall> &walls);
+        void update(std::vector<Game::Wall> &walls, int worldWidth, int worldHeight);
         void render(Engine::Graphics &g);
     };
 } // namespace Game

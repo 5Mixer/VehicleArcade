@@ -7,7 +7,7 @@ const Game::Net::PlayerData Game::Vehicle::getData() {
         angle};
 }
 
-void Game::Vehicle::update(std::vector<Game::Wall> &walls) {
+void Game::Vehicle::update(std::vector<Game::Wall> &walls, int worldWidth, int worldHeight) {
     float accelerationSpeed = .1;
     float breakSpeed = .1;
     float turnSpeed = .04;
@@ -49,6 +49,18 @@ void Game::Vehicle::update(std::vector<Game::Wall> &walls) {
 
             collide = true;
         }
+    }
+    if (target.x() < 0) {
+        target.x() = 0;
+    }
+    if (target.y() < 0) {
+        target.y() = 0;
+    }
+    if (target.x() > worldWidth) {
+        target.x() = worldWidth;
+    }
+    if (target.y() > worldHeight) {
+        target.y() = worldHeight;
     }
     if (collide) {
         forwardsVelocity *= wallFrictionFactor;

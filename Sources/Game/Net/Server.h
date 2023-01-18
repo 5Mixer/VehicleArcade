@@ -28,6 +28,8 @@ namespace Game {
             std::vector<Game::Bullet> bullets{};
             std::vector<Game::Missile> missiles{};
             std::vector<Game::Wall> walls{};
+            int worldWidth = 5000;
+            int worldHeight = 2000;
 
             ENetPacket *createPlayerJoinPacket(Game::Vehicle vehicle);
             void updateEntities();

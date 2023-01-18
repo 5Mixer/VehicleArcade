@@ -8,8 +8,8 @@
    version="1.1"
    id="svg54492"
    inkscape:export-filename="grass.png"
-   inkscape:export-xdpi="500"
-   inkscape:export-ydpi="500"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    sodipodi:docname="grass.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -28,7 +28,7 @@
      inkscape:document-units="mm"
      showgrid="true"
      inkscape:zoom="19.962339"
-     inkscape:cx="227.32806"
+     inkscape:cx="34.965842"
      inkscape:cy="5.4352347"
      inkscape:window-width="2363"
      inkscape:window-height="1366"
@@ -59,12 +59,12 @@
      transform="translate(-0.40852302,0.53948593)">
     <path
        id="circle54470"
-       style="fill:#d4ff2a;stroke-width:0.59476;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+       style="fill:#397133;stroke-width:0.59476;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers;fill-opacity:1"
        d="m 1.3203677,-0.06541066 c 0,0.23779507 -0.1338693,0.50542143 -0.37557991,0.50542143 -0.2417105,10e-9 -0.49481477,-0.20313351 -0.49481477,-0.44092858722 0,-0.23779509278 0.0332032,-0.50592788278 0.27491377,-0.50592786278 0.24171053,-1e-8 0.59548091,0.20363993 0.59548091,0.44143502 z"
        sodipodi:nodetypes="sssss" />
     <path
        id="circle54470-3"
-       style="fill:#e5ff80;stroke-width:0.54426;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+       style="fill:#376635;stroke-width:0.54426;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers;fill-opacity:1"
        d="M 1.5542681,-0.27305904 C 1.6867783,-0.44729156 1.933998,-0.57118061 2.1110994,-0.4408168 2.2882008,-0.31045304 2.360455,-0.02510823 2.2279448,0.14912431 2.0954345,0.32335684 1.9216908,0.50191012 1.7445893,0.37154624 1.567488,0.24118247 1.4217577,-0.09882652 1.5542681,-0.27305904 Z"
        sodipodi:nodetypes="sssss" />
     <path
@@ -74,12 +74,12 @@
        sodipodi:nodetypes="sssss" />
     <path
        id="path6624"
-       style="fill:#ddff55;stroke-width:0.54426;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+       style="fill:#296530;stroke-width:0.54426;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers;fill-opacity:1"
        d="M 2.5555134,-0.26163655 C 2.6763796,-0.42172958 2.9007952,-0.50084573 3.1123448,-0.42939431 3.3125698,-0.36176779 3.3841464,0.05902011 3.2291901,0.1605468 3.0762939,0.26072379 2.9507683,0.4356052 2.7458346,0.38296873 2.5521009,0.33320894 2.4194266,-0.08138315 2.5555134,-0.26163655 Z"
        sodipodi:nodetypes="sssss" />
     <path
        id="circle54470-5"
-       style="fill:#cdde87;stroke-width:0.59476;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+       style="fill:#47722c;stroke-width:0.59476;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers;fill-opacity:1"
        d="M 4.3091946,-0.03253506 C 4.3079084,-0.27032676 4.0951614,-0.37605077 3.8783663,-0.45789202 3.478963,-0.60866874 3.4783272,-0.31076864 3.5182829,-0.07474303 3.5579912,0.15982129 3.8309446,0.40831787 4.0672877,0.35848249 4.3230949,0.30454291 4.310458,0.20042564 4.3091946,-0.03253506 Z"
        sodipodi:nodetypes="sssss" />
     <path

@@ -25,6 +25,9 @@ namespace Game {
     private:
         Game::Net::Client &client;
 
+        int worldWidth = 5000;
+        int worldHeight = 2000;
+
         std::vector<Game::Bullet> bullets;
         std::vector<Game::Missile> missiles;
         std::vector<Game::Wall> walls;
