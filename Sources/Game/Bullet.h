@@ -10,7 +10,7 @@
 namespace Game {
     class Bullet {
     private:
-        float speed = 15;
+        float speed = 30;
 
     public:
         Bullet(std::uint8_t shooter, Kore::vec2 pos, float angle)

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg54492"
+   inkscape:export-filename="cursor.png"
+   inkscape:export-xdpi="250"
+   inkscape:export-ydpi="250"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="cursor.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview54494"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     showgrid="true"
+     inkscape:zoom="12.229014"
+     inkscape:cx="23.346117"
+     inkscape:cy="36.020891"
+     inkscape:window-width="2302"
+     inkscape:window-height="1366"
+     inkscape:window-x="1138"
+     inkscape:window-y="44"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     showguides="true">
+    <sodipodi:guide
+       position="1.9382993,16.145704"
+       orientation="0,-1"
+       id="guide23051"
+       inkscape:locked="false" />
+    <inkscape:grid
+       type="xygrid"
+       id="grid23059"
+       spacingx="0.50000001"
+       spacingy="0.50000001"
+       empspacing="0"
+       color="#bbbbbb"
+       opacity="1"
+       empcolor="#6e6eff"
+       empopacity="0.6745098"
+       originx="0"
+       originy="0" />
+  </sodipodi:namedview>
+  <defs
+     id="defs54489" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-0.40852302,0.53948593)">
+    <g
+       id="g24029"
+       transform="translate(4.1410401e-7,-0.35000007)"
+       style="opacity:1;paint-order:fill markers stroke">
+      <circle
+         style="fill:#000000;stroke:#ececec;stroke-width:0.325;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke;opacity:1;fill-opacity:0.50116163"
+         id="circle24027"
+         r="2.5924673"
+         cy="7.4605141"
+         cx="8.4085226" />
+    </g>
+  </g>
+</svg>

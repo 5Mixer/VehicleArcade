@@ -21,6 +21,9 @@ namespace Engine {
     void Engine::Graphics::drawSprite(Engine::Sprite sprite, Kore::vec2 pos) {
         graphics->drawScaledSubImage(&spriteAtlasTexture, sprite.x, sprite.y, sprite.width, sprite.height, pos.x() - sprite.width / 2, pos.y() - sprite.height / 2, sprite.width, sprite.height);
     }
+    void Engine::Graphics::drawScaledSprite(Engine::Sprite sprite, Kore::vec2 pos, float scale) {
+        graphics->drawScaledSubImage(&spriteAtlasTexture, sprite.x, sprite.y, sprite.width, sprite.height, pos.x() - sprite.width * scale / 2, pos.y() - sprite.height * scale / 2, sprite.width * scale, sprite.height * scale);
+    }
     void Engine::Graphics::drawRotatedSprite(Engine::Sprite sprite, Kore::vec2 pos, float angle) {
         auto prior = graphics->transformation;
         transform(Engine::Transform::rotate(angle, pos.x(), pos.y()));
@@ -48,8 +51,11 @@ namespace Engine {
     void Engine::Graphics::drawTrail(Kore::vec2 pos) {
         drawSprite(*spriteAtlas.get("Assets/trail.png"), pos);
     }
+    void Engine::Graphics::drawCursor(Kore::vec2 pos) {
+        drawSprite(*spriteAtlas.get("Assets/cursor.png"), pos);
+    }
     void Engine::Graphics::drawBullet(Kore::vec2 pos, float angle) {
-        drawSprite(*spriteAtlas.get("Assets/bullet.png"), pos);
+        drawScaledSprite(*spriteAtlas.get("Assets/bullet.png"), pos, 1);
     }
     void Engine::Graphics::drawMissile(Kore::vec2 pos, float angle) {
         drawRotatedSprite(*spriteAtlas.get("Assets/missile.png"), pos, angle);

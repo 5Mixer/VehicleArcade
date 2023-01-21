@@ -14,6 +14,8 @@ Game::Play::Play(Game::Net::Client &client)
             std::floor(Engine::Core::getInstance().rand() * static_cast<float>(4))
         ));
     }
+
+    Kore::Mouse::the()->show(false);
 }
 
 void Game::Play::render(Engine::Graphics &graphics) {
@@ -63,6 +65,8 @@ void Game::Play::render(Engine::Graphics &graphics) {
     controlledCar.render(graphics);
 
     graphics.transform(camera.getTransform().Invert());
+
+    graphics.drawCursor(Engine::Input::mousePosition);
 }
 
 void Game::Play::onPlayerJoinMessage(const Net::PlayerJoin *packet) {
