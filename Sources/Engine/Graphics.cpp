@@ -45,6 +45,9 @@ namespace Engine {
         drawRotatedSprite(*spriteAtlas.get("Assets/carWheel.png"), leftWheelPos, angle + angleDelta);
         drawRotatedSprite(*spriteAtlas.get("Assets/carWheel.png"), rightWheelPos, angle + angleDelta);
     }
+    void Engine::Graphics::drawTrail(Kore::vec2 pos) {
+        drawSprite(*spriteAtlas.get("Assets/trail.png"), pos);
+    }
     void Engine::Graphics::drawBullet(Kore::vec2 pos, float angle) {
         drawSprite(*spriteAtlas.get("Assets/bullet.png"), pos);
     }

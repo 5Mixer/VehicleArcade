@@ -30,6 +30,11 @@ namespace Game {
         Kore::vec2 pos{0, 0};
         float angle = 0;
 
+        // Kore::vec2 getBackLeftWheelPos();
+        // Kore::vec2 getBackRightWheelPos();
+        // Kore::vec2 getFrontLeftWheelPos();
+        // Kore::vec2 getFrontRightWheelPos();
+
         void accelerate(float acceleration);
         void turn(float angleDelta);
         void update(std::vector<Game::Wall> &walls, int worldWidth, int worldHeight);

@@ -9,6 +9,7 @@
 #include "Net/Client.h"
 #include "Net/MessageReceiver.h"
 #include "Simulation.h"
+#include "Trail.h"
 #include "Vehicle.h"
 #include "Wall.h"
 #include <Kore/IO/FileReader.h>
@@ -33,6 +34,8 @@ namespace Game {
         std::vector<Game::Wall> walls;
         std::vector<Game::Grass> grass;
         std::vector<Game::Vehicle> vehicles;
+        std::vector<Game::Trail> trails;
+
         Game::Vehicle controlledCar;
         Engine::Camera camera;
         std::chrono::steady_clock::time_point lastBulletShootTime;

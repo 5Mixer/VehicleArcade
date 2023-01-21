@@ -36,6 +36,9 @@ void Game::Play::render(Engine::Graphics &graphics) {
     for (auto &singleGrass : grass) {
         singleGrass.render(graphics);
     }
+    for (auto &trail : trails) {
+        graphics.drawTrail(trail.pos);
+    }
     for (auto &bullet : bullets) {
         bullet.update();
         bullet.render(graphics);
@@ -217,6 +220,8 @@ void Game::Play::update() {
     Game::interactMissilesAndWalls(missiles, walls);
 
     controlledCar.update(walls, worldWidth, worldHeight);
+
+    trails.push_back(Game::Trail{controlledCar.pos});
 
     if (editingScene) {
         if (Engine::Input::mouseDown) {
