@@ -5,9 +5,6 @@ namespace Engine {
         : graphics(std::unique_ptr<Kore::Graphics2::Graphics2>(new Kore::Graphics2::Graphics2(Kore::System::windowWidth(), Kore::System::windowHeight()))),
           spriteAtlasTexture(Kore::Graphics4::Texture("./sprites.png")),
           spriteAtlas(spriteAtlas),
-          wall1Texture(Kore::Graphics4::Texture("../Assets/wall1.png")),
-          wall2Texture(Kore::Graphics4::Texture("../Assets/wall2.png")),
-          wall3Texture(Kore::Graphics4::Texture("../Assets/wall3.png")),
           grassTexture(Kore::Graphics4::Texture("../Assets/grass.png")) {
     }
 

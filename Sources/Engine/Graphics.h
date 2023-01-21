@@ -18,9 +18,6 @@ namespace Engine {
         Engine::SpriteAtlas spriteAtlas;
         Kore::Graphics4::Texture spriteAtlasTexture;
         Kore::Graphics4::Texture grassTexture;
-        Kore::Graphics4::Texture wall1Texture;
-        Kore::Graphics4::Texture wall2Texture;
-        Kore::Graphics4::Texture wall3Texture;
 
     public:
         Graphics(Engine::SpriteAtlas &spriteAtlas);
