@@ -3,6 +3,7 @@
 
 #include "../Engine/Core.h"
 #include "../Engine/Graphics.h"
+#include "../Engine/Transform.h"
 #include "Net/EntityGenerated.h"
 #include "Wall.h"
 #include <Kore/Math/Vector.h>
@@ -30,10 +31,10 @@ namespace Game {
         Kore::vec2 pos{0, 0};
         float angle = 0;
 
-        // Kore::vec2 getBackLeftWheelPos();
-        // Kore::vec2 getBackRightWheelPos();
-        // Kore::vec2 getFrontLeftWheelPos();
-        // Kore::vec2 getFrontRightWheelPos();
+        Kore::vec2 getBackLeftWheelPos();
+        Kore::vec2 getBackRightWheelPos();
+        Kore::vec2 getFrontLeftWheelPos();
+        Kore::vec2 getFrontRightWheelPos();
 
         void accelerate(float acceleration);
         void turn(float angleDelta);

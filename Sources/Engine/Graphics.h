@@ -2,6 +2,7 @@
 #define ENGINE_GRAPHICS
 
 #include "SpriteAtlas.h"
+#include "Transform.h"
 #include <Kore/Graphics2/Graphics.h>
 #include <Kore/Graphics4/Graphics.h>
 #include <Kore/Math/Matrix.h>
@@ -32,7 +33,6 @@ namespace Engine {
         void drawMissile(Kore::vec2 pos, float angle = 0);
         void drawWall(Kore::vec2 pos, int layer);
         void transform(Kore::mat3 transformation);
-        Kore::mat3 rotate(float angle, float centerx, float centery);
     }; // namespace Engine
 } // namespace Engine
 #endif

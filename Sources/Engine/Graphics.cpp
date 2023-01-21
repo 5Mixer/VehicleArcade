@@ -23,7 +23,7 @@ namespace Engine {
     }
     void Engine::Graphics::drawRotatedSprite(Engine::Sprite sprite, Kore::vec2 pos, float angle) {
         auto prior = graphics->transformation;
-        transform(rotate(angle, pos.x(), pos.y()));
+        transform(Engine::Transform::rotate(angle, pos.x(), pos.y()));
         graphics->drawScaledSubImage(&spriteAtlasTexture, sprite.x, sprite.y, sprite.width, sprite.height, pos.x() - sprite.width / 2, pos.y() - sprite.height / 2, sprite.width, sprite.height);
         graphics->transformation = prior;
     }
@@ -38,7 +38,7 @@ namespace Engine {
     void Engine::Graphics::drawVehicle(Kore::vec2 pos, float angle, float angleDelta) {
         drawRotatedSprite(*spriteAtlas.get("Assets/car.png"), pos, angle);
 
-        auto rotation = rotate(angle, pos.x(), pos.y());
+        auto rotation = Engine::Transform::rotate(angle, pos.x(), pos.y());
         auto leftWheelPos = rotation * Kore::vec3(pos.x() + 40, pos.y() - 35, 1);
         auto rightWheelPos = rotation * Kore::vec3(pos.x() + 40, pos.y() + 35, 1);
 
@@ -59,8 +59,5 @@ namespace Engine {
     }
     void Engine::Graphics::transform(Kore::mat3 transformation) {
         graphics->transformation *= transformation;
-    }
-    Kore::mat3 Engine::Graphics::rotate(float angle, float centerx, float centery) {
-        return (Kore::mat3::Translation(centerx, centery) * Kore::mat3::RotationZ(angle)) * Kore::mat3::Translation(-centerx, -centery);
     }
 } // namespace Engine

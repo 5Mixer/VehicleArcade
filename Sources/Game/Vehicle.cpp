@@ -84,3 +84,16 @@ void Game::Vehicle::turn(float angleDelta) {
     // visualAngleDelta = angleDelta;
     visualAngleDelta += (angleDelta - visualAngleDelta) / 10;
 }
+
+Kore::vec2 Game::Vehicle::getBackLeftWheelPos() {
+    return Engine::Transform::rotate(angle, pos.x(), pos.y()) * Kore::vec3(pos.x() - 40, pos.y() - 35, 1);
+}
+Kore::vec2 Game::Vehicle::getBackRightWheelPos() {
+    return Engine::Transform::rotate(angle, pos.x(), pos.y()) * Kore::vec3(pos.x() - 40, pos.y() + 35, 1);
+}
+Kore::vec2 Game::Vehicle::getFrontLeftWheelPos() {
+    return Engine::Transform::rotate(angle, pos.x(), pos.y()) * Kore::vec3(pos.x() + 40, pos.y() - 35, 1);
+}
+Kore::vec2 Game::Vehicle::getFrontRightWheelPos() {
+    return Engine::Transform::rotate(angle, pos.x(), pos.y()) * Kore::vec3(pos.x() + 40, pos.y() + 35, 1);
+}

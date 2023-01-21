@@ -221,7 +221,10 @@ void Game::Play::update() {
 
     controlledCar.update(walls, worldWidth, worldHeight);
 
-    trails.push_back(Game::Trail{controlledCar.pos});
+    trails.push_back(Game::Trail{controlledCar.getBackLeftWheelPos()});
+    trails.push_back(Game::Trail{controlledCar.getBackRightWheelPos()});
+    trails.push_back(Game::Trail{controlledCar.getFrontLeftWheelPos()});
+    trails.push_back(Game::Trail{controlledCar.getFrontRightWheelPos()});
 
     if (editingScene) {
         if (Engine::Input::mouseDown) {
