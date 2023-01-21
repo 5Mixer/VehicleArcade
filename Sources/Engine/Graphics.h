@@ -1,7 +1,7 @@
 #ifndef ENGINE_GRAPHICS
 #define ENGINE_GRAPHICS
 
-#include "../simdjson.h"
+#include "SpriteAtlas.h"
 #include <Kore/Graphics2/Graphics.h>
 #include <Kore/Graphics4/Graphics.h>
 #include <Kore/Math/Matrix.h>
@@ -15,21 +15,19 @@ namespace Engine {
     private:
         void start();
         std::unique_ptr<Kore::Graphics2::Graphics2> graphics;
-        Kore::Graphics4::Texture texture;
-        Kore::Graphics4::Texture carTexture;
+        Engine::SpriteAtlas spriteAtlas;
+        Kore::Graphics4::Texture spriteAtlasTexture;
         Kore::Graphics4::Texture grassTexture;
-        Kore::Graphics4::Texture bulletTexture;
-        Kore::Graphics4::Texture missileTexture;
         Kore::Graphics4::Texture wall1Texture;
         Kore::Graphics4::Texture wall2Texture;
         Kore::Graphics4::Texture wall3Texture;
-        Kore::Graphics4::Texture wheelTexture;
 
     public:
-        Graphics();
+        Graphics(Engine::SpriteAtlas &spriteAtlas);
         void begin();
         void end();
-        void drawSprite(int sprite, Kore::vec2 pos, float angle = 0);
+        void drawSprite(Engine::Sprite sprite, Kore::vec2 pos);
+        void drawRotatedSprite(Engine::Sprite sprite, Kore::vec2 pos, float angle);
         void drawGrass(Kore::vec2 pos, float angle, std::uint8_t variety);
         void drawVehicle(Kore::vec2 pos, float angle = 0, float angleDelta = 0);
         void drawBullet(Kore::vec2 pos, float angle = 0);

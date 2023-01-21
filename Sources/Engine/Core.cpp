@@ -7,7 +7,8 @@ namespace Engine {
     void Core::init() {
         Kore::System::init("Vehicle Arcade", 1024, 768);
 
-        graphics = std::make_unique<Graphics>();
+        Engine::SpriteAtlas spriteAtlas{SpriteAtlas("sprites.json")};
+        graphics = std::unique_ptr<Graphics>(new Graphics(spriteAtlas));
 
         Input::init();
     }

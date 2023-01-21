@@ -138,7 +138,7 @@ void Game::Play::onPlayerShootMissileMessage(const Net::PlayerShootMissile *pack
 }
 
 void Game::Play::shootBullet() {
-    if (std::chrono::steady_clock::now() < lastBulletShootTime + std::chrono::milliseconds(150)) {
+    if (std::chrono::steady_clock::now() < lastBulletShootTime + std::chrono::milliseconds(100)) {
         return;
     }
 
@@ -224,7 +224,7 @@ void Game::Play::update() {
         }
     } else {
         if (Engine::Input::mouseDown) {
-            shootMissile();
+            shootBullet();
         }
     }
 }

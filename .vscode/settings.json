@@ -77,6 +77,9 @@
         "csignal": "cpp",
         "span": "cpp",
         "bitset": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "ranges": "cpp",
+        "queue": "cpp",
+        "stack": "cpp"
     }
 }
