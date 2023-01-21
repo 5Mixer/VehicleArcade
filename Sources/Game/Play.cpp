@@ -66,6 +66,7 @@ void Game::Play::render(Engine::Graphics &graphics) {
 
     graphics.transform(camera.getTransform().Invert());
 
+    graphics.drawBar(Kore::vec2{40, 60}, controlledCar.health, controlledCar.maxHealth);
     graphics.drawCursor(Engine::Input::mousePosition);
 }
 

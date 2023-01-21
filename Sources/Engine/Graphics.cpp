@@ -54,6 +54,18 @@ namespace Engine {
     void Engine::Graphics::drawCursor(Kore::vec2 pos) {
         drawSprite(*spriteAtlas.get("Assets/cursor.png"), pos);
     }
+    void Engine::Graphics::drawBar(Kore::vec2 pos, int filledBarElements, int totalBarElements) {
+        graphics->setColor(0xf2f85b5b);
+        auto barElementSprite = *spriteAtlas.get("Assets/barElement.png");
+        for (int offset = 0; offset < filledBarElements; offset++) {
+            drawSprite(barElementSprite, pos + Kore::vec2{(barElementSprite.width) * offset, 0});
+        }
+        graphics->setColor(0x80989898);
+        for (int offset = filledBarElements; offset < totalBarElements; offset++) {
+            drawSprite(barElementSprite, pos + Kore::vec2{(barElementSprite.width) * offset, 0});
+        }
+        graphics->setColor(Kore::Graphics1::Color::White);
+    }
     void Engine::Graphics::drawBullet(Kore::vec2 pos, float angle) {
         drawScaledSprite(*spriteAtlas.get("Assets/bullet.png"), pos, 1);
     }

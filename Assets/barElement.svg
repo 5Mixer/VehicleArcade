@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="22"
+   height="52"
+   viewBox="0 0 5.5 13"
+   version="1.1"
+   id="svg54492"
+   inkscape:export-filename="barElement.png"
+   inkscape:export-xdpi="87.272728"
+   inkscape:export-ydpi="87.272728"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="barElement.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview54494"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     showgrid="true"
+     inkscape:zoom="14.679994"
+     inkscape:cx="33.685301"
+     inkscape:cy="24.284752"
+     inkscape:window-width="2302"
+     inkscape:window-height="1366"
+     inkscape:window-x="1138"
+     inkscape:window-y="44"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     showguides="true">
+    <sodipodi:guide
+       position="0.78033974,14.103657"
+       orientation="0,-1"
+       id="guide23051"
+       inkscape:locked="false" />
+    <inkscape:grid
+       type="xygrid"
+       id="grid23059"
+       spacingx="0.50000001"
+       spacingy="0.50000001"
+       empspacing="0"
+       color="#bbbbbb"
+       opacity="1"
+       empcolor="#6e6eff"
+       empopacity="0.6745098"
+       originx="-1.1579596"
+       originy="-0.95795351"
+       enabled="false"
+       visible="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs54489" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-1.5664826,-0.41846755)">
+    <rect
+       style="fill:#d6d6d6;fill-opacity:0.899207;stroke:#ffffff;stroke-width:0.302535;stroke-linecap:square;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       id="rect26096"
+       width="4.6538157"
+       height="11.634539"
+       x="1.9895748"
+       y="1.101198"
+       rx="0.48966777"
+       ry="0.48966777" />
+    <g
+       id="g24029"
+       transform="translate(4.1410401e-7,-0.35000007)"
+       style="opacity:1;paint-order:fill markers stroke" />
+  </g>
+</svg>

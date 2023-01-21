@@ -31,6 +31,9 @@ namespace Game {
         Kore::vec2 pos{0, 0};
         float angle = 0;
 
+        int health = 25;
+        int maxHealth = 25;
+
         Kore::vec2 getBackLeftWheelPos();
         Kore::vec2 getBackRightWheelPos();
         Kore::vec2 getFrontLeftWheelPos();

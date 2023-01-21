@@ -29,6 +29,7 @@ namespace Engine {
         void drawRotatedSprite(Engine::Sprite sprite, Kore::vec2 pos, float angle);
         void drawTrail(Kore::vec2 pos);
         void drawCursor(Kore::vec2 pos);
+        void drawBar(Kore::vec2 pos, int filledBarElements, int totalBarElements);
         void drawGrass(Kore::vec2 pos, float angle, std::uint8_t variety);
         void drawVehicle(Kore::vec2 pos, float angle = 0, float angleDelta = 0);
         void drawBullet(Kore::vec2 pos, float angle = 0);
