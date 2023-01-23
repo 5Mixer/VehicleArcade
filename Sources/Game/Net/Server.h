@@ -24,12 +24,14 @@ namespace Game {
             void service(MessageReceiver &receiver);
             std::uint8_t nextPlayerId = 0;
 
-            std::unordered_map<std::uint8_t, Game::Vehicle> vehicles{};
+            std::vector<Game::Vehicle> vehicles{};
             std::vector<Game::Bullet> bullets{};
             std::vector<Game::Missile> missiles{};
             std::vector<Game::Wall> walls{};
             int worldWidth = 5000;
             int worldHeight = 2000;
+
+            Game::Vehicle *getVehicleById(std::uint8_t id);
 
             ENetPacket *createPlayerJoinPacket(Game::Vehicle vehicle);
             void updateEntities();
@@ -44,11 +46,14 @@ namespace Game {
             void onPlayerJoinMessage(const PlayerJoin *packet){};                 // server -> client
             void onDisconnect(){};                                                // server -> client
             void onPlayerDisconnectMessage(const PlayerDisconnect *packet){};     // server -> client
+            void onPlayerStatusMessage(const PlayerStatus *packet){};             // server -> client
 
             void onPlayerPlaceWallMessage(const PlayerPlaceWall *packet);
             void onPlayerMoveMessage(const PlayerMove *packet);
             void onPlayerShootMessage(const PlayerShoot *packet);
             void onPlayerShootMissileMessage(const PlayerShootMissile *packet);
+
+            void sendPlayerStatus(std::uint8_t playerId, std::uint8_t health);
         };
     } // namespace Net
 } // namespace Game

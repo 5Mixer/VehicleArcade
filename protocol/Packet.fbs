@@ -8,6 +8,11 @@ table PlayerMove {
     angle: float;
 }
 
+table PlayerStatus {
+    player: ubyte;
+    health: ubyte;
+}
+
 table PlayerShoot {
     bullet: BulletData;
 }
@@ -44,6 +49,7 @@ union PacketType {
     PlayerShoot,
     PlayerShootMissile,
     PlayerPlaceWall,
+    PlayerStatus,
 }
 
 table Packet {

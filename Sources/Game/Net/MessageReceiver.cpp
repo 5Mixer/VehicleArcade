@@ -18,6 +18,10 @@ void Game::Net::MessageReceiver::processRawPacket(const Packet *packet) {
             onPlayerMoveMessage(packet->type_as_PlayerMove());
             break;
         }
+        case PacketType::PlayerStatus: {
+            onPlayerStatusMessage(packet->type_as_PlayerStatus());
+            break;
+        }
         case PacketType::PlayerShoot: {
             onPlayerShootMessage(packet->type_as_PlayerShoot());
             break;

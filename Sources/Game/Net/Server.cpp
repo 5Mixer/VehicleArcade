@@ -49,6 +49,11 @@ void Game::Net::Server::updateEntities() {
     }
     Game::interactBulletsAndWalls(bullets, walls);
     Game::interactMissilesAndWalls(missiles, walls);
+    Game::interactMissilesAndVehicles(missiles, vehicles);
+
+    for (Game::Vehicle &vehicle : vehicles) {
+        sendPlayerStatus(vehicle.id, vehicle.health);
+    }
 }
 
 void Game::Net::Server::service(MessageReceiver &receiver) {
@@ -64,7 +69,7 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 // create vector of players to be sent in PlayerJoinDownload packet
                 std::vector<PlayerData> vehicleData;
                 for (auto &vehicle : vehicles) {
-                    vehicleData.push_back(vehicle.second.getData());
+                    vehicleData.push_back(vehicle.getData());
                 }
                 auto vectorOfVehicleData = builder.CreateVectorOfStructs(vehicleData);
 
@@ -113,7 +118,7 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 // Associate the network peer with it's playerId, on the heap. Deleted on disconnect.
                 event.peer->data = new std::uint8_t(playerId);
 
-                vehicles.insert({playerId, newVehicle});
+                vehicles.push_back(newVehicle);
 
                 enet_host_broadcast(server, 0, createPlayerJoinPacket(newVehicle));
 
@@ -122,7 +127,10 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
             case ENET_EVENT_TYPE_DISCONNECT: {
                 receiver.onDisconnect();
 
-                vehicles.erase(*(std::uint8_t *)event.peer->data);
+                vehicles.erase(std::remove_if(vehicles.begin(), vehicles.end(), [&](Game::Vehicle vehicle) -> bool {
+                                   return vehicle.id == *(std::uint8_t *)event.peer->data;
+                               }),
+                               vehicles.end());
 
                 flatbuffers::FlatBufferBuilder builder{50};
                 auto packet = CreatePacket(
@@ -202,6 +210,19 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
     }
 }
 
+void Game::Net::Server::sendPlayerStatus(std::uint8_t playerId, std::uint8_t health) {
+    // Broadcast player status to all players
+    flatbuffers::FlatBufferBuilder builder{50};
+
+    auto playerStatus = CreatePlayerStatus(builder, playerId, health);
+    auto outboundPacketData = CreatePacket(builder, PacketType::PlayerStatus, playerStatus.Union());
+    builder.Finish(outboundPacketData);
+
+    auto outboundPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_UNSEQUENCED);
+
+    enet_host_broadcast(server, 0, outboundPacket);
+}
+
 void Game::Net::Server::onPlayerPlaceWallMessage(const PlayerPlaceWall *packet) {
     // update server side state for wall location
     walls.push_back(Wall(packet->wall()));
@@ -252,9 +273,24 @@ void Game::Net::Server::onPlayerShootMissileMessage(const PlayerShootMissile *pa
     enet_host_broadcast(server, 0, outboundPacket);
 }
 
+Game::Vehicle *Game::Net::Server::getVehicleById(std::uint8_t id) {
+    for (Game::Vehicle &vehicle : vehicles) {
+        if (vehicle.id == id) {
+            return &vehicle;
+        }
+    }
+    return nullptr;
+}
+
 void Game::Net::Server::onPlayerMoveMessage(const PlayerMove *packet) {
     // update server side state for player location
-    Vehicle &vehicle = vehicles.at(packet->player());
+    Vehicle *serverVehiclePtr = getVehicleById(packet->player());
+    if (serverVehiclePtr == nullptr) {
+        std::cerr << "Received move for nonexistant player" << std::endl;
+        return;
+    }
+    Vehicle &vehicle = *serverVehiclePtr;
+
     vehicle.pos.x() = packet->pos()->x();
     vehicle.pos.y() = packet->pos()->y();
     vehicle.angle = packet->angle();

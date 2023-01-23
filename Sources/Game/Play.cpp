@@ -109,17 +109,27 @@ void Game::Play::onPlayerMoveMessage(const Net::PlayerMove *packet) {
     if (client.getId() == packet->player()) {
         return;
     }
-    bool found = false;
     for (auto &vehicle : vehicles) {
         if (vehicle.id == packet->player()) {
             vehicle.pos.x() = packet->pos()->x();
             vehicle.pos.y() = packet->pos()->y();
             vehicle.angle = packet->angle();
-            found = true;
             break;
         }
     }
 }
+void Game::Play::onPlayerStatusMessage(const Net::PlayerStatus *packet) {
+    if (packet->player() == controlledCar.id) {
+        controlledCar.health = static_cast<int>(packet->health());
+        return;
+    }
+    for (auto &vehicle : vehicles) {
+        if (vehicle.id == packet->player()) {
+            vehicle.health = static_cast<int>(packet->health());
+            break;
+        }
+    }
+};
 
 void Game::Play::onPlayerPlaceWallMessage(const Net::PlayerPlaceWall *packet) {
     if (packet->wall()->placer() == client.getId()) {
@@ -237,11 +247,7 @@ void Game::Play::update() {
         }
     } else {
         if (Engine::Input::mouseDown) {
-            shootBullet();
+            shootMissile();
         }
     }
-}
-
-std::string Game::Play::toString() {
-    return "Play";
 }

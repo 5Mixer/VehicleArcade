@@ -37,3 +37,16 @@ void Game::interactMissilesAndWalls(std::vector<Game::Missile> &missiles, std::v
                 }),
                 walls.end());
 }
+void Game::interactMissilesAndVehicles(std::vector<Game::Missile> &missiles, std::vector<Game::Vehicle> &vehicles) {
+    // TODO: Avoid n^2
+    for (auto &vehicle : vehicles) {
+        for (auto &missile : missiles) {
+            if (vehicle.id == missile.shooter) {
+                continue;
+            }
+            if ((missile.pos - vehicle.pos).squareLength() < std::pow(150, 2)) {
+                vehicle.health -= 5;
+            }
+        }
+    }
+}

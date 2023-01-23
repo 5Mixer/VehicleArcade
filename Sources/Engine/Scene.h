@@ -11,7 +11,6 @@ namespace Engine {
     public:
         virtual void render(Engine::Graphics &g) = 0;
         virtual void update() = 0;
-        virtual std::string toString() = 0;
     };
 } // namespace Engine
 

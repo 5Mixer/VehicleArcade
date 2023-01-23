@@ -54,13 +54,13 @@ namespace Game {
         Play(Game::Net::Client &client);
         void render(Engine::Graphics &g);
         void update();
-        std::string toString();
 
         void onPlayerPlaceWallMessage(const Net::PlayerPlaceWall *packet);
         void onPlayerJoinMessage(const Net::PlayerJoin *packet);
         void onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *packet); // server -> new client
         void onPlayerDisconnectMessage(const Net::PlayerDisconnect *packet);
         void onPlayerMoveMessage(const Net::PlayerMove *packet);
+        void onPlayerStatusMessage(const Net::PlayerStatus *packet);
         void onPlayerShootMessage(const Net::PlayerShoot *packet);
         void onPlayerShootMissileMessage(const Net::PlayerShootMissile *packet);
         void onDisconnect();
