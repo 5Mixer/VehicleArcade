@@ -4,6 +4,7 @@
 #include "../Engine/Core.h"
 #include "../Engine/Graphics.h"
 #include "../Engine/Transform.h"
+#include "Collider.h"
 #include "Net/EntityGenerated.h"
 #include "Wall.h"
 #include <Kore/Math/Vector.h>
@@ -11,7 +12,8 @@
 #include <vector>
 
 namespace Game {
-    class Vehicle {
+    constexpr int vehicleRadius = 50;
+    class Vehicle : public CircleCollider {
     private:
         float forwardsVelocity = 0;
         float turnRateVelocityFactor(float speed, float maximumSpeed);
@@ -24,6 +26,9 @@ namespace Game {
             : id(data->id()),
               pos(Kore::vec2{data->pos().x(), data->pos().y()}),
               angle(data->angle()){};
+
+        Kore::vec2 getColliderPos() { return pos; };
+        float getColliderRadius() { return vehicleRadius; };
 
         const Net::PlayerData getData();
 

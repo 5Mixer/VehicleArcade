@@ -1,52 +1,23 @@
 #include "Simulation.h"
 
-// TODO: Deduplicate this!
 void Game::interactBulletsAndWalls(std::vector<Game::Bullet> &bullets, std::vector<Game::Wall> &walls) {
-    bullets.erase(std::remove_if(bullets.begin(), bullets.end(), [&](Game::Bullet bullet) -> bool {
-                      // TODO: Avoid n^2
-                      for (auto &wall : walls) {
-                          if ((bullet.pos - wall.pos).squareLength() < std::pow(10, 2)) {
-                              wall.health--;
-                              return true;
-                          }
-                      }
-                      return false;
-                  }),
-                  bullets.end());
-
-    walls.erase(std::remove_if(walls.begin(), walls.end(), [&](Game::Wall wall) -> bool {
-                    return wall.health <= 0;
-                }),
-                walls.end());
+    Game::intersect(bullets, walls, [](Game::Bullet &bullet, Game::Wall &wall) -> void {
+        wall.health--;
+        bullet.health = 0;
+    });
 }
 void Game::interactMissilesAndWalls(std::vector<Game::Missile> &missiles, std::vector<Game::Wall> &walls) {
-    missiles.erase(std::remove_if(missiles.begin(), missiles.end(), [&](Game::Missile missile) -> bool {
-                       // TODO: Avoid n^2
-                       for (auto &wall : walls) {
-                           if ((missile.pos - wall.pos).squareLength() < std::pow(50, 2)) {
-                               wall.health -= 5;
-                               return true;
-                           }
-                       }
-                       return false;
-                   }),
-                   missiles.end());
-
-    walls.erase(std::remove_if(walls.begin(), walls.end(), [&](Game::Wall wall) -> bool {
-                    return wall.health <= 0;
-                }),
-                walls.end());
+    Game::intersect(missiles, walls, [](Game::Missile &missile, Game::Wall &wall) -> void {
+        wall.health -= 5;
+        missile.health = 0;
+    });
 }
 void Game::interactMissilesAndVehicles(std::vector<Game::Missile> &missiles, std::vector<Game::Vehicle> &vehicles) {
-    // TODO: Avoid n^2
-    for (auto &vehicle : vehicles) {
-        for (auto &missile : missiles) {
-            if (vehicle.id == missile.shooter) {
-                continue;
-            }
-            if ((missile.pos - vehicle.pos).squareLength() < std::pow(150, 2)) {
-                vehicle.health -= 5;
-            }
+    Game::intersect(missiles, vehicles, [](Game::Missile &missile, Game::Vehicle &vehicle) -> void {
+        if (vehicle.id == missile.shooter) {
+            return;
         }
-    }
+        vehicle.health -= 5;
+        missile.health = 0;
+    });
 }

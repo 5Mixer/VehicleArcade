@@ -7,7 +7,7 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
 {
-	const { stdout, stderr } = await exec('flatc -c --scoped-enums --filename-suffix Generated --cpp-field-case-style lower --warnings-as-errors -o ./Sources/Game/Net/ ./protocol/*');
+	const { stdout, stderr } = await exec('./flatc -c --scoped-enums --filename-suffix Generated --cpp-field-case-style lower --warnings-as-errors -o ./Sources/Game/Net/ ./protocol/*');
 	if (stderr) {
 		console.log('flatc error:', stdout, stderr);
 	} else {

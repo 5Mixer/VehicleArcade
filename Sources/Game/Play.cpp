@@ -233,6 +233,10 @@ void Game::Play::update() {
 
     Game::interactBulletsAndWalls(bullets, walls);
     Game::interactMissilesAndWalls(missiles, walls);
+    Game::interactMissilesAndVehicles(missiles, vehicles);
+    Game::eraseDead(bullets);
+    Game::eraseDead(missiles);
+    Game::eraseDead(walls);
 
     controlledCar.update(walls, worldWidth, worldHeight);
 

@@ -3,12 +3,14 @@
 
 #include "../Engine/Core.h"
 #include "../Engine/Graphics.h"
+#include "Collider.h"
 #include "Net/EntityGenerated.h"
 #include <Kore/Math/Vector.h>
 #include <cmath>
 
 namespace Game {
-    class Missile {
+    constexpr int missileRadius = 50;
+    class Missile : public CircleCollider {
     private:
         float speed = 25;
 
@@ -21,10 +23,14 @@ namespace Game {
               pos(Kore::vec2(data->pos().x(), data->pos().y())),
               angle(data->angle()){};
 
+        Kore::vec2 getColliderPos() { return pos; };
+        float getColliderRadius() { return missileRadius; };
+
         const Net::BulletData getData();
 
         Kore::vec2 pos;
         std::uint8_t shooter;
+        std::uint8_t health = 1;
         float angle;
         void update();
         void render(Engine::Graphics &g);
