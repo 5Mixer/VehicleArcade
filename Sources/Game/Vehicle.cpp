@@ -7,14 +7,13 @@ const Game::Net::PlayerData Game::Vehicle::getData() {
         angle};
 }
 
-void Game::Vehicle::update(std::vector<Game::Wall> &walls, int worldWidth, int worldHeight) {
+void Game::Vehicle::controlWithInput() {
     float accelerationSpeed = .1;
     float breakSpeed = .1;
-    float turnSpeed = .04;
     float frictionFactor = .99;
-    float wallFrictionFactor = .95;
+    float turnSpeed = .04;
     float maximumSpeed = 10;
-
+    float turnRate = this->turnRateVelocityFactor(forwardsVelocity, maximumSpeed);
     if (Engine::Input::keysDown[Kore::KeyCode::KeyW]) {
         accelerate(accelerationSpeed);
     } else if (Engine::Input::keysDown[Kore::KeyCode::KeyS]) {
@@ -23,18 +22,22 @@ void Game::Vehicle::update(std::vector<Game::Wall> &walls, int worldWidth, int w
         forwardsVelocity *= frictionFactor;
     }
 
-    float turnRate = this->turnRateVelocityFactor(forwardsVelocity, maximumSpeed);
-    visualAngleDelta = visualAngleDelta * .8;
+    if (std::abs(forwardsVelocity) > maximumSpeed) {
+        forwardsVelocity = maximumSpeed * (forwardsVelocity > 0 ? 1 : -1);
+    }
+
     if (Engine::Input::keysDown[Kore::KeyCode::KeyA]) {
         turn(-turnSpeed * turnRate);
     }
     if (Engine::Input::keysDown[Kore::KeyCode::KeyD]) {
         turn(turnSpeed * turnRate);
     }
+}
 
-    if (std::abs(forwardsVelocity) > maximumSpeed) {
-        forwardsVelocity = maximumSpeed * (forwardsVelocity > 0 ? 1 : -1);
-    }
+void Game::Vehicle::update(std::vector<Game::Wall> &walls, int worldWidth, int worldHeight) {
+    float wallFrictionFactor = .95;
+
+    visualAngleDelta = visualAngleDelta * .8;
 
     auto target = pos + Kore::vec2{std::cos(angle + visualAngleDelta * 20) * forwardsVelocity, std::sin(angle + visualAngleDelta * 20) * forwardsVelocity};
 

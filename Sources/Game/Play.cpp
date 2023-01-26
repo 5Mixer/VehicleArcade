@@ -2,7 +2,6 @@
 
 Game::Play::Play(Game::Net::Client &client)
     : editingScene(false),
-      controlledCar(Game::Vehicle(255, Kore::vec2(), 0)),
       client(client) {
 
     for (int i = 0; i < 10000; i++) {
@@ -19,7 +18,12 @@ Game::Play::Play(Game::Net::Client &client)
 }
 
 void Game::Play::render(Engine::Graphics &graphics) {
-    camera.pos = controlledCar.pos;
+    Game::Vehicle *controlledVehicle = getVehicleById(controlledVehicleId);
+    if (controlledVehicle == nullptr) {
+        return;
+    }
+
+    camera.pos = controlledVehicle->pos;
     if (camera.pos.x() < Kore::System::windowWidth() / 2) {
         camera.pos.x() = Kore::System::windowWidth() / 2;
     }
@@ -62,11 +66,9 @@ void Game::Play::render(Engine::Graphics &graphics) {
         vehicle.render(graphics);
     }
 
-    controlledCar.render(graphics);
-
     graphics.transform(camera.getTransform().Invert());
 
-    graphics.drawBar(Kore::vec2{40, 60}, controlledCar.health, controlledCar.maxHealth);
+    graphics.drawBar(Kore::vec2{40, 60}, controlledVehicle->health, controlledVehicle->maxHealth);
     graphics.drawCursor(Engine::Input::mousePosition);
 }
 
@@ -89,7 +91,8 @@ void Game::Play::onDisconnect() {
 }
 
 void Game::Play::onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *packet) {
-    controlledCar = Vehicle(packet->player());
+    vehicles.push_back(Vehicle(packet->player()));
+    controlledVehicleId = packet->player()->id();
 
     for (auto playerData : *packet->players()) {
         vehicles.push_back(Vehicle(playerData));
@@ -109,20 +112,16 @@ void Game::Play::onPlayerMoveMessage(const Net::PlayerMove *packet) {
     if (client.getId() == packet->player()) {
         return;
     }
-    for (auto &vehicle : vehicles) {
-        if (vehicle.id == packet->player()) {
-            vehicle.pos.x() = packet->pos()->x();
-            vehicle.pos.y() = packet->pos()->y();
-            vehicle.angle = packet->angle();
-            break;
-        }
-    }
-}
-void Game::Play::onPlayerStatusMessage(const Net::PlayerStatus *packet) {
-    if (packet->player() == controlledCar.id) {
-        controlledCar.health = static_cast<int>(packet->health());
+    Game::Vehicle *vehicle = getVehicleById(packet->player());
+    if (vehicle == nullptr) {
+        std::cerr << "Could not find player referred to in player move packet" << std::endl;
         return;
     }
+    vehicle->pos.x() = packet->pos()->x();
+    vehicle->pos.y() = packet->pos()->y();
+    vehicle->angle = packet->angle();
+}
+void Game::Play::onPlayerStatusMessage(const Net::PlayerStatus *packet) {
     for (auto &vehicle : vehicles) {
         if (vehicle.id == packet->player()) {
             vehicle.health = static_cast<int>(packet->health());
@@ -155,18 +154,25 @@ void Game::Play::onPlayerShootMissileMessage(const Net::PlayerShootMissile *pack
     missiles.push_back(Missile(packet->bullet()));
 }
 
+// TODO: Deduplicate with missile shooting
 void Game::Play::shootBullet() {
     if (std::chrono::steady_clock::now() < lastBulletShootTime + std::chrono::milliseconds(100)) {
         return;
     }
 
+    Game::Vehicle *controlledVehicle = getVehicleById(controlledVehicleId);
+    if (controlledVehicle == nullptr) {
+        std::cerr << "Could not find player" << std::endl;
+        return;
+    }
+
     Kore::vec2 mouseWorldPos = getMouseWorldPos();
-    float directAngle = atan2(mouseWorldPos.y() - controlledCar.pos.y(), mouseWorldPos.x() - controlledCar.pos.x());
+    float directAngle = atan2(mouseWorldPos.y() - controlledVehicle->pos.y(), mouseWorldPos.x() - controlledVehicle->pos.x());
     float angleRange = Engine::Core::getInstance().rand() - .5;
 
     Game::Bullet bullet{
         client.getId(),
-        controlledCar.pos,
+        controlledVehicle->pos,
         directAngle + angleRange * .01f};
 
     auto startOffset = 80 + 20 * Engine::Core::getInstance().rand();
@@ -182,14 +188,19 @@ void Game::Play::shootMissile() {
     if (std::chrono::steady_clock::now() < lastBulletShootTime + std::chrono::milliseconds(400)) {
         return;
     }
+    Game::Vehicle *controlledVehicle = getVehicleById(controlledVehicleId);
+    if (controlledVehicle == nullptr) {
+        std::cerr << "Could not find player" << std::endl;
+        return;
+    }
 
     Kore::vec2 mouseWorldPos = getMouseWorldPos();
-    float directAngle = atan2(mouseWorldPos.y() - controlledCar.pos.y(), mouseWorldPos.x() - controlledCar.pos.x());
+    float directAngle = atan2(mouseWorldPos.y() - controlledVehicle->pos.y(), mouseWorldPos.x() - controlledVehicle->pos.x());
     float angleRange = Engine::Core::getInstance().rand() - .5;
 
     Game::Missile missile{
         client.getId(),
-        controlledCar.pos,
+        controlledVehicle->pos,
         directAngle + angleRange * .005f};
 
     auto startOffset = 80 + 20 * Engine::Core::getInstance().rand();
@@ -227,7 +238,13 @@ Kore::vec2 Game::Play::getMouseWorldPos() {
 
 void Game::Play::update() {
     client.service(*this);
-    client.sendPlayerMove(controlledCar.pos.x(), controlledCar.pos.y(), controlledCar.angle);
+
+    Game::Vehicle *controlledVehicle = getVehicleById(controlledVehicleId);
+    if (controlledVehicle == nullptr) {
+        return;
+    }
+
+    client.sendPlayerMove(controlledVehicle->pos.x(), controlledVehicle->pos.y(), controlledVehicle->angle);
 
     editingScene = Engine::Input::keysDown.at(Kore::KeyTab);
 
@@ -238,12 +255,15 @@ void Game::Play::update() {
     Game::eraseDead(missiles);
     Game::eraseDead(walls);
 
-    controlledCar.update(walls, worldWidth, worldHeight);
+    controlledVehicle->controlWithInput();
+    controlledVehicle->update(walls, worldWidth, worldHeight);
 
-    trails.push_back(Game::Trail{controlledCar.getBackLeftWheelPos()});
-    trails.push_back(Game::Trail{controlledCar.getBackRightWheelPos()});
-    trails.push_back(Game::Trail{controlledCar.getFrontLeftWheelPos()});
-    trails.push_back(Game::Trail{controlledCar.getFrontRightWheelPos()});
+    for (Game::Vehicle &vehicle : vehicles) {
+        trails.push_back(Game::Trail{vehicle.getBackLeftWheelPos()});
+        trails.push_back(Game::Trail{vehicle.getBackRightWheelPos()});
+        trails.push_back(Game::Trail{vehicle.getFrontLeftWheelPos()});
+        trails.push_back(Game::Trail{vehicle.getFrontRightWheelPos()});
+    }
 
     if (editingScene) {
         if (Engine::Input::mouseDown) {
@@ -254,4 +274,7 @@ void Game::Play::update() {
             shootMissile();
         }
     }
+
+    // Don't wait until the next frame to service network events
+    // client.service(*this);
 }

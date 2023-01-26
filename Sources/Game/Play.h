@@ -36,9 +36,18 @@ namespace Game {
         std::vector<Game::Vehicle> vehicles;
         std::vector<Game::Trail> trails;
 
-        Game::Vehicle controlledCar;
+        std::uint8_t controlledVehicleId = 255;
         Engine::Camera camera;
         std::chrono::steady_clock::time_point lastBulletShootTime;
+
+        Game::Vehicle *getVehicleById(std::uint8_t id) {
+            for (auto &vehicle : vehicles) {
+                if (vehicle.id == id) {
+                    return &vehicle;
+                }
+            }
+            return nullptr;
+        }
 
         void shootBullet();
         void shootMissile();

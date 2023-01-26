@@ -46,6 +46,7 @@ namespace Game {
 
         void accelerate(float acceleration);
         void turn(float angleDelta);
+        void controlWithInput();
         void update(std::vector<Game::Wall> &walls, int worldWidth, int worldHeight);
         void render(Engine::Graphics &g);
     };
