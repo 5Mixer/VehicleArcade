@@ -9,10 +9,10 @@
 #include <cmath>
 
 namespace Game {
-    constexpr int bulletRadius = 50;
     class Bullet : public CircleCollider {
     private:
         float speed = 30;
+        static const int radius = 50;
 
     public:
         Bullet(std::uint8_t shooter, Kore::vec2 pos, float angle)
@@ -26,7 +26,7 @@ namespace Game {
               angle(data->angle()){};
 
         Kore::vec2 getColliderPos() { return pos; };
-        float getColliderRadius() { return bulletRadius; };
+        float getColliderRadius() { return radius; };
 
         const Net::BulletData getData();
 

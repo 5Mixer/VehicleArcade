@@ -47,9 +47,7 @@ void Game::Net::Server::updateEntities() {
     for (auto &missile : missiles) {
         missile.update();
     }
-    Game::interactBulletsAndWalls(bullets, walls);
-    Game::interactMissilesAndWalls(missiles, walls);
-    Game::interactMissilesAndVehicles(missiles, vehicles);
+    Game::simulate(bullets, missiles, walls, vehicles);
 
     for (Game::Vehicle &vehicle : vehicles) {
         sendPlayerStatus(vehicle.id, vehicle.health);

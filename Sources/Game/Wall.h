@@ -7,9 +7,10 @@
 #include <cstdint>
 
 namespace Game {
-    constexpr int wallRadius = 50;
     class Wall : public CircleCollider {
     private:
+        static const int radius = 50;
+
     public:
         Wall(std::uint8_t placer, Kore::vec2 pos, int health = 8)
             : placer(placer), pos(pos), health(health){};
@@ -21,7 +22,7 @@ namespace Game {
               health(data->health()){};
 
         Kore::vec2 getColliderPos() { return pos; };
-        float getColliderRadius() { return wallRadius; };
+        float getColliderRadius() { return radius; };
 
         const Net::WallData getData();
 

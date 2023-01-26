@@ -16,7 +16,7 @@ namespace Game {
     void interactMissilesAndVehicles(std::vector<Game::Missile> &missiles, std::vector<Game::Vehicle> &vehicles);
 
     template <class T>
-    void eraseDead(std::vector<T> &elements) {
+    inline void eraseDead(std::vector<T> &elements) {
         elements.erase(std::remove_if(elements.begin(), elements.end(), [](T el) -> bool {
                            return el.health <= 0;
                        }),
@@ -25,7 +25,7 @@ namespace Game {
 
     // TODO: Use acceleration structure to avoid N^2
     template <class T, class U, typename Functor>
-    void intersect(std::vector<T> &firstList, std::vector<U> &secondList, Functor onIntersect) {
+    inline void intersect(std::vector<T> &firstList, std::vector<U> &secondList, Functor onIntersect) {
         for (T &first : firstList) {
             for (U &second : secondList) {
                 int minDistanceSquared = std::pow(first.getColliderRadius() + second.getColliderRadius(), 2);
@@ -35,6 +35,20 @@ namespace Game {
                 }
             }
         }
+    }
+
+    inline void simulate(
+        std::vector<Game::Bullet> &bullets,
+        std::vector<Game::Missile> &missiles,
+        std::vector<Game::Wall> &walls,
+        std::vector<Game::Vehicle> &vehicles
+    ) {
+        interactBulletsAndWalls(bullets, walls);
+        interactMissilesAndWalls(missiles, walls);
+        interactMissilesAndVehicles(missiles, vehicles);
+        eraseDead(bullets);
+        eraseDead(missiles);
+        eraseDead(walls);
     }
 } // namespace Game
 

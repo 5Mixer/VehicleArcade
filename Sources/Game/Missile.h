@@ -9,9 +9,9 @@
 #include <cmath>
 
 namespace Game {
-    constexpr int missileRadius = 50;
     class Missile : public CircleCollider {
     private:
+        static const int radius = 50;
         float speed = 25;
 
     public:
@@ -24,7 +24,7 @@ namespace Game {
               angle(data->angle()){};
 
         Kore::vec2 getColliderPos() { return pos; };
-        float getColliderRadius() { return missileRadius; };
+        float getColliderRadius() { return radius; };
 
         const Net::BulletData getData();
 

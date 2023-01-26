@@ -246,12 +246,7 @@ void Game::Play::update() {
 
     editingScene = Engine::Input::keysDown.at(Kore::KeyTab);
 
-    Game::interactBulletsAndWalls(bullets, walls);
-    Game::interactMissilesAndWalls(missiles, walls);
-    Game::interactMissilesAndVehicles(missiles, vehicles);
-    Game::eraseDead(bullets);
-    Game::eraseDead(missiles);
-    Game::eraseDead(walls);
+    Game::simulate(bullets, missiles, walls, vehicles);
 
     controlledVehicle->controlWithInput();
     controlledVehicle->update(walls, worldWidth, worldHeight);

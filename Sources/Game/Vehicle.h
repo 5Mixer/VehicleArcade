@@ -12,9 +12,9 @@
 #include <vector>
 
 namespace Game {
-    constexpr int vehicleRadius = 50;
     class Vehicle : public CircleCollider {
     private:
+        static const int radius = 50;
         float forwardsVelocity = 0;
         float turnRateVelocityFactor(float speed, float maximumSpeed);
         float visualAngleDelta = 0;
@@ -28,7 +28,7 @@ namespace Game {
               angle(data->angle()){};
 
         Kore::vec2 getColliderPos() { return pos; };
-        float getColliderRadius() { return vehicleRadius; };
+        float getColliderRadius() { return radius; };
 
         const Net::PlayerData getData();
 
