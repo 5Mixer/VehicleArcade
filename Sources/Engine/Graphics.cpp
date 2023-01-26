@@ -7,23 +7,6 @@ namespace Engine {
           spriteAtlas(spriteAtlas),
           grassTexture(Kore::Graphics4::Texture("../Assets/grass.png")) {
     }
-
-    void Engine::Graphics::start() {
-    }
-
-    void Engine::Graphics::begin() {
-        graphics->begin(false, Kore::System::windowWidth(), Kore::System::windowHeight());
-        graphics->clear(0x217844);
-    }
-    void Engine::Graphics::end() {
-        graphics->end();
-    }
-    void Engine::Graphics::drawSprite(Engine::Sprite sprite, Kore::vec2 pos) {
-        graphics->drawScaledSubImage(&spriteAtlasTexture, sprite.x, sprite.y, sprite.width, sprite.height, pos.x() - sprite.width / 2, pos.y() - sprite.height / 2, sprite.width, sprite.height);
-    }
-    void Engine::Graphics::drawScaledSprite(Engine::Sprite sprite, Kore::vec2 pos, float scale) {
-        graphics->drawScaledSubImage(&spriteAtlasTexture, sprite.x, sprite.y, sprite.width, sprite.height, pos.x() - sprite.width * scale / 2, pos.y() - sprite.height * scale / 2, sprite.width * scale, sprite.height * scale);
-    }
     void Engine::Graphics::drawRotatedSprite(Engine::Sprite sprite, Kore::vec2 pos, float angle) {
         auto prior = graphics->transformation;
         transform(Engine::Transform::rotate(angle, pos.x(), pos.y()));
@@ -48,12 +31,6 @@ namespace Engine {
         drawRotatedSprite(*spriteAtlas.get("Assets/carWheel.png"), leftWheelPos, angle + angleDelta);
         drawRotatedSprite(*spriteAtlas.get("Assets/carWheel.png"), rightWheelPos, angle + angleDelta);
     }
-    void Engine::Graphics::drawTrail(Kore::vec2 pos) {
-        drawSprite(*spriteAtlas.get("Assets/trail.png"), pos);
-    }
-    void Engine::Graphics::drawCursor(Kore::vec2 pos) {
-        drawSprite(*spriteAtlas.get("Assets/cursor.png"), pos);
-    }
     void Engine::Graphics::drawBar(Kore::vec2 pos, int filledBarElements, int totalBarElements) {
         graphics->setColor(0xf2f85b5b);
         auto barElementSprite = *spriteAtlas.get("Assets/barElement.png");
@@ -65,17 +42,5 @@ namespace Engine {
             drawSprite(barElementSprite, pos + Kore::vec2{(barElementSprite.width) * offset, 0});
         }
         graphics->setColor(Kore::Graphics1::Color::White);
-    }
-    void Engine::Graphics::drawBullet(Kore::vec2 pos, float angle) {
-        drawScaledSprite(*spriteAtlas.get("Assets/bullet.png"), pos, 1);
-    }
-    void Engine::Graphics::drawMissile(Kore::vec2 pos, float angle) {
-        drawRotatedSprite(*spriteAtlas.get("Assets/missile.png"), pos, angle);
-    }
-    void Engine::Graphics::drawWall(Kore::vec2 pos, int layer) {
-        drawSprite(*spriteAtlas.get("Assets/wall" + std::to_string(layer + 1) + ".png"), pos);
-    }
-    void Engine::Graphics::transform(Kore::mat3 transformation) {
-        graphics->transformation *= transformation;
     }
 } // namespace Engine

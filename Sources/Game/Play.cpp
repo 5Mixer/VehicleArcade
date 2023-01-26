@@ -46,11 +46,9 @@ void Game::Play::render(Engine::Graphics &graphics) {
         graphics.drawTrail(trail.pos);
     }
     for (auto &bullet : bullets) {
-        bullet.update();
         bullet.render(graphics);
     }
     for (auto &missile : missiles) {
-        missile.update();
         missile.render(graphics);
     }
 
@@ -258,6 +256,13 @@ void Game::Play::update() {
     controlledVehicle->controlWithInput();
     controlledVehicle->update(walls, worldWidth, worldHeight);
 
+    for (Game::Bullet &bullet : bullets) {
+        bullet.update();
+    }
+    for (Game::Missile &missile : missiles) {
+        missile.update();
+    }
+
     for (Game::Vehicle &vehicle : vehicles) {
         trails.push_back(Game::Trail{vehicle.getBackLeftWheelPos()});
         trails.push_back(Game::Trail{vehicle.getBackRightWheelPos()});
@@ -276,5 +281,5 @@ void Game::Play::update() {
     }
 
     // Don't wait until the next frame to service network events
-    // client.service(*this);
+    client.service(*this);
 }

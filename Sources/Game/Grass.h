@@ -26,7 +26,9 @@ namespace Game {
         float angle;
         std::uint8_t variety;
 
-        void render(Engine::Graphics &g);
+        void render(Engine::Graphics &g) {
+            g.drawGrass(pos, angle, variety);
+        }
     };
 } // namespace Game
 

@@ -34,8 +34,12 @@ namespace Game {
         std::uint8_t shooter;
         std::uint8_t health = 1;
         float angle;
-        void update();
-        void render(Engine::Graphics &g);
+        void update() {
+            pos += Kore::vec2{std::cos(angle) * speed, std::sin(angle) * speed};
+        }
+        void render(Engine::Graphics &g) {
+            g.drawBullet(pos);
+        }
     };
 } // namespace Game
 

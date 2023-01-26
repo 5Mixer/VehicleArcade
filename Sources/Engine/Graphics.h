@@ -22,20 +22,41 @@ namespace Engine {
 
     public:
         Graphics(Engine::SpriteAtlas &spriteAtlas);
-        void begin();
-        void end();
-        void drawSprite(Engine::Sprite sprite, Kore::vec2 pos);
-        void drawScaledSprite(Engine::Sprite sprite, Kore::vec2 pos, float scale);
+        void begin() {
+            graphics->begin(false, Kore::System::windowWidth(), Kore::System::windowHeight());
+            graphics->clear(0x217844);
+        }
+        void end() {
+            graphics->end();
+        }
+        void drawSprite(Engine::Sprite sprite, Kore::vec2 pos) {
+            graphics->drawScaledSubImage(&spriteAtlasTexture, sprite.x, sprite.y, sprite.width, sprite.height, pos.x() - sprite.width / 2, pos.y() - sprite.height / 2, sprite.width, sprite.height);
+        }
+        void drawScaledSprite(Engine::Sprite sprite, Kore::vec2 pos, float scale) {
+            graphics->drawScaledSubImage(&spriteAtlasTexture, sprite.x, sprite.y, sprite.width, sprite.height, pos.x() - sprite.width * scale / 2, pos.y() - sprite.height * scale / 2, sprite.width * scale, sprite.height * scale);
+        }
         void drawRotatedSprite(Engine::Sprite sprite, Kore::vec2 pos, float angle);
-        void drawTrail(Kore::vec2 pos);
-        void drawCursor(Kore::vec2 pos);
+        void drawTrail(Kore::vec2 pos) {
+            drawSprite(*spriteAtlas.get("Assets/trail.png"), pos);
+        }
+        void drawCursor(Kore::vec2 pos) {
+            drawSprite(*spriteAtlas.get("Assets/cursor.png"), pos);
+        }
         void drawBar(Kore::vec2 pos, int filledBarElements, int totalBarElements);
         void drawGrass(Kore::vec2 pos, float angle, std::uint8_t variety);
         void drawVehicle(Kore::vec2 pos, float angle = 0, float angleDelta = 0);
-        void drawBullet(Kore::vec2 pos, float angle = 0);
-        void drawMissile(Kore::vec2 pos, float angle = 0);
-        void drawWall(Kore::vec2 pos, int layer);
-        void transform(Kore::mat3 transformation);
+        void drawBullet(Kore::vec2 pos) {
+            drawSprite(*spriteAtlas.get("Assets/bullet.png"), pos);
+        }
+        void drawMissile(Kore::vec2 pos, float angle = 0) {
+            drawRotatedSprite(*spriteAtlas.get("Assets/missile.png"), pos, angle);
+        }
+        void drawWall(Kore::vec2 pos, int layer) {
+            drawSprite(*spriteAtlas.get("Assets/wall" + std::to_string(layer + 1) + ".png"), pos);
+        }
+        void transform(Kore::mat3 transformation) {
+            graphics->transformation *= transformation;
+        }
     }; // namespace Engine
 } // namespace Engine
 #endif
