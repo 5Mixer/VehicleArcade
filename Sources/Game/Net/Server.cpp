@@ -87,9 +87,9 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 // Associate the network peer with it's playerId, on the heap. Deleted on disconnect.
                 event.peer->data = new std::uint8_t(playerId);
 
-                vehicles.push_back(newVehicle);
+                vehicles.push_back(std::move(newVehicle));
 
-                enet_host_broadcast(server, 0, createPlayerJoinPacket(newVehicle.getData()));
+                enet_host_broadcast(server, 0, createPlayerJoinPacket(playerData));
 
                 break;
             }

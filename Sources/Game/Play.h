@@ -8,6 +8,7 @@
 #include "Grass.h"
 #include "Net/Client.h"
 #include "Net/MessageReceiver.h"
+#include "Particle.h"
 #include "Simulation.h"
 #include "Trail.h"
 #include "Vehicle.h"
@@ -15,6 +16,7 @@
 #include <Kore/IO/FileReader.h>
 #include <Kore/IO/FileWriter.h>
 #include <Kore/Math/Matrix.h>
+#include <Kore/Math/Vector.h>
 #include <algorithm>
 #include <chrono>
 #include <memory>
@@ -35,6 +37,7 @@ namespace Game {
         std::vector<Game::Grass> grass;
         std::vector<Game::Vehicle> vehicles;
         std::vector<Game::Trail> trails;
+        std::vector<Game::Particle> particles;
 
         std::uint8_t controlledVehicleId = 255;
         Engine::Camera camera;
@@ -52,6 +55,7 @@ namespace Game {
         void shootBullet();
         void shootMissile();
         void placeWall();
+        void spawnParticle(Kore::vec2 pos);
 
         void renderBars(Engine::Graphics &g);
 

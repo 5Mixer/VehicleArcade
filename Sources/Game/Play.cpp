@@ -64,6 +64,10 @@ void Game::Play::render(Engine::Graphics &graphics) {
         vehicle.render(graphics);
     }
 
+    for (auto &particle : particles) {
+        particle.render(graphics);
+    }
+
     graphics.transform(camera.getTransform().Invert());
 
     graphics.drawBar(Kore::vec2{40, 60}, controlledVehicle->health, controlledVehicle->maxHealth);
@@ -182,6 +186,12 @@ void Game::Play::shootBullet() {
     lastBulletShootTime = std::chrono::steady_clock::now();
 }
 
+void Game::Play::spawnParticle(Kore::vec2 pos) {
+    particles.push_back(Particle{
+        pos,
+        Engine::Core::getInstance().rand() * (3.14 * 2)});
+}
+
 void Game::Play::shootMissile() {
     if (std::chrono::steady_clock::now() < lastBulletShootTime + std::chrono::milliseconds(400)) {
         return;
@@ -247,6 +257,8 @@ void Game::Play::update() {
     editingScene = Engine::Input::keysDown.at(Kore::KeyTab);
 
     Game::simulate(bullets, missiles, walls, vehicles);
+    Game::updateVector(particles);
+    Game::eraseDead(particles);
 
     controlledVehicle->controlWithInput();
     controlledVehicle->update(walls, worldWidth, worldHeight);
@@ -256,6 +268,7 @@ void Game::Play::update() {
         trails.push_back(Game::Trail{vehicle.getBackRightWheelPos()});
         trails.push_back(Game::Trail{vehicle.getFrontLeftWheelPos()});
         trails.push_back(Game::Trail{vehicle.getFrontRightWheelPos()});
+        spawnParticle(vehicle.pos);
     }
 
     if (editingScene) {

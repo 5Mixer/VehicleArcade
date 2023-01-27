@@ -45,6 +45,9 @@ namespace Engine {
         void drawBar(Kore::vec2 pos, int filledBarElements, int totalBarElements);
         void drawGrass(Kore::vec2 pos, float angle, std::uint8_t variety);
         void drawVehicle(Kore::vec2 pos, float angle = 0, float angleDelta = 0);
+        void drawParticle(Kore::vec2 pos) {
+            drawSprite(*spriteAtlas.get("Assets/particle.png"), pos);
+        }
         void drawBullet(Kore::vec2 pos) {
             drawSprite(*spriteAtlas.get("Assets/bullet.png"), pos);
         }
