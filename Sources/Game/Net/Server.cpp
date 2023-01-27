@@ -155,9 +155,6 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 auto deserialisedPacket = GetPacket(event.packet->data);
 
                 // Drop packets where the client is dishonest about their player ID
-                // This should be more efficient than overriding the player ID (requiring unpacking, mutation, repacking)
-                // Whilst having no downside cost - clients should know their assigned player ID as soon as they receive
-                // their player join download packet
                 bool playerIdValid = true;
                 switch (deserialisedPacket->type_type()) {
                     case PacketType::PlayerMove: {
@@ -187,6 +184,22 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
 
                 receiver.processRawPacket(deserialisedPacket);
 
+                auto ptype = deserialisedPacket->type_type();
+                if (ptype == PacketType::PlayerShoot ||
+                    ptype == PacketType::PlayerStatus ||
+                    ptype == PacketType::PlayerPlaceWall ||
+                    ptype == PacketType::PlayerShootMissile ||
+                    ptype == PacketType::PlayerMove) {
+                    // broadcast packet
+                    auto outboundPacket = enet_packet_create(
+                        event.packet->data,
+                        event.packet->dataLength,
+                        ptype == PacketType::PlayerMove ? ENET_PACKET_FLAG_UNSEQUENCED : ENET_PACKET_FLAG_RELIABLE
+                    );
+
+                    enet_host_broadcast(server, 0, outboundPacket);
+                }
+
                 if (deserialisedPacket->type_type() == PacketType::PlayerDisconnect) {
                     enet_peer_disconnect(event.peer, 0);
                 }
@@ -205,64 +218,21 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
 void Game::Net::Server::sendPlayerStatus(std::uint8_t playerId, std::uint8_t health) {
     // Broadcast player status to all players
     flatbuffers::FlatBufferBuilder builder{50};
-
-    auto playerStatus = CreatePlayerStatus(builder, playerId, health);
-    auto outboundPacketData = CreatePacket(builder, PacketType::PlayerStatus, playerStatus.Union());
-    builder.Finish(outboundPacketData);
-
-    auto outboundPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_UNSEQUENCED);
-
-    enet_host_broadcast(server, 0, outboundPacket);
 }
 
 void Game::Net::Server::onPlayerPlaceWallMessage(const PlayerPlaceWall *packet) {
     // update server side state for wall location
     walls.push_back(Wall(packet->wall()));
-
-    // Broadcast placement of wall to other players
-    flatbuffers::FlatBufferBuilder builder{50};
-
-    auto placeWall = CreatePlayerPlaceWall(builder, packet->wall());
-    auto outboundPacketData = CreatePacket(builder, PacketType::PlayerPlaceWall, placeWall.Union());
-    builder.Finish(outboundPacketData);
-
-    auto outboundPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_UNSEQUENCED);
-
-    enet_host_broadcast(server, 0, outboundPacket);
 }
 
 void Game::Net::Server::onPlayerShootMessage(const PlayerShoot *packet) {
     // update server side state for bullet location
     bullets.push_back(Bullet(packet->bullet()));
-
-    // Broadcast shoot to other players
-    flatbuffers::FlatBufferBuilder builder{50};
-
-    auto shoot = CreatePlayerShoot(builder, packet->bullet());
-    auto outboundPacketData = CreatePacket(builder, PacketType::PlayerShoot, shoot.Union());
-
-    builder.Finish(outboundPacketData);
-
-    auto outboundPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_UNSEQUENCED);
-
-    enet_host_broadcast(server, 0, outboundPacket);
 }
 
 void Game::Net::Server::onPlayerShootMissileMessage(const PlayerShootMissile *packet) {
     // update server side state for missile location
     missiles.push_back(Missile(packet->bullet()));
-
-    // Broadcast shoot to other players
-    flatbuffers::FlatBufferBuilder builder{50};
-
-    auto shoot = CreatePlayerShootMissile(builder, packet->bullet());
-    auto outboundPacketData = CreatePacket(builder, PacketType::PlayerShootMissile, shoot.Union());
-
-    builder.Finish(outboundPacketData);
-
-    auto outboundPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_UNSEQUENCED);
-
-    enet_host_broadcast(server, 0, outboundPacket);
 }
 
 Game::Vehicle *Game::Net::Server::getVehicleById(std::uint8_t id) {
@@ -286,19 +256,6 @@ void Game::Net::Server::onPlayerMoveMessage(const PlayerMove *packet) {
     vehicle.pos.x() = packet->pos()->x();
     vehicle.pos.y() = packet->pos()->y();
     vehicle.angle = packet->angle();
-
-    // Broadcast move to other players
-    flatbuffers::FlatBufferBuilder builder{50};
-
-    auto pos = Vec2{packet->pos()->x(), packet->pos()->y()};
-    auto move = CreatePlayerMove(builder, packet->player(), &pos, packet->angle());
-    auto outboundPacketData = CreatePacket(builder, PacketType::PlayerMove, move.Union());
-
-    builder.Finish(outboundPacketData);
-
-    auto outboundPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_UNSEQUENCED);
-
-    enet_host_broadcast(server, 0, outboundPacket);
 }
 
 ENetPacket *Game::Net::Server::createPlayerJoinPacket(Vehicle vehicle) {

@@ -264,7 +264,7 @@ void Game::Play::update() {
         }
     } else {
         if (Engine::Input::mouseDown) {
-            shootMissile();
+            shootBullet();
         }
     }
 
