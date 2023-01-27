@@ -89,7 +89,7 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
 
                 vehicles.push_back(newVehicle);
 
-                enet_host_broadcast(server, 0, createPlayerJoinPacket(newVehicle));
+                enet_host_broadcast(server, 0, createPlayerJoinPacket(newVehicle.getData()));
 
                 break;
             }
@@ -192,7 +192,17 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
     }
 }
 
-void Game::Net::Server::sendPlayerStatus(std::uint8_t playerId, std::uint8_t health) {}
+void Game::Net::Server::sendPlayerStatus(std::uint8_t playerId, std::uint8_t health) {
+    flatbuffers::FlatBufferBuilder builder{50};
+
+    auto playerStatus = CreatePlayerStatus(builder, playerId, health);
+    auto outboundPacketData = CreatePacket(builder, PacketType::PlayerStatus, playerStatus.Union());
+    builder.Finish(outboundPacketData);
+
+    auto outboundPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_UNSEQUENCED);
+
+    enet_host_broadcast(server, 0, outboundPacket);
+}
 
 void Game::Net::Server::onPlayerPlaceWallMessage(const PlayerPlaceWall *packet) {
     walls.push_back(Wall(packet->wall()));
@@ -204,15 +214,6 @@ void Game::Net::Server::onPlayerShootMessage(const PlayerShoot *packet) {
 
 void Game::Net::Server::onPlayerShootMissileMessage(const PlayerShootMissile *packet) {
     missiles.push_back(Missile(packet->bullet()));
-}
-
-Game::Vehicle *Game::Net::Server::getVehicleById(std::uint8_t id) {
-    for (Game::Vehicle &vehicle : vehicles) {
-        if (vehicle.id == id) {
-            return &vehicle;
-        }
-    }
-    return nullptr;
 }
 
 void Game::Net::Server::onPlayerMoveMessage(const PlayerMove *packet) {
@@ -229,16 +230,15 @@ void Game::Net::Server::onPlayerMoveMessage(const PlayerMove *packet) {
     vehicle.angle = packet->angle();
 }
 
-ENetPacket *Game::Net::Server::createPlayerJoinPacket(Vehicle vehicle) {
+ENetPacket *Game::Net::Server::createPlayerJoinPacket(Game::Net::PlayerData vehicleData) {
     flatbuffers::FlatBufferBuilder builder{50};
-    auto playerData = vehicle.getData();
 
     auto packet = CreatePacket(
         builder,
         PacketType::PlayerJoin,
         CreatePlayerJoin(
             builder,
-            &playerData
+            &vehicleData
         )
             .Union()
     );

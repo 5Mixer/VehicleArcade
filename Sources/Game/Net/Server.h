@@ -31,9 +31,16 @@ namespace Game {
             int worldWidth = 5000;
             int worldHeight = 2000;
 
-            Game::Vehicle *getVehicleById(std::uint8_t id);
+            Game::Vehicle *getVehicleById(std::uint8_t id) {
+                for (Game::Vehicle &vehicle : vehicles) {
+                    if (vehicle.id == id) {
+                        return &vehicle;
+                    }
+                }
+                return nullptr;
+            }
 
-            ENetPacket *createPlayerJoinPacket(Game::Vehicle vehicle);
+            ENetPacket *createPlayerJoinPacket(Game::Net::PlayerData vehicleData);
             void updateEntities();
 
             template <class U, class T, typename Alloc = std::allocator<T>>
