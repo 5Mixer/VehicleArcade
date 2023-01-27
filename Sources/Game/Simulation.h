@@ -13,6 +13,7 @@
 namespace Game {
     void interactBulletsAndWalls(std::vector<Game::Bullet> &bullets, std::vector<Game::Wall> &walls);
     void interactMissilesAndWalls(std::vector<Game::Missile> &missiles, std::vector<Game::Wall> &walls);
+    void interactBulletsAndVehicles(std::vector<Game::Bullet> &bullets, std::vector<Game::Vehicle> &vehicles);
     void interactMissilesAndVehicles(std::vector<Game::Missile> &missiles, std::vector<Game::Vehicle> &vehicles);
 
     template <class T>
@@ -44,6 +45,16 @@ namespace Game {
         }
     }
 
+    inline void respawnDeadPlayers(std::vector<Game::Vehicle> &vehicles) {
+        Kore::vec2 respawnPoint{100, 100}; // TODO: Don't hardcode, organise world definition
+        for (Game::Vehicle &vehicle : vehicles) {
+            if (vehicle.health <= 0) {
+                vehicle.pos = respawnPoint;
+                vehicle.health = vehicle.maxHealth;
+            }
+        }
+    }
+
     inline void simulate(
         std::vector<Game::Bullet> &bullets,
         std::vector<Game::Missile> &missiles,
@@ -55,9 +66,11 @@ namespace Game {
         interactBulletsAndWalls(bullets, walls);
         interactMissilesAndWalls(missiles, walls);
         interactMissilesAndVehicles(missiles, vehicles);
+        interactBulletsAndVehicles(bullets, vehicles);
         eraseDead(bullets);
         eraseDead(missiles);
         eraseDead(walls);
+        respawnDeadPlayers(vehicles);
     }
 } // namespace Game
 

@@ -12,6 +12,15 @@ void Game::interactMissilesAndWalls(std::vector<Game::Missile> &missiles, std::v
         missile.health = 0;
     });
 }
+void Game::interactBulletsAndVehicles(std::vector<Game::Bullet> &bullets, std::vector<Game::Vehicle> &vehicles) {
+    Game::intersect(bullets, vehicles, [](Game::Bullet &bullet, Game::Vehicle &vehicle) -> void {
+        if (vehicle.id == bullet.shooter) {
+            return;
+        }
+        vehicle.health--;
+        bullet.health = 0;
+    });
+}
 void Game::interactMissilesAndVehicles(std::vector<Game::Missile> &missiles, std::vector<Game::Vehicle> &vehicles) {
     Game::intersect(missiles, vehicles, [](Game::Missile &missile, Game::Vehicle &vehicle) -> void {
         if (vehicle.id == missile.shooter) {
