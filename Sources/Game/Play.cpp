@@ -120,12 +120,12 @@ void Game::Play::onPlayerMoveMessage(const Net::PlayerMove *packet) {
     vehicle->angle = packet->angle();
 }
 void Game::Play::onPlayerStatusMessage(const Net::PlayerStatus *packet) {
-    for (auto &vehicle : vehicles) {
-        if (vehicle.id == packet->player()) {
-            vehicle.health = static_cast<int>(packet->health());
-            break;
-        }
+    Game::Vehicle *vehicle = getVehicleById(packet->player());
+    if (vehicle == nullptr) {
+        std::cerr << "Could not find player referred to in player move packet" << std::endl;
+        return;
     }
+    vehicle->health = static_cast<int>(packet->health());
 };
 
 void Game::Play::onPlayerPlaceWallMessage(const Net::PlayerPlaceWall *packet) {
@@ -250,13 +250,6 @@ void Game::Play::update() {
 
     controlledVehicle->controlWithInput();
     controlledVehicle->update(walls, worldWidth, worldHeight);
-
-    for (Game::Bullet &bullet : bullets) {
-        bullet.update();
-    }
-    for (Game::Missile &missile : missiles) {
-        missile.update();
-    }
 
     for (Game::Vehicle &vehicle : vehicles) {
         trails.push_back(Game::Trail{vehicle.getBackLeftWheelPos()});

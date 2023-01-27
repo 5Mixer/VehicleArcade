@@ -23,6 +23,13 @@ namespace Game {
                        elements.end());
     }
 
+    template <class T>
+    inline void updateVector(std::vector<T> &elements) {
+        for (T &element : elements) {
+            element.update();
+        }
+    }
+
     // TODO: Use acceleration structure to avoid N^2
     template <class T, class U, typename Functor>
     inline void intersect(std::vector<T> &firstList, std::vector<U> &secondList, Functor onIntersect) {
@@ -43,6 +50,8 @@ namespace Game {
         std::vector<Game::Wall> &walls,
         std::vector<Game::Vehicle> &vehicles
     ) {
+        updateVector(bullets);
+        updateVector(missiles);
         interactBulletsAndWalls(bullets, walls);
         interactMissilesAndWalls(missiles, walls);
         interactMissilesAndVehicles(missiles, vehicles);

@@ -41,12 +41,6 @@ void Game::Net::Server::run() {
 }
 
 void Game::Net::Server::updateEntities() {
-    for (auto &bullet : bullets) {
-        bullet.update();
-    }
-    for (auto &missile : missiles) {
-        missile.update();
-    }
     Game::simulate(bullets, missiles, walls, vehicles);
 
     for (Game::Vehicle &vehicle : vehicles) {
