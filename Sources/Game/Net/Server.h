@@ -36,6 +36,15 @@ namespace Game {
             ENetPacket *createPlayerJoinPacket(Game::Vehicle vehicle);
             void updateEntities();
 
+            template <class U, class T, typename Alloc = std::allocator<T>>
+            std::vector<U> getDataOfVector(std::vector<T, Alloc> elements) {
+                std::vector<U> elementsData;
+                for (T &element : elements) {
+                    elementsData.push_back(element.getData());
+                }
+                return elementsData;
+            }
+
         public:
             Server();
             ~Server();

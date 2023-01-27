@@ -58,33 +58,10 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
 
                 flatbuffers::FlatBufferBuilder builder{50};
 
-                // create vector of players to be sent in PlayerJoinDownload packet
-                std::vector<PlayerData> vehicleData;
-                for (auto &vehicle : vehicles) {
-                    vehicleData.push_back(vehicle.getData());
-                }
-                auto vectorOfVehicleData = builder.CreateVectorOfStructs(vehicleData);
-
-                // create vector of bullets to be sent in PlayerJoinDownload packet
-                std::vector<BulletData> bulletData;
-                for (auto &bullet : bullets) {
-                    bulletData.push_back(bullet.getData());
-                }
-                auto vectorOfBulletData = builder.CreateVectorOfStructs(bulletData);
-
-                // create vector of missiles to be sent in PlayerJoinDownload packet
-                std::vector<BulletData> missileData;
-                for (auto &missile : missiles) {
-                    missileData.push_back(missile.getData());
-                }
-                auto vectorOfMissileData = builder.CreateVectorOfStructs(missileData);
-
-                // create vector of walls to be sent in PlayerJoinDownload packet
-                std::vector<WallData> wallData;
-                for (auto &wall : walls) {
-                    wallData.push_back(wall.getData());
-                }
-                auto vectorOfWallData = builder.CreateVectorOfStructs(wallData);
+                auto vectorOfVehicleData = builder.CreateVectorOfStructs(getDataOfVector<PlayerData>(vehicles));
+                auto vectorOfBulletData = builder.CreateVectorOfStructs(getDataOfVector<BulletData>(bullets));
+                auto vectorOfMissileData = builder.CreateVectorOfStructs(getDataOfVector<BulletData>(missiles));
+                auto vectorOfWallData = builder.CreateVectorOfStructs(getDataOfVector<WallData>(walls));
 
                 Vehicle newVehicle{playerId, Kore::vec2{}, 0};
 
@@ -215,23 +192,17 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
     }
 }
 
-void Game::Net::Server::sendPlayerStatus(std::uint8_t playerId, std::uint8_t health) {
-    // Broadcast player status to all players
-    flatbuffers::FlatBufferBuilder builder{50};
-}
+void Game::Net::Server::sendPlayerStatus(std::uint8_t playerId, std::uint8_t health) {}
 
 void Game::Net::Server::onPlayerPlaceWallMessage(const PlayerPlaceWall *packet) {
-    // update server side state for wall location
     walls.push_back(Wall(packet->wall()));
 }
 
 void Game::Net::Server::onPlayerShootMessage(const PlayerShoot *packet) {
-    // update server side state for bullet location
     bullets.push_back(Bullet(packet->bullet()));
 }
 
 void Game::Net::Server::onPlayerShootMissileMessage(const PlayerShootMissile *packet) {
-    // update server side state for missile location
     missiles.push_back(Missile(packet->bullet()));
 }
 
