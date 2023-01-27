@@ -10,6 +10,7 @@
 #include <Kore/System.h>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace Engine {
     class Graphics {
@@ -28,6 +29,12 @@ namespace Engine {
         }
         void end() {
             graphics->end();
+        }
+        template <class T>
+        void renderVector(std::vector<T> &elements) {
+            for (T &element : elements) {
+                element.render(*this);
+            }
         }
         void drawSprite(Engine::Sprite sprite, Kore::vec2 pos) {
             graphics->drawScaledSubImage(&spriteAtlasTexture, sprite.x, sprite.y, sprite.width, sprite.height, pos.x() - sprite.width / 2, pos.y() - sprite.height / 2, sprite.width, sprite.height);

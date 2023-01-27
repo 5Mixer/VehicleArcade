@@ -39,18 +39,12 @@ void Game::Play::render(Engine::Graphics &graphics) {
 
     graphics.transform(camera.getTransform());
 
-    for (auto &singleGrass : grass) {
-        singleGrass.render(graphics);
-    }
+    graphics.renderVector(grass);
     for (auto &trail : trails) {
         graphics.drawTrail(trail.pos);
     }
-    for (auto &bullet : bullets) {
-        bullet.render(graphics);
-    }
-    for (auto &missile : missiles) {
-        missile.render(graphics);
-    }
+    graphics.renderVector(bullets);
+    graphics.renderVector(missiles);
 
     // Draw walls
     for (int layer = 0; layer < 3; layer++) {
@@ -60,13 +54,8 @@ void Game::Play::render(Engine::Graphics &graphics) {
         }
     }
 
-    for (auto &vehicle : vehicles) {
-        vehicle.render(graphics);
-    }
-
-    for (auto &particle : particles) {
-        particle.render(graphics);
-    }
+    graphics.renderVector(vehicles);
+    graphics.renderVector(particles);
 
     graphics.transform(camera.getTransform().Invert());
 
