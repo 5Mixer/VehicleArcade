@@ -39,6 +39,7 @@ table PlayerJoinDownload {
     bullets: [BulletData];
     missiles: [BulletData];
     walls: [WallData];
+    collectables: [CollectableData];
 }
 
 table SpawnCollectable {

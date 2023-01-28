@@ -98,6 +98,9 @@ void Game::Play::onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *pack
     for (const Net::WallData *wallData : *packet->walls()) {
         walls.push_back(Wall(wallData));
     }
+    for (const Net::CollectableData *collectableData : *packet->collectables()) {
+        collectables.push_back(Collectable(collectableData));
+    }
 }
 
 void Game::Play::onPlayerMoveMessage(const Net::PlayerMove *packet) {

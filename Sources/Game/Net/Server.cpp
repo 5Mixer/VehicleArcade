@@ -91,6 +91,7 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 auto vectorOfBulletData = builder.CreateVectorOfStructs(getDataOfVector<BulletData>(bullets));
                 auto vectorOfMissileData = builder.CreateVectorOfStructs(getDataOfVector<BulletData>(missiles));
                 auto vectorOfWallData = builder.CreateVectorOfStructs(getDataOfVector<WallData>(walls));
+                auto vectorOfCollectableData = builder.CreateVectorOfStructs(getDataOfVector<CollectableData>(collectables));
 
                 Vehicle newVehicle{playerId, Kore::vec2{}, 0};
 
@@ -105,7 +106,8 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                         vectorOfVehicleData,
                         vectorOfBulletData,
                         vectorOfMissileData,
-                        vectorOfWallData
+                        vectorOfWallData,
+                        vectorOfCollectableData
                     )
                         .Union()
                 );
