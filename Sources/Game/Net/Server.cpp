@@ -33,6 +33,8 @@ void Game::Net::Server::run() {
 
         updateEntities();
 
+        spawnCollectable();
+
         // std::this_thread::sleep_until(last + std::chrono::duration<float>(1000 / 60.));
         std::this_thread::sleep_for(std::chrono::duration<float>(1 / 60.));
 
@@ -41,11 +43,38 @@ void Game::Net::Server::run() {
 }
 
 void Game::Net::Server::updateEntities() {
-    Game::simulate(bullets, missiles, walls, vehicles);
+    Game::simulate(bullets, missiles, walls, vehicles, collectables);
 
     for (Game::Vehicle &vehicle : vehicles) {
         sendPlayerStatus(vehicle.id, vehicle.health);
     }
+}
+
+void Game::Net::Server::spawnCollectable() {
+    Collectable collectable{
+        Kore::vec2{
+            rand() * worldWidth,
+            rand() * worldHeight},
+        Game::CollectableType::Coin};
+
+    flatbuffers::FlatBufferBuilder builder{50};
+    const auto collectableData = collectable.getData();
+
+    auto packetData = CreatePacket(
+        builder,
+        PacketType::SpawnCollectable,
+        CreateSpawnCollectable(
+            builder,
+            &collectableData
+        )
+            .Union()
+    );
+    builder.Finish(packetData);
+
+    auto packet = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_RELIABLE);
+    enet_host_broadcast(server, 0, packet);
+
+    collectables.push_back(std::move(collectable));
 }
 
 void Game::Net::Server::service(MessageReceiver &receiver) {

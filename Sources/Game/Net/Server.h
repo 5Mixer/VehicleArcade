@@ -3,6 +3,7 @@
 
 #include "../../enet.h"
 #include "../Bullet.h"
+#include "../Collectable.h"
 #include "../Simulation.h"
 #include "../Vehicle.h"
 #include "../Wall.h"
@@ -28,6 +29,7 @@ namespace Game {
             std::vector<Game::Bullet> bullets{};
             std::vector<Game::Missile> missiles{};
             std::vector<Game::Wall> walls{};
+            std::vector<Game::Collectable> collectables{};
             int worldWidth = 5000;
             int worldHeight = 2000;
 
@@ -42,6 +44,7 @@ namespace Game {
 
             ENetPacket *createPlayerJoinPacket(Game::Net::PlayerData vehicleData);
             void updateEntities();
+            void spawnCollectable();
 
             template <class U, class T, typename Alloc = std::allocator<T>>
             std::vector<U> getDataOfVector(std::vector<T, Alloc> elements) {
@@ -51,6 +54,10 @@ namespace Game {
                 }
                 return elementsData;
             }
+
+            // TODO: Deduplicate with engine core
+            std::minstd_rand random;
+            float rand() { return random() / static_cast<float>(random.max()); }
 
         public:
             Server();
@@ -63,6 +70,7 @@ namespace Game {
             void onDisconnect(){};                                                // server -> client
             void onPlayerDisconnectMessage(const PlayerDisconnect *packet){};     // server -> client
             void onPlayerStatusMessage(const PlayerStatus *packet){};             // server -> client
+            void onSpawnCollectableMessage(const SpawnCollectable *packet){};     // server -> client
 
             void onPlayerPlaceWallMessage(const PlayerPlaceWall *packet);
             void onPlayerMoveMessage(const PlayerMove *packet);

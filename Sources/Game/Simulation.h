@@ -2,6 +2,7 @@
 #define GAME_SIMULATION
 
 #include "Bullet.h"
+#include "Collectable.h"
 #include "Collider.h"
 #include "Missile.h"
 #include "Vehicle.h"
@@ -15,6 +16,7 @@ namespace Game {
     void interactMissilesAndWalls(std::vector<Game::Missile> &missiles, std::vector<Game::Wall> &walls);
     void interactBulletsAndVehicles(std::vector<Game::Bullet> &bullets, std::vector<Game::Vehicle> &vehicles);
     void interactMissilesAndVehicles(std::vector<Game::Missile> &missiles, std::vector<Game::Vehicle> &vehicles);
+    void interactCollectablesAndVehicles(std::vector<Game::Collectable> &collectables, std::vector<Game::Vehicle> &vehicles);
 
     template <class T>
     inline void eraseDead(std::vector<T> &elements) {
@@ -59,7 +61,8 @@ namespace Game {
         std::vector<Game::Bullet> &bullets,
         std::vector<Game::Missile> &missiles,
         std::vector<Game::Wall> &walls,
-        std::vector<Game::Vehicle> &vehicles
+        std::vector<Game::Vehicle> &vehicles,
+        std::vector<Game::Collectable> &collectables
     ) {
         updateVector(bullets);
         updateVector(missiles);
@@ -67,9 +70,11 @@ namespace Game {
         interactMissilesAndWalls(missiles, walls);
         interactMissilesAndVehicles(missiles, vehicles);
         interactBulletsAndVehicles(bullets, vehicles);
+        interactCollectablesAndVehicles(collectables, vehicles);
         eraseDead(bullets);
         eraseDead(missiles);
         eraseDead(walls);
+        eraseDead(collectables);
         respawnDeadPlayers(vehicles);
     }
 } // namespace Game

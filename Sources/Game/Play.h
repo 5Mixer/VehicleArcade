@@ -5,6 +5,7 @@
 #include "../Engine/Graphics.h"
 #include "../Engine/Scene.h"
 #include "Bullet.h"
+#include "Collectable.h"
 #include "Grass.h"
 #include "Net/Client.h"
 #include "Net/MessageReceiver.h"
@@ -38,6 +39,7 @@ namespace Game {
         std::vector<Game::Vehicle> vehicles;
         std::vector<Game::Trail> trails;
         std::vector<Game::Particle> particles;
+        std::vector<Game::Collectable> collectables;
 
         std::uint8_t controlledVehicleId = 255;
         Engine::Camera camera;
@@ -76,6 +78,7 @@ namespace Game {
         void onPlayerStatusMessage(const Net::PlayerStatus *packet);
         void onPlayerShootMessage(const Net::PlayerShoot *packet);
         void onPlayerShootMissileMessage(const Net::PlayerShootMissile *packet);
+        void onSpawnCollectableMessage(const Net::SpawnCollectable *packet);
         void onDisconnect();
     };
 } // namespace Game

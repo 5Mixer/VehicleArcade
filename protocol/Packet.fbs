@@ -41,6 +41,10 @@ table PlayerJoinDownload {
     walls: [WallData];
 }
 
+table SpawnCollectable {
+    collectable: CollectableData;
+}
+
 union PacketType {
     PlayerJoin,
     PlayerJoinDownload,
@@ -50,6 +54,7 @@ union PacketType {
     PlayerShootMissile,
     PlayerPlaceWall,
     PlayerStatus,
+    SpawnCollectable,
 }
 
 table Packet {

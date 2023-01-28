@@ -43,6 +43,7 @@ void Game::Play::render(Engine::Graphics &graphics) {
     for (auto &trail : trails) {
         graphics.drawTrail(trail.pos);
     }
+    graphics.renderVector(collectables);
     graphics.renderVector(bullets);
     graphics.renderVector(missiles);
 
@@ -145,6 +146,10 @@ void Game::Play::onPlayerShootMissileMessage(const Net::PlayerShootMissile *pack
     missiles.push_back(Missile(packet->bullet()));
 }
 
+void Game::Play::onSpawnCollectableMessage(const Net::SpawnCollectable *packet) {
+    collectables.push_back(Collectable(packet->collectable()));
+}
+
 // TODO: Deduplicate with missile shooting
 void Game::Play::shootBullet() {
     if (std::chrono::steady_clock::now() < lastBulletShootTime + std::chrono::milliseconds(100)) {
@@ -245,7 +250,7 @@ void Game::Play::update() {
 
     editingScene = Engine::Input::keysDown.at(Kore::KeyTab);
 
-    Game::simulate(bullets, missiles, walls, vehicles);
+    Game::simulate(bullets, missiles, walls, vehicles, collectables);
     Game::updateVector(particles);
     Game::eraseDead(particles);
 

@@ -34,6 +34,10 @@ void Game::Net::MessageReceiver::processRawPacket(const Packet *packet) {
             onPlayerStatusMessage(packet->type_as_PlayerStatus());
             break;
         }
+        case PacketType::SpawnCollectable: {
+            onSpawnCollectableMessage(packet->type_as_SpawnCollectable());
+            break;
+        }
         default: {
             std::cerr << "Received unknown message type " << int(packet->type_type()) << std::endl;
         }

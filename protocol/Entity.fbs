@@ -27,3 +27,12 @@ struct WallData {
     pos: Vec2;
     health: int;
 }
+
+enum CollectableType : byte {
+    Coin
+}
+
+struct CollectableData {
+    pos: Vec2;
+    type: CollectableType;
+}
