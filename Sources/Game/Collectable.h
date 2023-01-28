@@ -9,46 +9,30 @@
 #include <cmath>
 
 namespace Game {
-    enum class CollectableType {
-        Coin
-    };
+    using CollectableType = Net::CollectableType;
 
     class Collectable : public CircleCollider {
     private:
         static const int radius = 40;
 
     public:
-        // TODO: Clean up this conversion
-        CollectableType getTypeFromNetType(Net::CollectableType netType) {
-            if (netType == Net::CollectableType::Coin) {
-                return CollectableType::Coin;
-            }
-            return CollectableType::Coin;
-        }
-
         Collectable(Kore::vec2 pos, CollectableType type)
             : pos(pos), type(type){};
 
         Collectable(const Net::CollectableData *data)
             : pos(Kore::vec2(data->pos().x(), data->pos().y())),
-              type(getTypeFromNetType(data->type())){};
+              type(data->type()){};
 
         Kore::vec2 getColliderPos() { return pos; };
         float getColliderRadius() { return radius; };
         int health = 1;
 
         const Net::CollectableData getData() {
-            // TODO: Clean up this conversion
-            Net::CollectableType netType;
-            if (type == CollectableType::Coin) {
-                netType = Net::CollectableType::Coin;
-            }
-
             return Game::Net::CollectableData{
                 Game::Net::Vec2{
                     pos.x(),
                     pos.y()},
-                netType};
+                type};
         }
 
         Kore::vec2 pos;
