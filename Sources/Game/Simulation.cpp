@@ -32,7 +32,7 @@ void Game::interactMissilesAndVehicles(std::vector<Game::Missile> &missiles, std
 }
 void Game::interactCollectablesAndVehicles(std::vector<Game::Collectable> &collectables, std::vector<Game::Vehicle> &vehicles) {
     Game::intersect(collectables, vehicles, [](Game::Collectable &collectable, Game::Vehicle &vehicle) -> void {
-        vehicle.health += 5;
+        vehicle.gold += 5;
         collectable.health = 0;
     });
 }

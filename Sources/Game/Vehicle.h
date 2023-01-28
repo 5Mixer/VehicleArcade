@@ -39,6 +39,8 @@ namespace Game {
         int health = 25;
         int maxHealth = 25;
 
+        int gold = 0;
+
         Kore::vec2 getBackLeftWheelPos();
         Kore::vec2 getBackRightWheelPos();
         Kore::vec2 getFrontLeftWheelPos();
