@@ -19,3 +19,11 @@ if [ ! -d Sources/flatbuffers/ ]; then
     mv flatbuffers/include/flatbuffers Sources/flatbuffers/
     rm -rf flatbuffers
 fi
+
+# Install fmt includes if the fmt dir doesn't exist
+# if [ ! -d Sources/fmt/ ]; then
+#     git clone https://github.com/fmtlib/fmt.git --depth 1
+#     mv fmt/include/fmt Sources/fmt
+#     mv fmt/src Sources/fmt
+#     rm -rf fmt
+# fi

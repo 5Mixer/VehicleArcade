@@ -15,11 +15,11 @@ const exec = util.promisify(require('child_process').exec);
 	}
 }
 {
-	const { stdout, stderr } = await exec('./fmt');
+	const { stdout, stderr } = await exec('./formatSource.sh');
 	if (stderr) {
-		console.log('fmt error:', stdout, stderr);
+		console.log('formatSource.sh error:', stdout, stderr);
 	} else {
-		console.log('fmt executed.', stdout, stderr);
+		console.log('formatSource.sh executed.', stdout, stderr);
 	}
 }
 {
@@ -54,6 +54,7 @@ project.setDebugDir('Deployment');
 project.addCppFlag("-fdiagnostics-color=always")
 // project.libs.push("enet")
 // project.libs.push("flatbuffers")
+project.libs.push("fmt");
 
 project.flatten();
 

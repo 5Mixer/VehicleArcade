@@ -62,7 +62,7 @@ void Game::Play::render(Engine::Graphics &graphics) {
 
     graphics.drawBar(Kore::vec2{40, 60}, controlledVehicle->health, controlledVehicle->maxHealth);
     graphics.drawMoney(Kore::vec2{40, 150}, controlledVehicle->money);
-    graphics.drawRoundTimer(endOfRoundTime - std::chrono::system_clock::now());
+    graphics.drawRoundTimer(std::chrono::duration_cast<std::chrono::seconds>(endOfRoundTime - std::chrono::system_clock::now()));
     graphics.drawCursor(Engine::Input::mousePosition);
 }
 
