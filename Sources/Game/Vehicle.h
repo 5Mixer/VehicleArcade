@@ -41,6 +41,16 @@ namespace Game {
 
         int money = 0;
 
+        void changeHealth(int offset) {
+            if (health + offset < 0) {
+                health = 0;
+            } else if (health + offset > maxHealth) {
+                health = maxHealth;
+            } else {
+                health += offset;
+            }
+        }
+
         Kore::vec2 getBackLeftWheelPos();
         Kore::vec2 getBackRightWheelPos();
         Kore::vec2 getFrontLeftWheelPos();
