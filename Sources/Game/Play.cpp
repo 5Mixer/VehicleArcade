@@ -61,6 +61,7 @@ void Game::Play::render(Engine::Graphics &graphics) {
     graphics.transform(camera.getTransform().Invert());
 
     graphics.drawBar(Kore::vec2{40, 60}, controlledVehicle->health, controlledVehicle->maxHealth);
+    graphics.drawMoney(Kore::vec2{40, 150}, controlledVehicle->money);
     graphics.drawCursor(Engine::Input::mousePosition);
 }
 

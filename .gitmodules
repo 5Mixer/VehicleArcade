@@ -1,3 +1,6 @@
 [submodule "Kore"]
 	path = Kore
 	url = https://github.com/Kode/Kore.git
+[submodule "kravur"]
+	path = kravur
+	url = https://github.com/Kode/kravur.git
