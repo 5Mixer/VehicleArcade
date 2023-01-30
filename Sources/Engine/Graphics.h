@@ -8,6 +8,7 @@
 #include <Kore/Math/Matrix.h>
 #include <Kore/Math/Vector.h>
 #include <Kore/System.h>
+#include <chrono>
 #include <memory>
 #include <string>
 #include <vector>
@@ -83,6 +84,15 @@ namespace Engine {
             graphics->setFontColor(Kore::Graphics1::Color::White);
             graphics->setFont(Kore::Kravur::load("fonts/font", style, 48));
             graphics->drawString(std::to_string(money).c_str(), pos.x(), pos.y());
+        }
+        void drawRoundTimer(std::chrono::duration<float> roundTimeRemaining) {
+            FontStyle style;
+            style.bold = false;
+            style.italic = false;
+            style.underlined = false;
+            graphics->setFontColor(Kore::Graphics1::Color::White);
+            graphics->setFont(Kore::Kravur::load("fonts/font", style, 65));
+            graphics->drawString(std::to_string(roundTimeRemaining.count()).c_str(), 100, 300);
         }
     }; // namespace Engine
 } // namespace Engine

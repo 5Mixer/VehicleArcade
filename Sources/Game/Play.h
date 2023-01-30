@@ -41,6 +41,9 @@ namespace Game {
         std::vector<Game::Particle> particles;
         std::vector<Game::Collectable> collectables;
 
+        std::chrono::time_point<std::chrono::system_clock>
+            endOfRoundTime{std::chrono::system_clock::now() + std::chrono::seconds{3 * 60}};
+
         std::uint8_t controlledVehicleId = 255;
         Engine::Camera camera;
         std::chrono::steady_clock::time_point lastBulletShootTime;

@@ -23,6 +23,11 @@ const exec = util.promisify(require('child_process').exec);
 	}
 }
 {
+	for (var i = 1; i < 70; i++) {
+		exec(`./kravur/kravur ./Assets/fonts/SplineSansMono-Regular.ttf ${i} ./Deployment/fonts/font${i}.kravur`)
+	}
+}
+{
 	const { stdout, stderr } = await exec('./installLibs.sh');
 	if (stderr) {
 		console.log('Lib installation error:', stdout, stderr);
