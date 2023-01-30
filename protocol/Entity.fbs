@@ -29,7 +29,8 @@ struct WallData {
 }
 
 enum CollectableType : byte {
-    Coin
+    Coin,
+    Health
 }
 
 struct CollectableData {

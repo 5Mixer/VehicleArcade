@@ -41,7 +41,11 @@ namespace Game {
         void render(Engine::Graphics &g) {
             switch (type) {
                 case CollectableType::Coin:
-                    g.drawCoin(pos);
+                    g.drawCoinCollectable(pos);
+                    break;
+
+                case CollectableType::Health:
+                    g.drawHealthCollectable(pos);
                     break;
 
                 default:

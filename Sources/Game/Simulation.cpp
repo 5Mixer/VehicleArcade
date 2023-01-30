@@ -32,7 +32,12 @@ void Game::interactMissilesAndVehicles(std::vector<Game::Missile> &missiles, std
 }
 void Game::interactCollectablesAndVehicles(std::vector<Game::Collectable> &collectables, std::vector<Game::Vehicle> &vehicles) {
     Game::intersect(collectables, vehicles, [](Game::Collectable &collectable, Game::Vehicle &vehicle) -> void {
-        vehicle.money += 5;
+        if (collectable.type == Game::CollectableType::Coin) {
+            vehicle.money += 5;
+        } else if (collectable.type == Game::CollectableType::Health) {
+            vehicle.health += 5;
+        }
+
         collectable.health = 0;
     });
 }

@@ -55,7 +55,7 @@ void Game::Net::Server::spawnCollectable() {
         Kore::vec2{
             rand() * worldWidth,
             rand() * worldHeight},
-        Game::CollectableType::Coin};
+        rand() > .5 ? Game::CollectableType::Coin : Game::CollectableType::Health};
 
     flatbuffers::FlatBufferBuilder builder{50};
     const auto collectableData = collectable.getData();

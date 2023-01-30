@@ -60,8 +60,11 @@ namespace Engine {
         void drawBullet(Kore::vec2 pos) {
             drawSprite(*spriteAtlas.get("Assets/bullet.png"), pos);
         }
-        void drawCoin(Kore::vec2 pos) {
+        void drawCoinCollectable(Kore::vec2 pos) {
             drawSprite(*spriteAtlas.get("Assets/coin.png"), pos);
+        }
+        void drawHealthCollectable(Kore::vec2 pos) {
+            drawSprite(*spriteAtlas.get("Assets/health.png"), pos);
         }
         void drawMissile(Kore::vec2 pos, float angle = 0) {
             drawRotatedSprite(*spriteAtlas.get("Assets/missile.png"), pos, angle);
