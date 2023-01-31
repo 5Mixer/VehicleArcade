@@ -29,7 +29,10 @@ namespace Game {
             health--;
         }
         void render(Engine::Graphics &g) {
-            g.drawParticle(pos, Engine::Color::fromRGBA(1, 1, 1, static_cast<float>(health) / static_cast<float>(maxLife)));
+            // Todo: don't hardcode gradient
+            float gradientProgression = static_cast<float>(maxLife - health) / static_cast<float>(maxLife);
+            std::uint32_t colour = Engine::Colour::sampleLinearGradient(.6f, .3f, .25f, 1.f, .3f, .2f, .2f, 0.f, gradientProgression);
+            g.drawParticle(pos, colour);
         }
     };
 } // namespace Game

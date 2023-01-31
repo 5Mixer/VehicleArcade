@@ -267,7 +267,9 @@ void Game::Play::update() {
         trails.push_back(Game::Trail{vehicle.getBackRightWheelPos()});
         trails.push_back(Game::Trail{vehicle.getFrontLeftWheelPos()});
         trails.push_back(Game::Trail{vehicle.getFrontRightWheelPos()});
-        spawnParticle(vehicle.pos);
+    }
+    for (Game::Missile &missile : missiles) {
+        spawnParticle(missile.pos);
     }
 
     if (editingScene) {
@@ -276,7 +278,7 @@ void Game::Play::update() {
         }
     } else {
         if (Engine::Input::mouseDown) {
-            shootBullet();
+            shootMissile();
         }
     }
 
