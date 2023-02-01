@@ -16,15 +16,18 @@
 namespace Game {
     class Lobby : public Engine::Scene {
     private:
+        static const unsigned int maxNameLength = 20;
         Game::Net::Client &client;
-        std::string nameField{"Username"};
+        std::string nameField{};
 
         std::chrono::time_point<std::chrono::system_clock>
             keyTime{std::chrono::system_clock::now()};
         bool fastKey = false;
 
     public:
-        Lobby(Game::Net::Client &client) : client(client){};
+        Lobby(Game::Net::Client &client) : client(client) {
+            nameField.reserve(maxNameLength);
+        };
         void render(Engine::Graphics &g);
         void update();
     };
