@@ -78,6 +78,15 @@ namespace Engine {
         void transform(Kore::mat3 transformation) {
             graphics->transformation *= transformation;
         }
+        void drawText(Kore::vec2 pos, std::string text) {
+            FontStyle style;
+            style.bold = false;
+            style.italic = false;
+            style.underlined = false;
+            graphics->setFontColor(Kore::Graphics1::Color::White);
+            graphics->setFont(Kore::Kravur::load("fonts/font", style, 48));
+            graphics->drawString(text.c_str(), pos.x(), pos.y());
+        }
         void drawMoney(Kore::vec2 pos, int money) {
             FontStyle style;
             style.bold = false;

@@ -8,6 +8,9 @@ namespace Engine {
         void onKeyUp(Kore::KeyCode code) {
             keysDown[code] = false;
         }
+        void onKeyPress(wchar_t code) {
+            pressedKeys.push_back(code);
+        }
 
         void onMousePress(int windowId, int button, int x, int y) {
             mousePosition.x() = x;
@@ -35,6 +38,7 @@ namespace Engine {
             auto keyboard = Kore::Keyboard::the();
             keyboard->KeyDown = onKeyDown;
             keyboard->KeyUp = onKeyUp;
+            keyboard->KeyPress = onKeyPress;
 
             auto mouse = Kore::Mouse::the();
             mouse->Press = onMousePress;

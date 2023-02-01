@@ -6,6 +6,7 @@
 
 #include "Engine/Core.h"
 #include "Engine/Input.h"
+#include "Game/Lobby.h"
 #include "Game/Net/Client.h"
 #include "Game/Net/Server.h"
 #include "Game/Play.h"
@@ -42,7 +43,8 @@ int kickstart(int argc, char **argv) {
 
     Kore::System::setShutdownCallback(disconnectClient);
 
-    auto playScene = std::unique_ptr<Game::Play>(new Game::Play(*client));
+    // auto playScene = std::unique_ptr<Game::Play>(new Game::Play(*client));
+    auto playScene = std::unique_ptr<Game::Lobby>(new Game::Lobby(*client));
     engine.setScene(playScene.get());
     engine.start();
 
