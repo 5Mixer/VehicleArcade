@@ -3,15 +3,42 @@ const project = new Project('Car');
 // TODO: Windows CI builds, flatc compilation in CI
 "https://github.com/google/flatbuffers/releases/latest/download/Windows.flatc.binary.zip"
 
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+const promisify = require('util').promisify;
+const fs = require('fs');
+const exec = promisify(require('child_process').exec);
+
+const flatcPath = "./flatc"
+const flatcFlags = " -c --scoped-enums --filename-suffix Generated --cpp-field-case-style lower --warnings-as-errors"
+const flatbuffersDir = "./protocol/"
+const flatbuffersCache = "./protocol/cache/"
+const flatbuffersDestination = './Sources/Game/Net/'
 
 {
-	const { stdout, stderr } = await exec('./flatc -c --scoped-enums --filename-suffix Generated --cpp-field-case-style lower --warnings-as-errors -o ./Sources/Game/Net/ ./protocol/*');
-	if (stderr) {
-		console.log('flatc error:', stdout, stderr);
-	} else {
-		console.log('flatc executed.', stdout, stderr);
+	await(promisify(fs.mkdir)(flatbuffersCache, { recursive: true }));
+
+	const flatbufferFiles = fs.readdirSync(flatbuffersDir, { withFileTypes: true })
+		.filter(item => !item.isDirectory())
+		.map(item => item.name);
+
+	for (const flatbufferFile of flatbufferFiles) {
+		const { stdout, stderr } = await exec(`${flatcPath} ${flatcFlags} -o ${flatbuffersCache} ${flatbuffersDir}${flatbufferFile}`);
+	}
+
+	const flatbufferCacheFiles = fs.readdirSync(flatbuffersCache, { withFileTypes: true })
+		.filter(item => !item.isDirectory())
+		.map(item => item.name);
+
+
+	for (const flatbufferCacheFile of flatbufferCacheFiles) {
+		const source = `${flatbuffersCache}${flatbufferCacheFile}`;
+		const destination = `${flatbuffersDestination}${flatbufferCacheFile}`
+		const cacheContent = fs.readFileSync(source, { encoding: 'utf8', flag: 'r' });
+		const existingContent = fs.readFileSync(destination, { encoding: 'utf8', flag: 'r' });
+		if (cacheContent != existingContent) {
+			fs.copyFile(source, destination, (err) => {
+				if (err) throw err;
+			});
+		}
 	}
 }
 {
