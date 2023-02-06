@@ -40,7 +40,9 @@ table PlayerDisconnect {
 
 table PlayerJoinDownload {
     player: PlayerData;
+    player_name: string;
     players: [PlayerData];
+    names: [string];
     bullets: [BulletData];
     missiles: [BulletData];
     walls: [WallData];

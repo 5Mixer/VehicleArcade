@@ -213,9 +213,16 @@ void Game::Net::Server::onPlayerRegisterMessage(const PlayerRegister *packet, EN
     auto vectorOfWallData = builder.CreateVectorOfStructs(getDataOfVector<WallData>(walls));
     auto vectorOfCollectableData = builder.CreateVectorOfStructs(getDataOfVector<CollectableData>(collectables));
 
+    std::vector<std::string> vehicleNames;
+    for (Game::Vehicle &vehicle : vehicles) {
+        vehicleNames.push_back(vehicle.name);
+    }
     Vehicle newVehicle{*(std::uint8_t *)peer.data, Kore::vec2{}, 0, packet->name()->str()};
 
     auto playerData = newVehicle.getData();
+    auto playerNameData = builder.CreateString(newVehicle.name);
+
+    auto vehicleNamesData = builder.CreateVectorOfStrings(vehicleNames);
 
     auto playerJoinDownloadPacket = CreatePacket(
         builder,
@@ -223,7 +230,9 @@ void Game::Net::Server::onPlayerRegisterMessage(const PlayerRegister *packet, EN
         CreatePlayerJoinDownload(
             builder,
             &playerData,
+            playerNameData,
             vectorOfVehicleData,
+            vehicleNamesData,
             vectorOfBulletData,
             vectorOfMissileData,
             vectorOfWallData,

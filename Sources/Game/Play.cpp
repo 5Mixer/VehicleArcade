@@ -87,11 +87,12 @@ void Game::Play::onDisconnect() {
 }
 
 void Game::Play::onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *packet) {
-    vehicles.push_back(Vehicle(packet->player(), "")); // TODO: Name in packet
+    vehicles.push_back(Vehicle(packet->player(), packet->playerName()->str()));
     controlledVehicleId = packet->player()->id();
 
+    int nameIndex = 0;
     for (auto playerData : *packet->players()) {
-        vehicles.push_back(Vehicle(playerData, "")); // TODO: Name in packet
+        vehicles.push_back(Vehicle(playerData, packet->names()->Get(nameIndex++)->str()));
     }
     for (const Net::BulletData *bulletData : *packet->bullets()) {
         bullets.push_back(Bullet(bulletData));
