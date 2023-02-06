@@ -27,6 +27,11 @@ table PlayerPlaceWall {
 
 table PlayerJoin {
     player: PlayerData;
+    name: string;
+}
+
+table PlayerRegister {
+    name: string;
 }
 
 table PlayerDisconnect {
@@ -47,6 +52,7 @@ table SpawnCollectable {
 }
 
 union PacketType {
+    PlayerRegister,
     PlayerJoin,
     PlayerJoinDownload,
     PlayerDisconnect,
@@ -55,7 +61,7 @@ union PacketType {
     PlayerShootMissile,
     PlayerPlaceWall,
     PlayerStatus,
-    SpawnCollectable,
+    SpawnCollectable
 }
 
 table Packet {

@@ -77,6 +77,7 @@ float Game::Vehicle::turnRateVelocityFactor(float speed, float maximumSpeed) {
 
 void Game::Vehicle::render(Engine::Graphics &g) {
     g.drawVehicle(pos, angle, visualAngleDelta * 20);
+    g.drawText(pos + Kore::vec2{0, -100}, name);
 }
 
 void Game::Vehicle::accelerate(float acceleration) {

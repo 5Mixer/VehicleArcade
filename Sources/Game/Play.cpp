@@ -1,8 +1,10 @@
 #include "Play.h"
 
-Game::Play::Play(Game::Net::Client &client)
+Game::Play::Play(Game::Net::Client &client, std::string name)
     : editingScene(false),
       client(client) {
+
+    client.sendPlayerRegister(name);
 
     for (int i = 0; i < 10000; i++) {
         grass.push_back(Grass(
@@ -71,7 +73,7 @@ void Game::Play::onPlayerJoinMessage(const Net::PlayerJoin *packet) {
         return;
     }
 
-    vehicles.push_back(Vehicle(packet->player()));
+    vehicles.push_back(Vehicle(packet->player(), packet->name()->str()));
 }
 void Game::Play::onPlayerDisconnectMessage(const Net::PlayerDisconnect *packet) {
     vehicles.erase(std::remove_if(vehicles.begin(), vehicles.end(), [&](Vehicle vehicle) -> bool {
@@ -85,11 +87,11 @@ void Game::Play::onDisconnect() {
 }
 
 void Game::Play::onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *packet) {
-    vehicles.push_back(Vehicle(packet->player()));
+    vehicles.push_back(Vehicle(packet->player(), "")); // TODO: Name in packet
     controlledVehicleId = packet->player()->id();
 
     for (auto playerData : *packet->players()) {
-        vehicles.push_back(Vehicle(playerData));
+        vehicles.push_back(Vehicle(playerData, "")); // TODO: Name in packet
     }
     for (const Net::BulletData *bulletData : *packet->bullets()) {
         bullets.push_back(Bullet(bulletData));

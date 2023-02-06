@@ -4,6 +4,7 @@
 #include "../Engine/Camera.h"
 #include "../Engine/Graphics.h"
 #include "../Engine/Scene.h"
+#include "../enet.h"
 #include "Bullet.h"
 #include "Collectable.h"
 #include "Grass.h"
@@ -69,13 +70,14 @@ namespace Game {
         bool editingScene;
 
     public:
-        Play(Game::Net::Client &client);
+        Play(Game::Net::Client &client, std::string name);
         void render(Engine::Graphics &g);
         void update();
 
         void onPlayerPlaceWallMessage(const Net::PlayerPlaceWall *packet);
         void onPlayerJoinMessage(const Net::PlayerJoin *packet);
-        void onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *packet); // server -> new client
+        void onPlayerRegisterMessage(const Net::PlayerRegister *packet, ENetPeer &peer){}; // client -> server
+        void onPlayerJoinDownloadMessage(const Net::PlayerJoinDownload *packet);           // server -> new client
         void onPlayerDisconnectMessage(const Net::PlayerDisconnect *packet);
         void onPlayerMoveMessage(const Net::PlayerMove *packet);
         void onPlayerStatusMessage(const Net::PlayerStatus *packet);

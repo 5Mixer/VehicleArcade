@@ -1,9 +1,13 @@
 #include "MessageReceiver.h"
 
-void Game::Net::MessageReceiver::processRawPacket(const Packet *packet) {
+void Game::Net::MessageReceiver::processRawPacket(const Packet *packet, ENetPeer &peer) {
     switch (packet->type_type()) {
         case PacketType::PlayerJoin: {
             onPlayerJoinMessage(packet->type_as_PlayerJoin());
+            break;
+        }
+        case PacketType::PlayerRegister: {
+            onPlayerRegisterMessage(packet->type_as_PlayerRegister(), peer);
             break;
         }
         case PacketType::PlayerJoinDownload: {

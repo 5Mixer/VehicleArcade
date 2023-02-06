@@ -42,7 +42,7 @@ namespace Game {
                 return nullptr;
             }
 
-            ENetPacket *createPlayerJoinPacket(Game::Net::PlayerData vehicleData);
+            ENetPacket *createPlayerJoinPacket(Game::Net::PlayerData vehicleData, std::string name);
             void updateEntities();
             void spawnCollectable();
 
@@ -72,6 +72,7 @@ namespace Game {
             void onPlayerStatusMessage(const PlayerStatus *packet){};             // server -> client
             void onSpawnCollectableMessage(const SpawnCollectable *packet){};     // server -> client
 
+            void onPlayerRegisterMessage(const PlayerRegister *packet, ENetPeer &peer);
             void onPlayerPlaceWallMessage(const PlayerPlaceWall *packet);
             void onPlayerMoveMessage(const PlayerMove *packet);
             void onPlayerShootMessage(const PlayerShoot *packet);

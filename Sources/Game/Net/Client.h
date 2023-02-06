@@ -29,6 +29,7 @@ namespace Game {
             void sendPlayerShootBullet(Bullet &bullet);
             void sendPlayerShootMissile(Missile &missile);
             void sendPlayerPlaceWall(Wall &wall);
+            void sendPlayerRegister(const std::string &name);
             std::uint8_t getId() { return id; };
             void disconnect();
 

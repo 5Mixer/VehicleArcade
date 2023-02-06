@@ -9,6 +9,7 @@
 #include "Wall.h"
 #include <Kore/Math/Vector.h>
 #include <cmath>
+#include <string>
 #include <vector>
 
 namespace Game {
@@ -20,12 +21,13 @@ namespace Game {
         float visualAngleDelta = 0;
 
     public:
-        Vehicle(std::uint8_t id, Kore::vec2 pos, float angle)
-            : id(id), pos(pos), angle(angle){};
-        Vehicle(const Net::PlayerData *data)
+        Vehicle(std::uint8_t id, Kore::vec2 pos, float angle, std::string name)
+            : id(id), pos(pos), angle(angle), name(name){};
+        Vehicle(const Net::PlayerData *data, const std::string name)
             : id(data->id()),
               pos(Kore::vec2{data->pos().x(), data->pos().y()}),
-              angle(data->angle()){};
+              angle(data->angle()),
+              name(name){};
 
         Kore::vec2 getColliderPos() { return pos; };
         float getColliderRadius() { return radius; };
@@ -33,6 +35,7 @@ namespace Game {
         const Net::PlayerData getData();
 
         std::uint8_t id;
+        std::string name;
         Kore::vec2 pos{0, 0};
         float angle = 0;
 

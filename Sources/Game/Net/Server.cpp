@@ -85,42 +85,8 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
             case ENET_EVENT_TYPE_CONNECT: {
                 auto playerId = nextPlayerId++;
 
-                flatbuffers::FlatBufferBuilder builder{50};
-
-                auto vectorOfVehicleData = builder.CreateVectorOfStructs(getDataOfVector<PlayerData>(vehicles));
-                auto vectorOfBulletData = builder.CreateVectorOfStructs(getDataOfVector<BulletData>(bullets));
-                auto vectorOfMissileData = builder.CreateVectorOfStructs(getDataOfVector<BulletData>(missiles));
-                auto vectorOfWallData = builder.CreateVectorOfStructs(getDataOfVector<WallData>(walls));
-                auto vectorOfCollectableData = builder.CreateVectorOfStructs(getDataOfVector<CollectableData>(collectables));
-
-                Vehicle newVehicle{playerId, Kore::vec2{}, 0};
-
-                auto playerData = newVehicle.getData();
-
-                auto packet = CreatePacket(
-                    builder,
-                    PacketType::PlayerJoinDownload,
-                    CreatePlayerJoinDownload(
-                        builder,
-                        &playerData,
-                        vectorOfVehicleData,
-                        vectorOfBulletData,
-                        vectorOfMissileData,
-                        vectorOfWallData,
-                        vectorOfCollectableData
-                    )
-                        .Union()
-                );
-                builder.Finish(packet);
-                auto netPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_RELIABLE);
-                enet_peer_send(event.peer, 0, netPacket);
-
                 // Associate the network peer with it's playerId, on the heap. Deleted on disconnect.
                 event.peer->data = new std::uint8_t(playerId);
-
-                vehicles.push_back(std::move(newVehicle));
-
-                enet_host_broadcast(server, 0, createPlayerJoinPacket(playerData));
 
                 break;
             }
@@ -153,6 +119,7 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                 break;
             }
             case ENET_EVENT_TYPE_RECEIVE: {
+
                 if (event.peer->data == nullptr) {
                     // Reject packets from peers without an assigned playerId
                     enet_peer_disconnect(event.peer, 0);
@@ -190,7 +157,7 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                     break;
                 }
 
-                receiver.processRawPacket(deserialisedPacket);
+                receiver.processRawPacket(deserialisedPacket, *event.peer);
 
                 auto ptype = deserialisedPacket->type_type();
                 if (ptype == PacketType::PlayerShoot ||
@@ -202,6 +169,7 @@ void Game::Net::Server::service(MessageReceiver &receiver) {
                     auto outboundPacket = enet_packet_create(
                         event.packet->data,
                         event.packet->dataLength,
+                        // TODO: More elegant assignment of packet flags
                         ptype == PacketType::PlayerMove ? ENET_PACKET_FLAG_UNSEQUENCED : ENET_PACKET_FLAG_RELIABLE
                     );
 
@@ -235,6 +203,43 @@ void Game::Net::Server::sendPlayerStatus(std::uint8_t playerId, std::uint8_t hea
     enet_host_broadcast(server, 0, outboundPacket);
 }
 
+void Game::Net::Server::onPlayerRegisterMessage(const PlayerRegister *packet, ENetPeer &peer) {
+
+    flatbuffers::FlatBufferBuilder builder{50};
+
+    auto vectorOfVehicleData = builder.CreateVectorOfStructs(getDataOfVector<PlayerData>(vehicles));
+    auto vectorOfBulletData = builder.CreateVectorOfStructs(getDataOfVector<BulletData>(bullets));
+    auto vectorOfMissileData = builder.CreateVectorOfStructs(getDataOfVector<BulletData>(missiles));
+    auto vectorOfWallData = builder.CreateVectorOfStructs(getDataOfVector<WallData>(walls));
+    auto vectorOfCollectableData = builder.CreateVectorOfStructs(getDataOfVector<CollectableData>(collectables));
+
+    Vehicle newVehicle{*(std::uint8_t *)peer.data, Kore::vec2{}, 0, packet->name()->str()};
+
+    auto playerData = newVehicle.getData();
+
+    auto playerJoinDownloadPacket = CreatePacket(
+        builder,
+        PacketType::PlayerJoinDownload,
+        CreatePlayerJoinDownload(
+            builder,
+            &playerData,
+            vectorOfVehicleData,
+            vectorOfBulletData,
+            vectorOfMissileData,
+            vectorOfWallData,
+            vectorOfCollectableData
+        )
+            .Union()
+    );
+    builder.Finish(playerJoinDownloadPacket);
+    auto netPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_RELIABLE);
+    enet_peer_send(&peer, 0, netPacket);
+
+    vehicles.push_back(std::move(newVehicle));
+
+    enet_host_broadcast(server, 0, createPlayerJoinPacket(playerData, packet->name()->str()));
+}
+
 void Game::Net::Server::onPlayerPlaceWallMessage(const PlayerPlaceWall *packet) {
     walls.push_back(Wall(packet->wall()));
 }
@@ -261,15 +266,16 @@ void Game::Net::Server::onPlayerMoveMessage(const PlayerMove *packet) {
     vehicle.angle = packet->angle();
 }
 
-ENetPacket *Game::Net::Server::createPlayerJoinPacket(Game::Net::PlayerData vehicleData) {
+ENetPacket *Game::Net::Server::createPlayerJoinPacket(Game::Net::PlayerData vehicleData, std::string name) {
     flatbuffers::FlatBufferBuilder builder{50};
-
+    auto nameData = builder.CreateString(name);
     auto packet = CreatePacket(
         builder,
         PacketType::PlayerJoin,
         CreatePlayerJoin(
             builder,
-            &vehicleData
+            &vehicleData,
+            nameData
         )
             .Union()
     );

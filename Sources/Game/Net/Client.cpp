@@ -67,7 +67,7 @@ void Game::Net::Client::service(MessageReceiver &receiver) {
                     ready = true;
                 }
 
-                receiver.processRawPacket(packet);
+                receiver.processRawPacket(packet, *event.peer);
                 enet_packet_destroy(event.packet);
 
                 break;
@@ -93,6 +93,19 @@ void Game::Net::Client::sendPlayerMove(float x, float y, float angle) {
     builder.Finish(packet);
 
     auto netPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_UNSEQUENCED);
+    enet_host_broadcast(client, 0, netPacket);
+}
+
+void Game::Net::Client::sendPlayerRegister(const std::string &name) {
+    flatbuffers::FlatBufferBuilder builder{50};
+
+    auto serialisedName = builder.CreateString(name);
+    auto registerData = CreatePlayerRegister(builder, serialisedName);
+    auto packet = CreatePacket(builder, PacketType::PlayerRegister, registerData.Union());
+
+    builder.Finish(packet);
+
+    auto netPacket = enet_packet_create(builder.GetBufferPointer(), builder.GetSize(), ENET_PACKET_FLAG_RELIABLE);
     enet_host_broadcast(client, 0, netPacket);
 }
 

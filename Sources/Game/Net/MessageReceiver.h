@@ -1,6 +1,7 @@
 #ifndef GAME_NET_MESSAGE_RECEIVER
 #define GAME_NET_MESSAGE_RECEIVER
 
+#include "../../enet.h"
 #include "PacketGenerated.h"
 #include <Kore/IO/BufferReader.h>
 #include <cstdint>
@@ -18,6 +19,7 @@ namespace Game {
             virtual ~MessageReceiver() {}
 
             virtual void onPlayerJoinMessage(const PlayerJoin *packet) = 0;
+            virtual void onPlayerRegisterMessage(const PlayerRegister *packet, ENetPeer &peer) = 0;
             virtual void onPlayerJoinDownloadMessage(const PlayerJoinDownload *packet) = 0; // server -> new client
             virtual void onPlayerDisconnectMessage(const PlayerDisconnect *packet) = 0;
             virtual void onPlayerMoveMessage(const PlayerMove *packet) = 0;
@@ -29,7 +31,7 @@ namespace Game {
             virtual void onDisconnect() = 0;
             void onTimeout() { onDisconnect(); };
 
-            void processRawPacket(const Packet *packet);
+            void processRawPacket(const Packet *packet, ENetPeer &peer);
         };
 
     } // namespace Net

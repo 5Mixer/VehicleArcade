@@ -35,5 +35,11 @@ void Game::Lobby::update() {
         keyTime = std::chrono::system_clock::now();
     }
 
+    if (Engine::Input::keysDown[Kore::KeyReturn]) {
+        // TODO: Cleanup!
+        auto playScene = new Game::Play(client, nameField);
+        Engine::Core::getInstance().setScene(playScene);
+    }
+
     Engine::Input::pressedKeys.clear();
 }

@@ -1,10 +1,12 @@
 #ifndef GAME_LOBBY
 #define GAME_LOBBY
 
+#include "../Engine/Core.h"
 #include "../Engine/Graphics.h"
 #include "../Engine/Input.h"
 #include "../Engine/Scene.h"
 #include "./Net/Client.h"
+#include "Play.h"
 #include <Kore/Math/Vector.h>
 #include <chrono>
 #include <codecvt>
