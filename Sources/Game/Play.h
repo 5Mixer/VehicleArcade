@@ -15,6 +15,7 @@
 #include "Trail.h"
 #include "Vehicle.h"
 #include "Wall.h"
+#include <Kore/Audio1/Audio.h>
 #include <Kore/IO/FileReader.h>
 #include <Kore/IO/FileWriter.h>
 #include <Kore/Math/Matrix.h>
@@ -41,6 +42,8 @@ namespace Game {
         std::vector<Game::Trail> trails;
         std::vector<Game::Particle> particles;
         std::vector<Game::Collectable> collectables;
+
+        Kore::Sound missileShootSound{"../Assets/sounds/impactPunch_medium_004.ogg"};
 
         std::chrono::time_point<std::chrono::system_clock>
             endOfRoundTime{std::chrono::system_clock::now() + std::chrono::seconds{3 * 60}};

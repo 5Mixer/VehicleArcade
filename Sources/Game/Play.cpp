@@ -4,6 +4,9 @@ Game::Play::Play(Game::Net::Client &client, std::string name)
     : editingScene(false),
       client(client) {
 
+    Kore::Audio2::init();
+    Kore::Audio1::init();
+
     client.sendPlayerRegister(name);
 
     for (int i = 0; i < 10000; i++) {
@@ -198,6 +201,10 @@ void Game::Play::shootMissile() {
     if (std::chrono::steady_clock::now() < lastBulletShootTime + std::chrono::milliseconds(400)) {
         return;
     }
+
+    missileShootSound.setVolume(1.f);
+    Kore::Audio1::play(&missileShootSound, false, 1.0f, false);
+
     Game::Vehicle *controlledVehicle = getVehicleById(controlledVehicleId);
     if (controlledVehicle == nullptr) {
         std::cerr << "Could not find player" << std::endl;
