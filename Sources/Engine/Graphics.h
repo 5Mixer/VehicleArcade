@@ -28,7 +28,9 @@ namespace Engine {
         Graphics(Engine::SpriteAtlas &spriteAtlas);
         void begin() {
             graphics->begin(false, Kore::System::windowWidth(), Kore::System::windowHeight());
-            graphics->clear(0x217844);
+        }
+        void clear(std::uint32_t clearColour) {
+            graphics->clear(clearColour);
         }
         void end() {
             graphics->end();

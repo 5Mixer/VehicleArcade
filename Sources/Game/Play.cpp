@@ -23,6 +23,8 @@ Game::Play::Play(Game::Net::Client &client, std::string name)
 }
 
 void Game::Play::render(Engine::Graphics &graphics) {
+    graphics.clear(backgroundColour);
+
     Game::Vehicle *controlledVehicle = getVehicleById(controlledVehicleId);
     if (controlledVehicle == nullptr) {
         return;

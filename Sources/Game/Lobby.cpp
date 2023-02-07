@@ -2,6 +2,7 @@
 
 void Game::Lobby::render(Engine::Graphics &g) {
     g.begin();
+    g.clear(backgroundColour);
 
     g.drawText(Kore::vec2{100, 100}, nameField);
 

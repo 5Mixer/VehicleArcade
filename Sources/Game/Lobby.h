@@ -22,6 +22,8 @@ namespace Game {
         Game::Net::Client &client;
         std::string nameField{};
 
+        std::uint32_t backgroundColour{0xcce7d3};
+
         std::chrono::time_point<std::chrono::system_clock>
             keyTime{std::chrono::system_clock::now()};
         bool fastKey = false;
