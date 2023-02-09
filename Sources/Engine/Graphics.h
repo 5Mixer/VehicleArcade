@@ -92,8 +92,12 @@ namespace Engine {
             style.bold = false;
             style.italic = false;
             style.underlined = false;
-            graphics->setFontColor(colour);
             graphics->setFont(Kore::Kravur::load("fonts/font", style, size));
+            graphics->setFontColor(0xff333333);
+            for (int x = -1; x <= 1; x++)
+                for (int y = -1; y <= 1; y++)
+                    graphics->drawString(text.c_str(), pos.x() + x, pos.y() + y);
+            graphics->setFontColor(colour);
             graphics->drawString(text.c_str(), pos.x(), pos.y());
         }
         void drawMoney(Kore::vec2 pos, int money) {
