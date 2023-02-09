@@ -33,7 +33,7 @@ void Game::Net::Server::run() {
 
         updateEntities();
 
-        spawnCollectable();
+        // spawnCollectable();
 
         // std::this_thread::sleep_until(last + std::chrono::duration<float>(1000 / 60.));
         std::this_thread::sleep_for(std::chrono::duration<float>(1 / 60.));

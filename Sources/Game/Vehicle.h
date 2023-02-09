@@ -37,6 +37,7 @@ namespace Game {
         std::uint8_t id;
         std::string name;
         Kore::vec2 pos{0, 0};
+        Kore::vec2 velocity{0, 0};
         float angle = 0;
 
         int health = 25;
@@ -58,6 +59,10 @@ namespace Game {
         Kore::vec2 getBackRightWheelPos();
         Kore::vec2 getFrontLeftWheelPos();
         Kore::vec2 getFrontRightWheelPos();
+
+        float skidFactor() {
+            return velocity.dot(Kore::vec2{cos(angle), sin(angle)});
+        }
 
         void accelerate(float acceleration);
         void turn(float angleDelta);

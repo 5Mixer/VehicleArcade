@@ -8,11 +8,10 @@ const Game::Net::PlayerData Game::Vehicle::getData() {
 }
 
 void Game::Vehicle::controlWithInput() {
-    float accelerationSpeed = .1;
+    float accelerationSpeed = .005;
     float breakSpeed = .1;
-    float frictionFactor = .99;
-    float turnSpeed = .04;
-    float maximumSpeed = 10;
+    float frictionFactor = .95;
+    float maximumSpeed = .3;
     float turnRate = this->turnRateVelocityFactor(forwardsVelocity, maximumSpeed);
     if (Engine::Input::keysDown[Kore::KeyCode::KeyW]) {
         accelerate(accelerationSpeed);
@@ -25,6 +24,8 @@ void Game::Vehicle::controlWithInput() {
     if (std::abs(forwardsVelocity) > maximumSpeed) {
         forwardsVelocity = maximumSpeed * (forwardsVelocity > 0 ? 1 : -1);
     }
+
+    float turnSpeed = .03 * (0.1 + 0.9 * sqrt(forwardsVelocity / maximumSpeed));
 
     if (Engine::Input::keysDown[Kore::KeyCode::KeyA]) {
         turn(-turnSpeed * turnRate);
@@ -39,10 +40,20 @@ void Game::Vehicle::update(std::vector<Game::Wall> &walls, int worldWidth, int w
 
     visualAngleDelta = visualAngleDelta * .8;
 
-    auto target = pos + Kore::vec2{std::cos(angle + visualAngleDelta * 20) * forwardsVelocity, std::sin(angle + visualAngleDelta * 20) * forwardsVelocity};
+    auto acc = Kore::vec2{std::cos(angle + visualAngleDelta * 20) * forwardsVelocity, std::sin(angle + visualAngleDelta * 20) * forwardsVelocity};
 
     auto collide = false;
     auto combinedRadius = 100;
+
+    if (collide) {
+        forwardsVelocity *= wallFrictionFactor;
+    }
+
+    velocity *= .965;
+    velocity += acc;
+
+    auto target = pos + velocity;
+
     for (const Game::Wall &wall : walls) {
         auto overlap = target - wall.pos;
         if (overlap.squareLength() < (combinedRadius * combinedRadius)) {
@@ -65,9 +76,7 @@ void Game::Vehicle::update(std::vector<Game::Wall> &walls, int worldWidth, int w
     if (target.y() > worldHeight) {
         target.y() = worldHeight;
     }
-    if (collide) {
-        forwardsVelocity *= wallFrictionFactor;
-    }
+
     pos = target;
 }
 
@@ -76,7 +85,7 @@ float Game::Vehicle::turnRateVelocityFactor(float speed, float maximumSpeed) {
 }
 
 void Game::Vehicle::render(Engine::Graphics &g) {
-    g.drawVehicle(pos, angle, visualAngleDelta * 20);
+    g.drawVehicle(pos, angle, visualAngleDelta * 40);
     g.drawText(pos + Kore::vec2{0, -100}, name);
 }
 
