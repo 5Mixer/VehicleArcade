@@ -168,6 +168,7 @@ void Game::Play::shootBullet() {
     if (std::chrono::steady_clock::now() < lastBulletShootTime + std::chrono::milliseconds(100)) {
         return;
     }
+    Kore::Audio1::play(&missileShootSound, false, Engine::Core::getInstance().rand() * .1 + .95, false);
 
     Game::Vehicle *controlledVehicle = getVehicleById(controlledVehicleId);
     if (controlledVehicle == nullptr) {
@@ -204,7 +205,6 @@ void Game::Play::shootMissile() {
         return;
     }
 
-    missileShootSound.setVolume(1.f);
     Kore::Audio1::play(&missileShootSound, false, 1.0f, false);
 
     Game::Vehicle *controlledVehicle = getVehicleById(controlledVehicleId);
@@ -290,7 +290,7 @@ void Game::Play::update() {
         }
     } else {
         if (Engine::Input::mouseDown) {
-            shootMissile();
+            shootBullet();
         }
     }
 

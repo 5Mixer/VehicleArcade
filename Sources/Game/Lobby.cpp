@@ -8,7 +8,7 @@ void Game::Lobby::render(Engine::Graphics &g) {
     auto y = 250;
 
     g.drawContainer(Kore::vec2{x - labelPadding, y + 200 - labelPadding}, Kore::vec2{700 + labelPadding * 2, 50 + labelPadding * 2}, 0xff809b80, containerColour);
-    g.drawText(Kore::vec2{x, y}, "Vehicle Combat", headerColour, 100);
+    g.drawText(Kore::vec2{x, y}, "VEHICLE COMBAT", headerColour, 135);
     g.drawText(Kore::vec2{x, y + 150}, "Username", labelColour, 30);
     g.drawText(Kore::vec2{x, y + 200}, nameField, fieldColour, 50);
 
@@ -32,14 +32,13 @@ void Game::Lobby::update() {
     }
     stripUnicode(nameField);
 
-    if (Engine::Input::keysDown[Kore::KeyBackspace] && nameField.length() > 0 && std::chrono::system_clock::now() > keyTime) {
+    if (Engine::Input::keysDown[Kore::KeyBackspace] && nameField.length() > 0 && (std::chrono::system_clock::now() > keyTime || !fastKey)) {
         nameField.pop_back();
         keyTime = std::chrono::system_clock::now() + std::chrono::milliseconds{fastKey ? 50 : 500};
         fastKey = true;
     }
     if (!Engine::Input::keysDown[Kore::KeyBackspace]) {
         fastKey = false;
-        keyTime = std::chrono::system_clock::now();
     }
 
     if (Engine::Input::keysDown[Kore::KeyReturn]) {
