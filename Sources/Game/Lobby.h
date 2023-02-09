@@ -22,7 +22,12 @@ namespace Game {
         Game::Net::Client &client;
         std::string nameField{};
 
-        std::uint32_t backgroundColour{0xcce7d3};
+        std::uint32_t labelPadding = 16;
+        std::uint32_t backgroundColour{0xffced7bd};
+        std::uint32_t labelColour{0xff748967};
+        std::uint32_t fieldColour{0xff4a6047};
+        std::uint32_t headerColour{0xff1f321d};
+        std::uint32_t containerColour{0xffe2e9de};
 
         std::chrono::time_point<std::chrono::system_clock>
             keyTime{std::chrono::system_clock::now()};

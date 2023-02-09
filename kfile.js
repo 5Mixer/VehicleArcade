@@ -50,7 +50,7 @@ const flatbuffersDestination = './Sources/Game/Net/'
 	}
 }
 {
-	for (var i = 1; i < 70; i++) {
+	for (var i = 1; i <= 100; i++) {
 		exec(`./kravur/kravur ./Assets/fonts/SplineSansMono-Regular.ttf ${i} ./Deployment/fonts/font${i}.kravur`)
 	}
 }

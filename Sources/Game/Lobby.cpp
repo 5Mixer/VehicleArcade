@@ -4,7 +4,13 @@ void Game::Lobby::render(Engine::Graphics &g) {
     g.begin();
     g.clear(backgroundColour);
 
-    g.drawText(Kore::vec2{100, 100}, nameField);
+    auto x = Kore::System::windowWidth() / 2 - 700 / 2;
+    auto y = 250;
+
+    g.drawContainer(Kore::vec2{x - labelPadding, y + 200 - labelPadding}, Kore::vec2{700 + labelPadding * 2, 50 + labelPadding * 2}, 0xff809b80, containerColour);
+    g.drawText(Kore::vec2{x, y}, "Vehicle Combat", headerColour, 100);
+    g.drawText(Kore::vec2{x, y + 150}, "Username", labelColour, 30);
+    g.drawText(Kore::vec2{x, y + 200}, nameField, fieldColour, 50);
 
     g.end();
 }

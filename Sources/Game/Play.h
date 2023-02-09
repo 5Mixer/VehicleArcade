@@ -31,7 +31,7 @@ namespace Game {
     private:
         Game::Net::Client &client;
 
-        std::uint32_t backgroundColour{0x217844};
+        std::uint32_t backgroundColour{0xff217844};
 
         int worldWidth = 5000;
         int worldHeight = 2000;

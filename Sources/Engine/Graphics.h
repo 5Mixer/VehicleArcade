@@ -80,13 +80,20 @@ namespace Engine {
         void transform(Kore::mat3 transformation) {
             graphics->transformation *= transformation;
         }
-        void drawText(Kore::vec2 pos, std::string text) {
+        void drawContainer(Kore::vec2 pos, Kore::vec2 size, std::uint32_t borderColour, std::uint32_t fillColour, int borderWidth = 5) {
+            graphics->setColor(fillColour);
+            graphics->fillRect(pos.x(), pos.y(), size.x(), size.y());
+            graphics->setColor(borderColour);
+            graphics->drawRect(pos.x(), pos.y(), size.x(), size.y(), borderWidth);
+            graphics->setColor(Kore::Graphics1::Color::White);
+        }
+        void drawText(Kore::vec2 pos, std::string text, std::uint32_t colour = Kore::Graphics1::Color::White, int size = 48) {
             FontStyle style;
             style.bold = false;
             style.italic = false;
             style.underlined = false;
-            graphics->setFontColor(Kore::Graphics1::Color::White);
-            graphics->setFont(Kore::Kravur::load("fonts/font", style, 48));
+            graphics->setFontColor(colour);
+            graphics->setFont(Kore::Kravur::load("fonts/font", style, size));
             graphics->drawString(text.c_str(), pos.x(), pos.y());
         }
         void drawMoney(Kore::vec2 pos, int money) {
