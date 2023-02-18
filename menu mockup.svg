@@ -24,12 +24,12 @@
      inkscape:deskcolor="#505050"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="1.5359945"
-     inkscape:cx="473.30898"
-     inkscape:cy="406.57697"
+     inkscape:zoom="1.2905819"
+     inkscape:cx="373.47495"
+     inkscape:cy="447.47258"
      inkscape:window-width="3440"
      inkscape:window-height="1390"
-     inkscape:window-x="1920"
+     inkscape:window-x="0"
      inkscape:window-y="20"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
@@ -62,7 +62,7 @@
          x="74.87365"
          y="79.003479">Username</tspan></text>
     <rect
-       style="opacity:1;fill:#e2e9de;fill-opacity:1;stroke:none;stroke-width:2.38278;stroke-linecap:square;stroke-opacity:1;paint-order:markers fill stroke"
+       style="opacity:1;fill:#e2e9de;fill-opacity:1;stroke:#809b80;stroke-width:0.983;stroke-linecap:square;stroke-opacity:1;paint-order:stroke fill markers;stroke-dasharray:none"
        id="rect10444"
        width="147.33435"
        height="14.210835"

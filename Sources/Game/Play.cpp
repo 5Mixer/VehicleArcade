@@ -275,8 +275,7 @@ void Game::Play::update() {
     controlledVehicle->update(walls, worldWidth, worldHeight);
 
     for (Game::Vehicle &vehicle : vehicles) {
-        // if (vehicle.skidFactor() > 7)
-        if (vehicle.skidFactor() > 5 + Engine::Core::getInstance().rand() * 3)
+        if (vehicle.skidFactor() > .9 + Engine::Core::getInstance().rand() * .1)
             continue;
         trails.push_back(Game::Trail{vehicle.getBackLeftWheelPos()});
         trails.push_back(Game::Trail{vehicle.getBackRightWheelPos()});

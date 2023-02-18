@@ -61,7 +61,12 @@ namespace Game {
         Kore::vec2 getFrontRightWheelPos();
 
         float skidFactor() {
-            return velocity.dot(Kore::vec2{cos(angle), sin(angle)});
+            if (velocity.isZero())
+                return 0;
+
+            Kore::vec2 absVelocity{velocity.x(), velocity.y()};
+            absVelocity.normalize();
+            return absVelocity.dot(Kore::vec2{cos(angle), sin(angle)});
         }
 
         void accelerate(float acceleration);

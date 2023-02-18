@@ -9,14 +9,14 @@ const Game::Net::PlayerData Game::Vehicle::getData() {
 
 void Game::Vehicle::controlWithInput() {
     float accelerationSpeed = .005;
-    float breakSpeed = .1;
+    float reverseSpeed = .004;
     float frictionFactor = .95;
     float maximumSpeed = .3;
     float turnRate = this->turnRateVelocityFactor(forwardsVelocity, maximumSpeed);
     if (Engine::Input::keysDown[Kore::KeyCode::KeyW]) {
         accelerate(accelerationSpeed);
     } else if (Engine::Input::keysDown[Kore::KeyCode::KeyS]) {
-        accelerate(-breakSpeed);
+        accelerate(-reverseSpeed);
     } else {
         forwardsVelocity *= frictionFactor;
     }
@@ -25,7 +25,7 @@ void Game::Vehicle::controlWithInput() {
         forwardsVelocity = maximumSpeed * (forwardsVelocity > 0 ? 1 : -1);
     }
 
-    float turnSpeed = .03 * (0.1 + 0.9 * sqrt(forwardsVelocity / maximumSpeed));
+    float turnSpeed = .03 * (0.1 + 0.9 * std::abs(forwardsVelocity) / std::abs(maximumSpeed));
 
     if (Engine::Input::keysDown[Kore::KeyCode::KeyA]) {
         turn(-turnSpeed * turnRate);
@@ -81,7 +81,7 @@ void Game::Vehicle::update(std::vector<Game::Wall> &walls, int worldWidth, int w
 }
 
 float Game::Vehicle::turnRateVelocityFactor(float speed, float maximumSpeed) {
-    return 0.3 + 0.7 * (speed / maximumSpeed);
+    return 0.3 + 0.7 * (std::abs(speed) / maximumSpeed);
 }
 
 void Game::Vehicle::render(Engine::Graphics &g) {
