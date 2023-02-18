@@ -34,6 +34,10 @@ namespace Engine {
             mousePosition.y() = y;
         }
 
+        void onMouseScroll(int windowId, int delta) {
+            scrollPosition += delta;
+        }
+
         void init() {
             auto keyboard = Kore::Keyboard::the();
             keyboard->KeyDown = onKeyDown;
@@ -44,6 +48,7 @@ namespace Engine {
             mouse->Press = onMousePress;
             mouse->Move = onMouseMove;
             mouse->Release = onMouseRelease;
+            mouse->Scroll = onMouseScroll;
         }
     } // namespace Input
 } // namespace Engine

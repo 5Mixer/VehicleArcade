@@ -286,13 +286,15 @@ void Game::Play::update() {
         spawnParticle(missile.pos);
     }
 
-    if (editingScene) {
-        if (Engine::Input::mouseDown) {
+    equippedItem = static_cast<Item>(Engine::Input::scrollPosition % Game::maxItems);
+
+    if (Engine::Input::mouseDown) {
+        if (equippedItem == Item::Walls) {
             placeWall();
-        }
-    } else {
-        if (Engine::Input::mouseDown) {
+        } else if (equippedItem == Item::Bullets) {
             shootBullet();
+        } else if (equippedItem == Item::Missiles) {
+            shootMissile();
         }
     }
 

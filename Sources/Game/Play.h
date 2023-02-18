@@ -8,6 +8,7 @@
 #include "Bullet.h"
 #include "Collectable.h"
 #include "Grass.h"
+#include "Item.h"
 #include "Net/Client.h"
 #include "Net/MessageReceiver.h"
 #include "Particle.h"
@@ -44,6 +45,8 @@ namespace Game {
         std::vector<Game::Trail> trails;
         std::vector<Game::Particle> particles;
         std::vector<Game::Collectable> collectables;
+
+        Item equippedItem{Item::Bullets};
 
         Kore::Sound missileShootSound{"../Assets/sounds/impactPunch_medium_004.ogg"};
 

@@ -12,6 +12,7 @@
 
 namespace Engine {
     namespace Input {
+        inline int scrollPosition = 0;
         inline std::array<bool, std::numeric_limits<std::uint8_t>::max() + 1> keysDown;
         inline Kore::vec2 mousePosition;
         inline bool mouseDown;
