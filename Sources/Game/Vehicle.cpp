@@ -77,18 +77,8 @@ void Game::Vehicle::update(std::vector<Game::Wall> &walls, std::vector<Game::Veh
             collide = true;
         }
     }
-    if (target.x() < 0) {
-        target.x() = 0;
-    }
-    if (target.y() < 0) {
-        target.y() = 0;
-    }
-    if (target.x() > worldWidth) {
-        target.x() = worldWidth;
-    }
-    if (target.y() > worldHeight) {
-        target.y() = worldHeight;
-    }
+
+    target = Engine::constrainPointToRect(target, Kore::vec2{0, 0}, Kore::vec2{worldWidth, worldHeight});
 
     pos = target;
 }

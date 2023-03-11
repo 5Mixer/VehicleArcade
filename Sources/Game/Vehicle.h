@@ -3,6 +3,7 @@
 
 #include "../Engine/Core.h"
 #include "../Engine/Graphics.h"
+#include "../Engine/Rectangle.h"
 #include "../Engine/Transform.h"
 #include "Collider.h"
 #include "Net/EntityGenerated.h"

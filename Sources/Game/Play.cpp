@@ -31,18 +31,10 @@ void Game::Play::render(Engine::Graphics &graphics) {
     }
 
     camera.pos = controlledVehicle->pos;
-    if (camera.pos.x() < Kore::System::windowWidth() / 2) {
-        camera.pos.x() = Kore::System::windowWidth() / 2;
-    }
-    if (camera.pos.y() < Kore::System::windowHeight() / 2) {
-        camera.pos.y() = Kore::System::windowHeight() / 2;
-    }
-    if (camera.pos.x() > worldWidth - Kore::System::windowWidth() / 2) {
-        camera.pos.x() = worldWidth - Kore::System::windowWidth() / 2;
-    }
-    if (camera.pos.y() > worldHeight - Kore::System::windowHeight() / 2) {
-        camera.pos.y() = worldHeight - Kore::System::windowHeight() / 2;
-    }
+
+    Kore::vec2 halfWindowSize = Kore::vec2{Kore::System::windowWidth() * 0.5f, Kore::System::windowHeight() * 0.5f};
+    Kore::vec2 worldSize = Kore::vec2{worldWidth, worldHeight};
+    camera.pos = Engine::constrainPointToRect(camera.pos, halfWindowSize, worldSize - halfWindowSize);
 
     graphics.transform(camera.getTransform());
 

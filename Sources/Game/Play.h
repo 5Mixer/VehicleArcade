@@ -3,6 +3,7 @@
 
 #include "../Engine/Camera.h"
 #include "../Engine/Graphics.h"
+#include "../Engine/Rectangle.h"
 #include "../Engine/Scene.h"
 #include "../enet.h"
 #include "Bullet.h"
