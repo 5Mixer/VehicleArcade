@@ -272,7 +272,7 @@ void Game::Play::update() {
     Game::eraseDead(particles);
 
     controlledVehicle->controlWithInput();
-    controlledVehicle->update(walls, worldWidth, worldHeight);
+    controlledVehicle->update(walls, vehicles, worldWidth, worldHeight);
 
     for (Game::Vehicle &vehicle : vehicles) {
         if (vehicle.skidFactor() > .9 + Engine::Core::getInstance().rand() * .1)

@@ -35,7 +35,7 @@ void Game::Vehicle::controlWithInput() {
     }
 }
 
-void Game::Vehicle::update(std::vector<Game::Wall> &walls, int worldWidth, int worldHeight) {
+void Game::Vehicle::update(std::vector<Game::Wall> &walls, std::vector<Game::Vehicle> &vehicles, int worldWidth, int worldHeight) {
     float wallFrictionFactor = .95;
 
     visualAngleDelta = visualAngleDelta * .8;
@@ -60,6 +60,19 @@ void Game::Vehicle::update(std::vector<Game::Wall> &walls, int worldWidth, int w
 
             overlap.setLength(combinedRadius);
             target = wall.pos + overlap;
+
+            collide = true;
+        }
+    }
+    for (const Game::Vehicle &vehicle : vehicles) {
+        if (vehicle.id == id) {
+            continue;
+        }
+        auto overlap = target - vehicle.pos;
+        if (overlap.squareLength() != 0 && overlap.squareLength() < (combinedRadius * combinedRadius)) {
+
+            overlap.setLength(combinedRadius);
+            target = vehicle.pos + overlap;
 
             collide = true;
         }

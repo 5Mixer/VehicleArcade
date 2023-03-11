@@ -72,7 +72,7 @@ namespace Game {
         void accelerate(float acceleration);
         void turn(float angleDelta);
         void controlWithInput();
-        void update(std::vector<Game::Wall> &walls, int worldWidth, int worldHeight);
+        void update(std::vector<Game::Wall> &walls, std::vector<Game::Vehicle> &vehicles, int worldWidth, int worldHeight);
         void render(Engine::Graphics &g);
     };
 } // namespace Game
