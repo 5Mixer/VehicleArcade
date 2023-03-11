@@ -35,11 +35,11 @@ namespace Engine {
         graphics->setColor(0xf2f85b5b);
         auto barElementSprite = *spriteAtlas.get("Assets/barElement.png");
         for (int offset = 0; offset < filledBarElements; offset++) {
-            drawSprite(barElementSprite, pos + Kore::vec2{(barElementSprite.width) * offset, 0});
+            drawSprite(barElementSprite, pos + Kore::vec2{static_cast<float>(barElementSprite.width * offset), 0});
         }
         graphics->setColor(0x80989898);
         for (int offset = filledBarElements; offset < totalBarElements; offset++) {
-            drawSprite(barElementSprite, pos + Kore::vec2{(barElementSprite.width) * offset, 0});
+            drawSprite(barElementSprite, pos + Kore::vec2{static_cast<float>(barElementSprite.width * offset), 0});
         }
         graphics->setColor(Kore::Graphics1::Color::White);
     }

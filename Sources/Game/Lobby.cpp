@@ -4,8 +4,8 @@ void Game::Lobby::render(Engine::Graphics &g) {
     g.begin();
     g.clear(backgroundColour);
 
-    auto x = Kore::System::windowWidth() / 2 - 700 / 2;
-    auto y = 250;
+    float x = Kore::System::windowWidth() / 2 - 700 / 2;
+    float y = 250;
 
     g.drawContainer(Kore::vec2{x - labelPadding, y + 200 - labelPadding}, Kore::vec2{700 + labelPadding * 2, 50 + labelPadding * 2}, 0xff809b80, containerColour);
     g.drawText(Kore::vec2{x, y}, "VEHICLE COMBAT", headerColour, 135);

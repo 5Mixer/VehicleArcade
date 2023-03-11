@@ -67,7 +67,7 @@ namespace Game {
 
             Kore::vec2 absVelocity{velocity.x(), velocity.y()};
             absVelocity.normalize();
-            return absVelocity.dot(Kore::vec2{cos(angle), sin(angle)});
+            return absVelocity.dot(Kore::vec2{std::cos(angle), std::sin(angle)});
         }
 
         void accelerate(float acceleration);
