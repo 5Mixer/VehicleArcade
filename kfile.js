@@ -33,6 +33,15 @@ const flatbuffersDestination = './Sources/Game/Net/'
 		const source = `${flatbuffersCache}${flatbufferCacheFile}`;
 		const destination = `${flatbuffersDestination}${flatbufferCacheFile}`
 		const cacheContent = fs.readFileSync(source, { encoding: 'utf8', flag: 'r' });
+		const destinationExists = fs.existsSync(destination)
+
+		if (!destinationExists) {
+			fs.copyFile(source, destination, (err) => {
+				if (err) throw err;
+			});
+			continue;
+		}
+
 		const existingContent = fs.readFileSync(destination, { encoding: 'utf8', flag: 'r' });
 		if (cacheContent != existingContent) {
 			fs.copyFile(source, destination, (err) => {
