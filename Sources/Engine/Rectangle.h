@@ -12,6 +12,10 @@ namespace Engine {
             std::max(topLeft.y(), std::min(point.y(), bottomRight.y())),
         };
     }
+    inline bool isPointInRect(Kore::vec2 point, Kore::vec2 topLeft, Kore::vec2 bottomRight) {
+        return topLeft.x() < point.x() && point.x() < bottomRight.x() &&
+               topLeft.y() < point.y() && point.y() < bottomRight.y();
+    }
 
 } // namespace Engine
 

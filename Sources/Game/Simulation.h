@@ -27,6 +27,15 @@ namespace Game {
     }
 
     template <class T>
+    inline void killOutOfBounds(std::vector<T> &elements, Kore::vec2 topLeft, Kore::vec2 bottomRight) {
+        for (T &element : elements) {
+            if (!Engine::isPointInRect(element.getColliderPos(), topLeft, bottomRight)) {
+                element.health = 0;
+            }
+        }
+    }
+
+    template <class T>
     inline void updateVector(std::vector<T> &elements) {
         for (T &element : elements) {
             element.update();
@@ -62,7 +71,9 @@ namespace Game {
         std::vector<Game::Missile> &missiles,
         std::vector<Game::Wall> &walls,
         std::vector<Game::Vehicle> &vehicles,
-        std::vector<Game::Collectable> &collectables
+        std::vector<Game::Collectable> &collectables,
+        int worldWidth = 5000, // TODO: Use centrally defined world size
+        int worldHeight = 2000
     ) {
         updateVector(bullets);
         updateVector(missiles);
@@ -71,6 +82,8 @@ namespace Game {
         interactMissilesAndVehicles(missiles, vehicles);
         interactBulletsAndVehicles(bullets, vehicles);
         interactCollectablesAndVehicles(collectables, vehicles);
+        killOutOfBounds(bullets, Kore::vec2{0, 0}, Kore::vec2{worldWidth, worldHeight});
+        killOutOfBounds(missiles, Kore::vec2{0, 0}, Kore::vec2{worldWidth, worldHeight});
         eraseDead(bullets);
         eraseDead(missiles);
         eraseDead(walls);

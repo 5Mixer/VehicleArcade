@@ -101,18 +101,12 @@ namespace Engine {
         }
         void drawMoney(Kore::vec2 pos, int money) {
             FontStyle style;
-            style.bold = false;
-            style.italic = false;
-            style.underlined = false;
             graphics->setFontColor(Kore::Graphics1::Color::White);
             graphics->setFont(Kore::Kravur::load("fonts/font", style, 48));
             graphics->drawString(fmt::format("${}", money).c_str(), pos.x(), pos.y());
         }
         void drawRoundTimer(std::chrono::seconds roundTimeRemaining) {
             FontStyle style;
-            style.bold = false;
-            style.italic = false;
-            style.underlined = false;
             graphics->setFontColor(Kore::Graphics1::Color::White);
             graphics->setFont(Kore::Kravur::load("fonts/font", style, 65));
             graphics->drawString(fmt::format("{:%M:%S}", roundTimeRemaining).c_str(), 100, 300);
