@@ -89,14 +89,15 @@ namespace Engine {
         }
         void drawText(Kore::vec2 pos, std::string text, std::uint32_t colour = Kore::Graphics1::Color::White, int size = 48) {
             FontStyle style;
-            style.bold = false;
-            style.italic = false;
-            style.underlined = false;
             graphics->setFont(Kore::Kravur::load("fonts/font", style, size));
-            graphics->setFontColor(0xff333333);
-            graphics->drawString(text.c_str(), pos.x(), pos.y());
             graphics->setFontColor(colour);
             graphics->drawString(text.c_str(), pos.x(), pos.y());
+        }
+        void drawCenteredText(Kore::vec2 pos, std::string text, std::uint32_t colour = Kore::Graphics1::Color::White, int size = 48) {
+            FontStyle style;
+            graphics->setFont(Kore::Kravur::load("fonts/font", style, size));
+            graphics->setFontColor(colour);
+            graphics->drawString(text.c_str(), pos.x() - graphics->getFont()->stringWidth(text.c_str(), text.length()) * 0.5f, pos.y());
         }
         void drawMoney(Kore::vec2 pos, int money) {
             FontStyle style;
