@@ -62,6 +62,9 @@ namespace Engine {
             drawSprite(*spriteAtlas.get("Assets/particle.png"), pos);
             graphics->setColor(Kore::Graphics1::Color::White);
         }
+        void drawSpawn(Kore::vec2 pos) {
+            drawSprite(*spriteAtlas.get("Assets/spawn.png"), pos);
+        }
         void drawBullet(Kore::vec2 pos) {
             drawSprite(*spriteAtlas.get("Assets/bullet.png"), pos);
         }

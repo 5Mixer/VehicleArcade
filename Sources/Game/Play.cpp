@@ -42,6 +42,9 @@ void Game::Play::render(Engine::Graphics &graphics) {
     for (auto &trail : trails) {
         graphics.drawTrail(trail.pos);
     }
+
+    graphics.drawSpawn(Kore::vec2{500, 500});
+
     graphics.renderVector(collectables);
     graphics.renderVector(bullets);
     graphics.renderVector(missiles);

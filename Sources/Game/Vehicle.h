@@ -37,7 +37,7 @@ namespace Game {
 
         std::uint8_t id;
         std::string name;
-        Kore::vec2 pos{0, 0};
+        Kore::vec2 pos{500, 500};
         Kore::vec2 velocity{0, 0};
         float angle = 0;
 

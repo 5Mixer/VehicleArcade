@@ -217,7 +217,7 @@ void Game::Net::Server::onPlayerRegisterMessage(const PlayerRegister *packet, EN
     for (Game::Vehicle &vehicle : vehicles) {
         vehicleNames.push_back(vehicle.name);
     }
-    Vehicle newVehicle{*(std::uint8_t *)peer.data, Kore::vec2{}, 0, packet->name()->str()};
+    Vehicle newVehicle{*(std::uint8_t *)peer.data, Kore::vec2{500, 500}, 0, packet->name()->str()};
 
     auto playerData = newVehicle.getData();
     auto playerNameData = builder.CreateString(newVehicle.name);

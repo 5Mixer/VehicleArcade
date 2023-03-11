@@ -43,6 +43,7 @@ namespace Game {
     }
 
     // TODO: Use acceleration structure to avoid N^2
+    // NOTE: No equality check
     template <class T, class U, typename Functor>
     inline void intersect(std::vector<T> &firstList, std::vector<U> &secondList, Functor onIntersect) {
         for (T &first : firstList) {
